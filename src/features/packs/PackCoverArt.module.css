@@ -1,0 +1,35 @@
+.cover {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.22), transparent 55%);
+}
+
+.card {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+}
+
+.details {
+  width: 100%;
+  aspect-ratio: 20 / 9;
+}
+
+.glyph {
+  position: relative;
+  z-index: 1;
+  padding: var(--space-3);
+  font: var(--text-2xl);
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.92);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}

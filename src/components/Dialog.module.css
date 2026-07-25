@@ -1,0 +1,69 @@
+.dialog {
+  padding: 0;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-overlay);
+  background: var(--surface-overlay);
+  color: var(--text-primary);
+  width: 90vw;
+}
+
+.md {
+  max-width: 480px;
+}
+
+.lg {
+  max-width: 640px;
+}
+
+.dialog::backdrop {
+  background: var(--scrim);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-height: 82vh;
+}
+
+.header {
+  padding: var(--space-5) var(--space-6) var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.title {
+  font: var(--text-xl);
+}
+
+.description {
+  margin-top: var(--space-1);
+  font: var(--text-sm);
+  color: var(--text-secondary);
+}
+
+.body {
+  padding: var(--space-5) var(--space-6);
+  overflow-y: auto;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-2);
+  padding: var(--space-4) var(--space-6);
+  border-top: 1px solid var(--border-subtle);
+}
+
+@starting-style {
+  .dialog[open] {
+    opacity: 0;
+    transform: scale(0.98);
+  }
+}
+
+.dialog[open] {
+  opacity: 1;
+  transform: scale(1);
+  transition: opacity var(--motion-base) var(--ease-standard), transform var(--motion-base) var(--ease-standard),
+    overlay var(--motion-base) allow-discrete, display var(--motion-base) allow-discrete;
+}

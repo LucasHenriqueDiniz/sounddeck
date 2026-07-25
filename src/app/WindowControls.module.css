@@ -1,0 +1,44 @@
+.controls {
+  display: flex;
+  align-items: stretch;
+  height: 100%;
+  flex-shrink: 0;
+  margin-left: var(--space-2);
+}
+
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 100%;
+  color: var(--text-secondary);
+  border-radius: 0;
+  transition: background-color var(--motion-fast) var(--ease-standard), color var(--motion-fast) var(--ease-standard);
+}
+
+.control:hover {
+  background: var(--surface-hover);
+  color: var(--text-primary);
+}
+
+.control:active {
+  background: var(--surface-pressed);
+}
+
+/* Flush against the window edge — an outset ring would get clipped by the
+   viewport, so focus draws inset here instead of the app-wide offset ring. */
+.control:focus-visible {
+  outline-offset: -2px;
+  border-radius: 0;
+}
+
+.close:hover {
+  background: #e81123;
+  color: #ffffff;
+}
+
+.close:active {
+  background: #f1707a;
+  color: #ffffff;
+}

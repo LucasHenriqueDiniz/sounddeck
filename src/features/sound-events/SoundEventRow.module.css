@@ -1,0 +1,77 @@
+.row {
+  display: grid;
+  grid-template-columns: minmax(160px, 1.4fr) minmax(220px, 1.6fr) auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.row:last-child {
+  border-bottom: none;
+}
+
+.info {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font: var(--text-sm);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.description {
+  font: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.state {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.fileName {
+  font: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 220px;
+}
+
+.fileNameMuted {
+  font: var(--text-xs);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+.duration {
+  font: var(--text-xs);
+  color: var(--text-muted);
+  flex-shrink: 0;
+  margin-left: auto;
+  min-width: 44px;
+  text-align: right;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.error {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  color: var(--danger);
+  font: var(--text-xs);
+}

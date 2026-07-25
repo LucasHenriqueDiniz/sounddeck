@@ -1,0 +1,29 @@
+.wrapper {
+  position: relative;
+  display: inline-flex;
+}
+
+.bubble {
+  position: fixed;
+  padding: var(--space-1) var(--space-2);
+  background: var(--surface-overlay);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-raised);
+  font: var(--text-xs);
+  white-space: normal;
+  text-align: center;
+  width: max-content;
+  max-width: min(220px, calc(100vw - 16px));
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--motion-fast) var(--ease-standard);
+  z-index: 60;
+}
+
+.visible {
+  opacity: 1;
+  visibility: visible;
+}
