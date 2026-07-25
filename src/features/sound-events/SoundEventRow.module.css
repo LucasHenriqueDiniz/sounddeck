@@ -3,12 +3,44 @@
   grid-template-columns: minmax(160px, 1.4fr) minmax(220px, 1.6fr) auto;
   align-items: center;
   gap: var(--space-4);
-  padding: var(--space-3) var(--space-4);
+  padding: var(--space-3) var(--space-4) var(--space-3) calc(var(--space-4) - 3px);
   border-bottom: 1px solid var(--border-subtle);
+  border-left: 3px solid transparent;
+  transition: background-color var(--motion-fast) var(--ease-standard);
 }
 
 .row:last-child {
   border-bottom: none;
+}
+
+/* State is the first thing a user should be able to tell apart at a glance:
+   left-border color plus (for the two "exception" states) a background
+   tint. "pack" is the expected/common state for a themed pack, so it stays
+   visually quiet — the other two are the ones worth calling out. */
+.statePack {
+  border-left-color: var(--accent);
+}
+
+.stateDefault {
+  border-left-color: var(--info);
+  background: var(--info-soft);
+}
+
+.stateDisabled {
+  border-left-color: var(--warning);
+  background: var(--surface-hover);
+}
+
+.stateDisabled .info,
+.stateDisabled .fileName,
+.stateDisabled .fileNameMuted,
+.stateDisabled .duration {
+  opacity: 0.55;
+}
+
+.stateDisabled .name {
+  text-decoration: line-through;
+  text-decoration-color: var(--border-strong);
 }
 
 .info {

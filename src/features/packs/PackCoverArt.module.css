@@ -7,11 +7,30 @@
   flex-shrink: 0;
 }
 
+/* Soft diagonal sheen + faint stripe texture — keeps the generated gradient
+   from reading as a flat placeholder while staying out of the way of the
+   glyph. No per-pack imagery is available (see DESIGN.md), so this is the
+   ceiling for "richness" without real cover art. */
+.cover::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(120% 90% at 12% 0%, rgba(255, 255, 255, 0.22), transparent 55%),
+    repeating-linear-gradient(
+      115deg,
+      rgba(255, 255, 255, 0.05) 0px,
+      rgba(255, 255, 255, 0.05) 2px,
+      transparent 2px,
+      transparent 14px
+    );
+}
+
 .cover::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.22), transparent 55%);
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.28), transparent 60%);
 }
 
 .card {

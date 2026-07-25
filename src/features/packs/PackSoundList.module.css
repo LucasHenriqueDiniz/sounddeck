@@ -1,0 +1,54 @@
+.section {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: 100%;
+}
+
+.heading {
+  flex-shrink: 0;
+  font: var(--text-sm);
+  font-weight: 600;
+  padding: var(--space-3) var(--space-4) var(--space-2);
+}
+
+.empty {
+  padding: 0 var(--space-4) var(--space-3);
+  font: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: var(--space-2);
+}
+
+.group + .group {
+  margin-top: var(--space-2);
+}
+
+.groupLabel {
+  padding: var(--space-1) var(--space-4);
+  font: var(--text-xs);
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-1) var(--space-4);
+}
+
+.name {
+  font: var(--text-sm);
+  color: var(--text-primary);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

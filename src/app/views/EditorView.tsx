@@ -1,7 +1,8 @@
 import { Button } from "../../components/Button";
 import { EmptyState } from "../../components/EmptyState";
+import { IconButton } from "../../components/IconButton";
 import { StatusBanner } from "../../components/StatusBanner";
-import { EditorIcon, UndoIcon } from "../../components/icons/icons";
+import { ChevronRightIcon, EditorIcon, UndoIcon } from "../../components/icons/icons";
 import { SoundEventList } from "../../features/sound-events/SoundEventList";
 import { useAppState } from "../AppState";
 import styles from "./EditorView.module.css";
@@ -27,6 +28,11 @@ export function EditorView() {
   return (
     <div className={styles.wrapper}>
       <header className={styles.header}>
+        <IconButton
+          label="Voltar para a Biblioteca"
+          icon={<ChevronRightIcon style={{ transform: "rotate(180deg)" }} />}
+          onClick={() => setView("library")}
+        />
         <div className={styles.headerInfo}>
           <h1 className={styles.title}>{selectedPack.name}</h1>
           <p className={styles.subtitle}>{selectedPack.assignments.length} eventos do Windows</p>

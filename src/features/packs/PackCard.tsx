@@ -5,6 +5,7 @@ import { Button } from "../../components/Button";
 import { CheckIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
+import { derivePackTags } from "../../lib/packTags";
 import { PackCoverArt } from "./PackCoverArt";
 import styles from "./PackCard.module.css";
 
@@ -30,7 +31,11 @@ const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
   sounddeck: "SoundDeck",
 };
 
+const ORIGIN_TAGS = new Set(["Oficial", "Comunidade", "SoundDeck"]);
+
 export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, onApply }: PackCardProps) {
+  const eraTags = derivePackTags(pack).filter((tag) => !ORIGIN_TAGS.has(tag));
+
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === "Enter" || event.key === " ") {
       event.preventDefault();
@@ -70,6 +75,15 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
         <p className={styles.meta}>
           {ORIGIN_LABEL[pack.origin]} · {soundCount} sons
         </p>
+        {eraTags.length > 0 && (
+          <div className={styles.tags}>
+            {eraTags.map((tag) => (
+              <span key={tag} className={styles.tag}>
+                {tag}
+              </span>
+            ))}
+          </div>
+        )}
       </div>
 
       <div className={styles.actions}>

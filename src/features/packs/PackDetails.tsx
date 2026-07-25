@@ -3,7 +3,9 @@ import { Button } from "../../components/Button";
 import { CheckIcon, EditorIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
+import { derivePackTags } from "../../lib/packTags";
 import { PackCoverArt } from "./PackCoverArt";
+import { PackSoundList } from "./PackSoundList";
 import styles from "./PackDetails.module.css";
 
 const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
@@ -43,6 +45,13 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
         </p>
         <p className={styles.description}>{pack.description}</p>
         {pack.sourceCredit && <p className={styles.credit}>{pack.sourceCredit}</p>}
+        <div className={styles.tags}>
+          {derivePackTags(pack).map((tag) => (
+            <span key={tag} className={styles.tag}>
+              {tag}
+            </span>
+          ))}
+        </div>
       </div>
 
       <div className={styles.stats}>
@@ -58,6 +67,10 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
           <span className={`${styles.statValue} tabular-nums`}>{summary.disabled}</span>
           <span className={styles.statLabel}>desativados</span>
         </div>
+      </div>
+
+      <div className={styles.soundsSection}>
+        <PackSoundList packId={pack.id} assignments={pack.assignments} remoteBaseUrl={pack.remoteBaseUrl} />
       </div>
 
       <div className={styles.actions}>

@@ -2,14 +2,17 @@
   display: flex;
   flex-direction: column;
   height: 100%;
-  overflow-y: auto;
+  min-height: 0;
+  overflow: hidden;
 }
 
 .cover {
+  flex-shrink: 0;
   padding: var(--space-4) var(--space-4) 0;
 }
 
 .header {
+  flex-shrink: 0;
   padding: var(--space-4);
   display: flex;
   flex-direction: column;
@@ -43,7 +46,23 @@
   color: var(--text-muted);
 }
 
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-1);
+}
+
+.tag {
+  font: var(--text-xs);
+  color: var(--text-muted);
+  background: var(--surface-hover);
+  border-radius: 999px;
+  padding: 1px var(--space-2);
+}
+
 .stats {
+  flex-shrink: 0;
   display: flex;
   gap: var(--space-5);
   padding: 0 var(--space-4) var(--space-4);
@@ -65,12 +84,20 @@
   color: var(--text-muted);
 }
 
+.soundsSection {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  border-top: 1px solid var(--border-subtle);
+}
+
 .actions {
+  flex-shrink: 0;
   display: flex;
   gap: var(--space-2);
   padding: var(--space-4);
   border-top: 1px solid var(--border-subtle);
-  margin-top: auto;
 }
 
 .actions > * {

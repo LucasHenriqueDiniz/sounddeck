@@ -6,6 +6,7 @@ import { Skeleton } from "../../components/Skeleton";
 import { ChevronRightIcon, LibraryIcon, SearchIcon } from "../../components/icons/icons";
 import { useAppState } from "../../app/AppState";
 import { useContainerWidth } from "../../hooks/useContainerWidth";
+import { collectAllTags, derivePackTags } from "../../lib/packTags";
 import { PackCard } from "./PackCard";
 import { PackDetails } from "./PackDetails";
 import styles from "./PackLibrary.module.css";
@@ -24,17 +25,29 @@ export function PackLibrary() {
     openApplyDialog,
   } = useAppState();
   const [query, setQuery] = useState("");
+  const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
   const { ref, width } = useContainerWidth<HTMLDivElement>();
   const compact = width > 0 && width < COMPACT_BREAKPOINT;
 
   const packs = packsState.status === "success" ? packsState.data : [];
+  const allTags = useMemo(() => collectAllTags(packs), [packs]);
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return packs;
-    return packs.filter(
-      (pack) => pack.name.toLowerCase().includes(q) || pack.author.toLowerCase().includes(q),
-    );
-  }, [packs, query]);
+    return packs.filter((pack) => {
+      const matchesQuery = !q || pack.name.toLowerCase().includes(q) || pack.author.toLowerCase().includes(q);
+      const matchesTags = activeTags.size === 0 || derivePackTags(pack).some((tag) => activeTags.has(tag));
+      return matchesQuery && matchesTags;
+    });
+  }, [packs, query, activeTags]);
+
+  function toggleTag(tag: string) {
+    setActiveTags((prev) => {
+      const next = new Set(prev);
+      if (next.has(tag)) next.delete(tag);
+      else next.add(tag);
+      return next;
+    });
+  }
 
   function handleSelect(id: string) {
     selectPack(id);
@@ -53,20 +66,45 @@ export function PackLibrary() {
       {showGrid && (
         <div className={styles.main}>
           <div className={styles.toolbar}>
-            <label className={styles.searchField}>
-              <SearchIcon size={15} />
-              <input
-                type="search"
-                placeholder="Buscar packs por nome ou autor…"
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                aria-label="Buscar packs"
-              />
-            </label>
-            {packsState.status === "success" && (
-              <span className={styles.count}>
-                {filtered.length} de {packs.length} packs
-              </span>
+            <div className={styles.toolbarRow}>
+              <label className={styles.searchField}>
+                <SearchIcon size={15} />
+                <input
+                  type="search"
+                  placeholder="Buscar packs por nome ou autor…"
+                  value={query}
+                  onChange={(event) => setQuery(event.target.value)}
+                  aria-label="Buscar packs"
+                />
+              </label>
+              {packsState.status === "success" && (
+                <span className={styles.count}>
+                  {filtered.length} de {packs.length} packs
+                </span>
+              )}
+            </div>
+            {allTags.length > 0 && (
+              <div className={styles.tagFilter} role="group" aria-label="Filtrar por tag">
+                {allTags.map((tag) => {
+                  const active = activeTags.has(tag);
+                  return (
+                    <button
+                      key={tag}
+                      type="button"
+                      className={[styles.tagChip, active ? styles.tagChipActive : ""].join(" ")}
+                      aria-pressed={active}
+                      onClick={() => toggleTag(tag)}
+                    >
+                      {tag}
+                    </button>
+                  );
+                })}
+                {activeTags.size > 0 && (
+                  <button type="button" className={styles.tagClear} onClick={() => setActiveTags(new Set())}>
+                    Limpar filtros
+                  </button>
+                )}
+              </div>
             )}
           </div>
 
@@ -104,7 +142,25 @@ export function PackLibrary() {
               <EmptyState
                 icon={<SearchIcon size={32} />}
                 title="Nenhum resultado encontrado"
-                description={`Nenhum pack corresponde a "${query}".`}
+                description={
+                  query && activeTags.size > 0
+                    ? `Nenhum pack corresponde a "${query}" com as tags selecionadas.`
+                    : query
+                      ? `Nenhum pack corresponde a "${query}".`
+                      : "Nenhum pack corresponde às tags selecionadas."
+                }
+                action={
+                  <button
+                    type="button"
+                    className={styles.tagClear}
+                    onClick={() => {
+                      setQuery("");
+                      setActiveTags(new Set());
+                    }}
+                  >
+                    Limpar busca e filtros
+                  </button>
+                }
               />
             )}
 

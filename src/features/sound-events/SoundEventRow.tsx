@@ -50,8 +50,15 @@ export function SoundEventRow({
       ? resolvePackFileUrl(remoteBaseUrl, packId, assignment.fileName)
       : undefined;
 
+  const stateClass =
+    assignment.state === "pack"
+      ? styles.statePack
+      : assignment.state === "default"
+        ? styles.stateDefault
+        : styles.stateDisabled;
+
   return (
-    <div className={styles.row}>
+    <div className={`${styles.row} ${stateClass}`}>
       <div className={styles.info}>
         <p className={styles.name}>{meta.friendlyName}</p>
         {meta.description && <p className={styles.description}>{meta.description}</p>}
