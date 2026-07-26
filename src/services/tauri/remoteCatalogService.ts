@@ -50,7 +50,9 @@ export async function fetchRemoteCatalog(baseUrl: string): Promise<SoundPack[]> 
       origin: pack.origin,
       releaseYear: pack.releaseYear,
       description: pack.description,
-      cover: pack.cover,
+      cover: pack.cover.imageUrl
+        ? { ...pack.cover, imageUrl: resolvePackFileUrl(baseUrl, pack.id, pack.cover.imageUrl) }
+        : pack.cover,
       assignments,
       sourceCredit: pack.sourceCredit,
       remoteBaseUrl: baseUrl,

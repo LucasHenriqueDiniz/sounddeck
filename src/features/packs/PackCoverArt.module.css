@@ -11,7 +11,7 @@
    from reading as a flat placeholder while staying out of the way of the
    glyph. No per-pack imagery is available (see DESIGN.md), so this is the
    ceiling for "richness" without real cover art. */
-.cover::before {
+.cover:not(:has(.image))::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -41,6 +41,15 @@
 .details {
   width: 100%;
   aspect-ratio: 20 / 9;
+}
+
+.image {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 50% 70%;
 }
 
 .glyph {

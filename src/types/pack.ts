@@ -3,11 +3,18 @@ import type { PackEventAssignment } from "./soundEvent";
 export type PackOrigin = "microsoft" | "community" | "sounddeck";
 
 export interface PackCoverArt {
-  /** Two-stop gradient used as the cover surface. */
+  /** Two-stop gradient used as the cover surface — also the fallback if `imageUrl` fails to load. */
   gradientFrom: string;
   gradientTo: string;
-  /** Single glyph/initial rendered over the gradient. */
+  /** Single glyph/initial rendered over the gradient (hidden when a real image is showing). */
   glyph: string;
+  /**
+   * Optional real cover photo. For remote-catalog packs this is a filename
+   * resolved the same way as audio files (`resolvePackFileUrl`); always a
+   * freely-licensed or original image — never a trademarked logo/wallpaper,
+   * see DESIGN.md.
+   */
+  imageUrl?: string;
 }
 
 export interface SoundPack {

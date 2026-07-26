@@ -16,13 +16,30 @@
  * outputDir defaults to a folder under the OS temp dir (kept out of git).
  */
 import AdmZip from "adm-zip";
-import { existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const SOURCE_DIR = process.argv[2] ?? "C:\\Users\\Lucas Diniz\\Downloads\\Nova pasta (2)";
 const OUTPUT_DIR = process.argv[3] ?? join(tmpdir(), "sounddeck-catalog");
 const SOURCE_CREDIT = "Arquivos de som via https://lelegofrog.github.io/wav.html";
+
+// ---------------------------------------------------------------------------
+// Cover images — optional, per pack id. Always freely-licensed or original
+// photos (see PHOTO_CREDITS / DESIGN.md) — never a trademarked logo/wallpaper.
+// Falls back to the generated gradient+glyph when a pack has no entry here.
+// ---------------------------------------------------------------------------
+const SCRIPT_DIR = fileURLToPath(new URL(".", import.meta.url));
+const COVER_IMAGES_DIR = join(SCRIPT_DIR, "cover-images");
+
+const COVER_IMAGE_OVERRIDES = {
+  "xp-real": "xp-real.jpg",
+};
+
+const COVER_PHOTO_CREDITS = {
+  "xp-real": "Foto de Spencer DeMera via Unsplash (Unsplash License, uso livre)",
+};
 
 // ---------------------------------------------------------------------------
 // Filename -> WindowsEventId mapping
@@ -252,6 +269,18 @@ function buildPack(id, name, releaseYear, description, hue, files, stagingRoot) 
 
   if (catalogFiles.length === 0) return null;
 
+  const cover = coverFor(name, hue);
+  const overrideFile = COVER_IMAGE_OVERRIDES[id];
+  let sourceCredit = SOURCE_CREDIT;
+  if (overrideFile) {
+    const srcPath = join(COVER_IMAGES_DIR, overrideFile);
+    if (existsSync(srcPath)) {
+      copyFileSync(srcPath, join(packDir, "cover.jpg"));
+      cover.imageUrl = "cover.jpg";
+      if (COVER_PHOTO_CREDITS[id]) sourceCredit = `${SOURCE_CREDIT} · ${COVER_PHOTO_CREDITS[id]}`;
+    }
+  }
+
   return {
     id,
     name,
@@ -259,8 +288,8 @@ function buildPack(id, name, releaseYear, description, hue, files, stagingRoot) 
     origin: "microsoft",
     releaseYear,
     description,
-    cover: coverFor(name, hue),
-    sourceCredit: SOURCE_CREDIT,
+    cover,
+    sourceCredit,
     files: catalogFiles,
   };
 }
