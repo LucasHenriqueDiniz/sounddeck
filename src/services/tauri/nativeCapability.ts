@@ -12,7 +12,7 @@ export async function checkNativeCapability(): Promise<NativeCapabilityStatus> {
   if (!isRunningInTauri()) {
     return {
       available: false,
-      message: "Executando fora do runtime Tauri — leitura do Registro indisponível.",
+      message: "Running outside the Tauri runtime — registry access unavailable.",
     };
   }
 
@@ -21,7 +21,7 @@ export async function checkNativeCapability(): Promise<NativeCapabilityStatus> {
     return {
       available: true,
       eventCount: events.length,
-      message: `Registro do Windows acessível — ${events.length} eventos encontrados.`,
+      message: `Windows registry reachable — ${events.length} events found.`,
     };
   } catch (error) {
     return {

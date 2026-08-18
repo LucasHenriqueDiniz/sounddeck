@@ -40,12 +40,12 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
       preventDismiss={running}
       title={
         state.phase === "success"
-          ? "Pack aplicado"
+          ? "Pack applied"
           : state.phase === "recoverable-error" || state.phase === "unrecoverable-error"
-            ? "Não foi possível aplicar o pack"
+            ? "Could not apply the pack"
             : `Aplicar "${pack.name}"`
       }
-      description={state.phase === "summary" ? "Revise as alterações antes de continuar." : undefined}
+      description={state.phase === "summary" ? "Review the changes before continuing." : undefined}
       footer={
         state.phase === "summary" ? (
           <>
@@ -53,7 +53,7 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
               Cancelar
             </Button>
             <Button variant="primary" onClick={() => start(pack)}>
-              Aplicar pack
+              Apply pack
             </Button>
           </>
         ) : state.phase === "running" ? (
@@ -67,7 +67,7 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
         ) : state.phase === "recoverable-error" ? (
           <>
             <Button variant="ghost" onClick={onClose}>
-              Fechar
+              Close
             </Button>
             <Button variant="primary" onClick={reset}>
               Tentar novamente
@@ -75,7 +75,7 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
           </>
         ) : (
           <Button variant="primary" onClick={onClose}>
-            Fechar
+            Close
           </Button>
         )
       }
@@ -89,21 +89,21 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.usingPackSound}</span>
-              <span className={styles.statLabel}>usarão sons do pack</span>
+              <span className={styles.statLabel}>will use pack sounds</span>
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.usingWindowsDefault}</span>
-              <span className={styles.statLabel}>manterão o padrão do Windows</span>
+              <span className={styles.statLabel}>will keep the Windows default</span>
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.disabled}</span>
-              <span className={styles.statLabel}>serão desativados</span>
+              <span className={styles.statLabel}>will be disabled</span>
             </li>
           </ul>
           <StatusBanner
             severity="info"
-            title="Um backup do esquema atual será criado automaticamente"
-            description="Você poderá restaurá-lo a qualquer momento em Backups."
+            title="A backup of the current scheme will be created automatically"
+            description="You can restore it at any time from Backups."
           />
         </div>
       )}
@@ -129,8 +129,8 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
           <p className={styles.resultTitle}>{state.errorMessage}</p>
           <p className={styles.resultDescription}>
             {state.phase === "unrecoverable-error"
-              ? "Nenhuma alteração parcial foi mantida. Verifique a área de Backups se precisar restaurar algo."
-              : "Nenhuma alteração foi aplicada. Você pode tentar novamente."}
+              ? "No partial changes were kept. Check the Backups area if you need to restore something."
+              : "No changes were applied. You can try again."}
           </p>
           {state.errorDetail && <pre className={styles.detail}>{state.errorDetail}</pre>}
         </div>

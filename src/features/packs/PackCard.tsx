@@ -27,11 +27,11 @@ interface PackCardProps {
 
 const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
   microsoft: "Microsoft",
-  community: "Comunidade",
+  community: "Community",
   sounddeck: "SoundDeck",
 };
 
-const ORIGIN_TAGS = new Set(["Oficial", "Comunidade", "SoundDeck"]);
+const ORIGIN_TAGS = new Set(["Official", "Community", "SoundDeck"]);
 
 export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, onApply }: PackCardProps) {
   const eraTags = derivePackTags(pack).filter((tag) => !ORIGIN_TAGS.has(tag));
@@ -55,7 +55,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
       role="button"
       tabIndex={0}
       aria-pressed={isSelected}
-      aria-label={`${pack.name}, ${soundCount} sons${isApplied ? ", aplicado atualmente" : ""}`}
+      aria-label={`${pack.name}, ${soundCount} sounds${isApplied ? ", aplicado atualmente" : ""}`}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
     >
@@ -73,7 +73,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
       <div className={styles.body}>
         <p className={styles.name}>{pack.name}</p>
         <p className={styles.meta}>
-          {ORIGIN_LABEL[pack.origin]} · {soundCount} sons
+          {ORIGIN_LABEL[pack.origin]} · {soundCount} sounds
         </p>
         {eraTags.length > 0 && (
           <div className={styles.tags}>
@@ -89,12 +89,12 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
       <div className={styles.actions}>
         <AudioPreviewButton
           seed={pack.id}
-          label={`o pack ${pack.name}`}
+          label={pack.name}
           size="sm"
           audioUrl={representativePreviewUrl(pack)}
         />
         <Button size="sm" variant={isSelected ? "primary" : "secondary"} onClick={handleActionClick}>
-          {isSelected ? "Aplicar" : "Selecionar"}
+          {isSelected ? "Apply" : "Select"}
         </Button>
       </div>
     </div>

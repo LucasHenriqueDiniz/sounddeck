@@ -11,162 +11,162 @@ export const SOUND_EVENT_CATALOG: EventFriendlyMeta[] = [
   // Sistema
   {
     id: { app: ".Default", event: "SystemAsterisk" },
-    friendlyName: "Aviso do sistema",
-    description: "Toca quando o Windows exibe uma informação geral.",
+    friendlyName: "System notice",
+    description: "Plays when Windows shows a general piece of information.",
     category: "system",
   },
   {
     id: { app: ".Default", event: "SystemExclamation" },
-    friendlyName: "Alerta do sistema",
-    description: "Toca em avisos que pedem atenção, mas não são erros.",
+    friendlyName: "System alert",
+    description: "Plays for warnings that need attention but are not errors.",
     category: "system",
   },
   {
     id: { app: ".Default", event: "SystemHand" },
-    friendlyName: "Erro crítico",
-    description: "Toca em erros graves ou operações bloqueadas.",
+    friendlyName: "Critical error",
+    description: "Plays for serious errors or blocked operations.",
     category: "system",
   },
   {
     id: { app: ".Default", event: "SystemQuestion" },
-    friendlyName: "Pergunta do sistema",
-    description: "Toca em caixas de diálogo de confirmação.",
+    friendlyName: "System question",
+    description: "Plays in confirmation dialogs.",
     category: "system",
   },
   {
     id: { app: ".Default", event: ".Default" },
-    friendlyName: "Som padrão",
-    description: "Som genérico usado quando nenhum outro evento se aplica.",
+    friendlyName: "Default sound",
+    description: "Generic sound used when no other event applies.",
     category: "system",
   },
   {
     id: { app: ".Default", event: "MenuCommand" },
-    friendlyName: "Comando de menu",
+    friendlyName: "Menu command",
     category: "system",
   },
 
   // Notificações
   {
     id: { app: ".Default", event: "Notification.Default" },
-    friendlyName: "Notificação padrão",
-    description: "Toast genérico do Windows.",
+    friendlyName: "Default notification",
+    description: "Generic Windows toast.",
     category: "notifications",
   },
   {
     id: { app: ".Default", event: "Notification.IM" },
-    friendlyName: "Mensagem instantânea",
+    friendlyName: "Instant message",
     category: "notifications",
   },
   {
     id: { app: ".Default", event: "Notification.Mail" },
-    friendlyName: "Novo e-mail",
+    friendlyName: "New email",
     category: "notifications",
   },
   {
     id: { app: ".Default", event: "Notification.Reminder" },
-    friendlyName: "Lembrete",
+    friendlyName: "Reminder",
     category: "notifications",
   },
   {
     id: { app: ".Default", event: "Notification.SMS" },
-    friendlyName: "SMS recebido",
+    friendlyName: "SMS received",
     category: "notifications",
   },
 
   // Dispositivos
   {
     id: { app: ".Default", event: "DeviceConnect" },
-    friendlyName: "Dispositivo conectado",
-    description: "Toca ao conectar um dispositivo USB ou Bluetooth.",
+    friendlyName: "Device connected",
+    description: "Plays when a USB or Bluetooth device is connected.",
     category: "devices",
   },
   {
     id: { app: ".Default", event: "DeviceDisconnect" },
-    friendlyName: "Dispositivo desconectado",
+    friendlyName: "Device disconnected",
     category: "devices",
   },
   {
     id: { app: ".Default", event: "DeviceFail" },
-    friendlyName: "Falha de dispositivo",
-    description: "Toca quando um dispositivo não é reconhecido.",
+    friendlyName: "Device failure",
+    description: "Plays when a device is not recognised.",
     category: "devices",
   },
 
   // Energia
   {
     id: { app: ".Default", event: "LowBatteryAlarm" },
-    friendlyName: "Bateria fraca",
+    friendlyName: "Low battery",
     category: "power",
   },
   {
     id: { app: ".Default", event: "CriticalBatteryAlarm" },
-    friendlyName: "Bateria crítica",
-    description: "Toca quando a carga está prestes a se esgotar.",
+    friendlyName: "Critical battery",
+    description: "Plays when the charge is about to run out.",
     category: "power",
   },
 
   // Explorer
   {
     id: { app: ".Default", event: "Navigating" },
-    friendlyName: "Navegação no Explorer",
+    friendlyName: "Explorer navigation",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "EmptyRecycleBin" },
-    friendlyName: "Esvaziar lixeira",
+    friendlyName: "Empty Recycle Bin",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "BlockedPopup" },
-    friendlyName: "Pop-up bloqueado",
+    friendlyName: "Pop-up blocked",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "Open" },
-    friendlyName: "Abrir programa",
+    friendlyName: "Open program",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "Close" },
-    friendlyName: "Fechar programa",
+    friendlyName: "Close program",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "Minimize" },
-    friendlyName: "Minimizar janela",
+    friendlyName: "Minimise window",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "Maximize" },
-    friendlyName: "Maximizar janela",
+    friendlyName: "Maximise window",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "RestoreUp" },
-    friendlyName: "Restaurar janela (maximizada)",
+    friendlyName: "Restore window (maximised)",
     category: "explorer",
   },
   {
     id: { app: ".Default", event: "RestoreDown" },
-    friendlyName: "Restaurar janela (minimizada)",
+    friendlyName: "Restore window (minimised)",
     category: "explorer",
   },
 
   // Sessão
   {
     id: { app: ".Default", event: "WindowsLogon" },
-    friendlyName: "Entrar no Windows",
+    friendlyName: "Windows logon",
     category: "session",
   },
   {
     id: { app: ".Default", event: "WindowsLogoff" },
-    friendlyName: "Sair do Windows",
+    friendlyName: "Windows logoff",
     category: "session",
   },
   {
     id: { app: ".Default", event: "WindowsUAC" },
-    friendlyName: "Controle de Conta de Usuário",
-    description: "Toca ao solicitar permissão administrativa.",
+    friendlyName: "User Account Control",
+    description: "Plays when administrative permission is requested.",
     category: "session",
   },
 ];

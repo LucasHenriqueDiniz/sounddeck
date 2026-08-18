@@ -54,13 +54,13 @@ export function WindowControls() {
 
   return (
     <div className={styles.controls}>
-      <button type="button" className={styles.control} aria-label="Minimizar" onClick={minimize}>
+      <button type="button" className={styles.control} aria-label="Minimise" onClick={minimize}>
         <WindowMinimizeIcon />
       </button>
       <button
         type="button"
         className={styles.control}
-        aria-label={maximized ? "Restaurar tamanho" : "Maximizar"}
+        aria-label={maximized ? "Restore size" : "Maximise"}
         onClick={toggleMaximize}
       >
         {maximized ? <WindowRestoreIcon /> : <WindowMaximizeIcon />}
@@ -68,7 +68,7 @@ export function WindowControls() {
       <button
         type="button"
         className={`${styles.control} ${styles.close}`}
-        aria-label="Fechar"
+        aria-label="Close"
         onClick={close}
       >
         <WindowCloseIcon />

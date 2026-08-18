@@ -18,7 +18,7 @@ export function BackupRow({ backup, busy, restored, onRestore }: BackupRowProps)
       <div className={styles.info}>
         <p className={styles.label}>{backup.label}</p>
         <p className={styles.meta}>
-          {formatDateTime(backup.createdAt)} · {backup.eventCount} eventos · {backup.sizeLabel}
+          {formatDateTime(backup.createdAt)} · {backup.eventCount} events · {backup.sizeLabel}
         </p>
       </div>
 
@@ -29,10 +29,10 @@ export function BackupRow({ backup, busy, restored, onRestore }: BackupRowProps)
       )}
 
       {!backup.restorable ? (
-        <Badge variant="neutral">Indisponível para restauração</Badge>
+        <Badge variant="neutral">Not restorable</Badge>
       ) : (
         <Button variant="secondary" size="sm" icon={<UndoIcon size={14} />} loading={busy} onClick={onRestore}>
-          Restaurar
+          Restore
         </Button>
       )}
     </div>

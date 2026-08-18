@@ -71,15 +71,15 @@ export function PackLibrary() {
                 <SearchIcon size={15} />
                 <input
                   type="search"
-                  placeholder="Buscar packs por nome ou autor…"
+                  placeholder="Search packs by name or author…"
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  aria-label="Buscar packs"
+                  aria-label="Search packs"
                 />
               </label>
               {packsState.status === "success" && (
                 <span className={styles.count}>
-                  {filtered.length} de {packs.length} packs
+                  {filtered.length} of {packs.length} packs
                 </span>
               )}
             </div>
@@ -123,8 +123,8 @@ export function PackLibrary() {
 
             {packsState.status === "error" && (
               <ErrorState
-                title="Não foi possível carregar a biblioteca"
-                description="Ocorreu um erro ao buscar os packs disponíveis."
+                title="Could not load the library"
+                description="Something went wrong while fetching the available packs."
                 detail={packsState.message}
                 onRetry={reloadPacks}
               />
@@ -133,21 +133,21 @@ export function PackLibrary() {
             {packsState.status === "success" && packs.length === 0 && (
               <EmptyState
                 icon={<LibraryIcon size={32} />}
-                title="Sua biblioteca está vazia"
-                description="Você ainda não tem nenhum pack de sons instalado."
+                title="Your library is empty"
+                description="You do not have any sound packs installed yet."
               />
             )}
 
             {packsState.status === "success" && packs.length > 0 && filtered.length === 0 && (
               <EmptyState
                 icon={<SearchIcon size={32} />}
-                title="Nenhum resultado encontrado"
+                title="No results found"
                 description={
                   query && activeTags.size > 0
                     ? `Nenhum pack corresponde a "${query}" com as tags selecionadas.`
                     : query
                       ? `Nenhum pack corresponde a "${query}".`
-                      : "Nenhum pack corresponde às tags selecionadas."
+                      : "No pack matches the selected tags."
                 }
                 action={
                   <button
@@ -190,7 +190,7 @@ export function PackLibrary() {
               {compact && (
                 <div className={styles.backRow}>
                   <IconButton
-                    label="Voltar para a biblioteca"
+                    label="Back to the library"
                     icon={<ChevronRightIcon style={{ transform: "rotate(180deg)" }} />}
                     onClick={() => selectPack(null)}
                   />
@@ -206,8 +206,8 @@ export function PackLibrary() {
           ) : (
             <EmptyState
               icon={<LibraryIcon size={28} />}
-              title="Nenhum pack selecionado"
-              description="Escolha um pack na biblioteca para ver capa, autor e eventos."
+              title="No pack selected"
+              description="Pick a pack in the library to see its cover, author and events."
             />
           )}
         </div>

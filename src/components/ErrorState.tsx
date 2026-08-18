@@ -29,7 +29,7 @@ export function ErrorState({ title, description, detail, onRetry, recoverable = 
         )}
         {detail && (
           <Button variant="ghost" onClick={() => setShowDetail((v) => !v)}>
-            {showDetail ? "Ocultar detalhes" : "Detalhes técnicos"}
+            {showDetail ? "Hide details" : "Technical details"}
           </Button>
         )}
       </div>

@@ -1,11 +1,11 @@
 export function formatDuration(ms: number | undefined): string {
   if (ms === undefined) return "—";
   const seconds = ms / 1000;
-  return `${seconds.toFixed(1).replace(".", ",")}s`;
+  return `${seconds.toFixed(1)}s`;
 }
 
 export function formatDateTime(iso: string): string {
-  return new Intl.DateTimeFormat("pt-BR", {
+  return new Intl.DateTimeFormat("en-US", {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",

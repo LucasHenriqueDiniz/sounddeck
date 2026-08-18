@@ -24,7 +24,7 @@ export async function pickReplacementWav(): Promise<PickWavResult> {
 
   const selection = await open({
     multiple: false,
-    filters: [{ name: "Áudio (WAV)", extensions: AUDIO_EXTENSIONS }],
+    filters: [{ name: "Audio (WAV)", extensions: AUDIO_EXTENSIONS }],
   });
 
   if (!selection || Array.isArray(selection)) {
@@ -34,7 +34,7 @@ export async function pickReplacementWav(): Promise<PickWavResult> {
   const fileName = selection.split(/[\\/]/).pop() ?? selection;
   const extension = fileName.split(".").pop()?.toLowerCase();
   if (!extension || !AUDIO_EXTENSIONS.includes(extension)) {
-    return { status: "invalid", reason: "Selecione um arquivo .wav válido." };
+    return { status: "invalid", reason: "Select a valid .wav file." };
   }
 
   return { status: "picked", path: selection, fileName };

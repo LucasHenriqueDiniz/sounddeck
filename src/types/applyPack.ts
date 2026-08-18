@@ -18,13 +18,13 @@ export const APPLY_PHASE_ORDER: ApplyPhase[] = [
 ];
 
 export const APPLY_PHASE_LABEL: Record<ApplyPhase, string> = {
-  validating: "Validando pack e eventos",
-  "creating-backup": "Criando backup do esquema atual",
-  "processing-audio": "Processando sons",
-  "copying-files": "Copiando arquivos",
-  "writing-registry": "Alterando configurações do Windows",
-  verifying: "Verificando aplicação",
-  complete: "Concluído",
+  validating: "Validating pack and events",
+  "creating-backup": "Backing up the current scheme",
+  "processing-audio": "Processing sounds",
+  "copying-files": "Copying files",
+  "writing-registry": "Writing Windows settings",
+  verifying: "Verifying",
+  complete: "Done",
 };
 
 export interface ApplySummary {

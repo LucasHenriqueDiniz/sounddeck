@@ -10,7 +10,8 @@
     "tauri": "tauri",
     "build:catalog": "node scripts/build-catalog.mjs",
     "build:landing-packs": "tsx scripts/build-landing-packs.mjs",
-    "build:og": "node scripts/build-og-image.mjs"
+    "build:og": "node scripts/build-og-image.mjs",
+    "build:landing": "node scripts/build-landing.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

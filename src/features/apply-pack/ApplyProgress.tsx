@@ -33,7 +33,7 @@ export function ApplyProgress({ currentPhase, currentPhaseProgress }: ApplyProgr
       <div className={styles.progress}>
         <ProgressBar
           value={currentPhase === "complete" ? 1 : currentPhaseProgress}
-          label={`Fase atual: ${APPLY_PHASE_LABEL[currentPhase]}`}
+          label={`Current phase: ${APPLY_PHASE_LABEL[currentPhase]}`}
         />
         <p className={styles.progressLabel}>{APPLY_PHASE_LABEL[currentPhase]}…</p>
       </div>

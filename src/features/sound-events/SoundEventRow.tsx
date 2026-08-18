@@ -37,7 +37,7 @@ export function SoundEventRow({
     setBusy(false);
     if (result.status === "invalid") setError(result.reason);
     else if (result.status === "unavailable")
-      setError("Seleção de arquivo só está disponível dentro do aplicativo desktop.");
+      setError("File selection is only available inside the desktop app.");
     else if (result.status === "picked") setError(null);
   }
 
@@ -71,7 +71,7 @@ export function SoundEventRow({
             {assignment.fileName}
           </span>
         ) : (
-          <span className={styles.fileNameMuted}>sem arquivo</span>
+          <span className={styles.fileNameMuted}>no file</span>
         )}
         <span className={`${styles.duration} tabular-nums`}>{formatDuration(assignment.durationMs)}</span>
       </div>
@@ -84,16 +84,16 @@ export function SoundEventRow({
           disabled={assignment.state === "disabled"}
           audioUrl={audioUrl}
         />
-        <IconButton label="Substituir arquivo" icon={<ReplaceIcon />} size="sm" onClick={handleReplace} disabled={busy} />
+        <IconButton label="Replace file" icon={<ReplaceIcon />} size="sm" onClick={handleReplace} disabled={busy} />
         <IconButton
-          label="Usar padrão do Windows"
+          label="Use the Windows default"
           icon={<UndoIcon />}
           size="sm"
           onClick={onUseDefault}
           disabled={assignment.state === "default"}
         />
         <IconButton
-          label="Desativar evento"
+          label="Disable event"
           icon={<DisableIcon />}
           size="sm"
           onClick={onDisable}

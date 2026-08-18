@@ -1,69 +1,21 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="{{LANG}}">
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title data-title-pt="SoundDeck — um seletor de sons para o Windows" data-title-en="SoundDeck — a sound picker for Windows">SoundDeck — um seletor de sons para o Windows</title>
-<meta name="description" data-desc-pt="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." data-desc-en="Change the Windows 10 and 11 sound scheme in one click. Five packs included — XP, Vista, 7, Minimal and Calm — with previews, a per-event editor and automatic backups." content="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." />
-<link rel="canonical" href="https://sounddeck.lucashdo.com/" />
+<title>{{TITLE}}</title>
 <meta name="theme-color" content="#0f0f10" media="(prefers-color-scheme: dark)" />
 <meta name="theme-color" content="#fbfaf8" media="(prefers-color-scheme: light)" />
-<link rel="icon" href="favicon.png" type="image/png" />
-<link rel="apple-touch-icon" href="icon-310.png" />
-<meta property="og:type" content="website" />
-<meta property="og:site_name" content="SoundDeck" />
-<meta property="og:locale" content="pt_BR" />
-<meta property="og:locale:alternate" content="en_US" />
-<meta property="og:url" content="https://sounddeck.lucashdo.com/" />
-<meta property="og:title" data-og-pt="SoundDeck — um seletor de sons para o Windows" data-og-en="SoundDeck — a sound picker for Windows" content="SoundDeck — um seletor de sons para o Windows" />
-<meta property="og:description" data-desc-pt="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." data-desc-en="Change the Windows 10 and 11 sound scheme in one click. Five packs included — XP, Vista, 7, Minimal and Calm — with previews, a per-event editor and automatic backups." content="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." />
-<meta property="og:image" content="https://sounddeck.lucashdo.com/og.png" />
-<meta property="og:image:width" content="1200" />
-<meta property="og:image:height" content="630" />
-<meta property="og:image:type" content="image/png" />
-<meta property="og:image:alt" data-og-pt="SoundDeck — um seletor de sons para o Windows" data-og-en="SoundDeck — a sound picker for Windows" content="SoundDeck — um seletor de sons para o Windows" />
-<meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" data-og-pt="SoundDeck — um seletor de sons para o Windows" data-og-en="SoundDeck — a sound picker for Windows" content="SoundDeck — um seletor de sons para o Windows" />
-<meta name="twitter:description" data-desc-pt="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." data-desc-en="Change the Windows 10 and 11 sound scheme in one click. Five packs included — XP, Vista, 7, Minimal and Calm — with previews, a per-event editor and automatic backups." content="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." />
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "SoundDeck",
-  "applicationCategory": "UtilitiesApplication",
-  "applicationSubCategory": "Personalization",
-  "operatingSystem": "Windows 10, Windows 11",
-  "softwareVersion": "0.1.0",
-  "url": "https://sounddeck.lucashdo.com/",
-  "downloadUrl": "https://sounddeck.lucashdo.com/download",
-  "installUrl": "https://sounddeck.lucashdo.com/download",
-  "softwareHelp": "https://sounddeck.lucashdo.com/download",
-  "releaseNotes": "https://sounddeck.lucashdo.com/changelog",
-  "image": "https://sounddeck.lucashdo.com/og.png",
-  "screenshot": "https://sounddeck.lucashdo.com/og.png",
-  "description": "Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático.",
-  "license": "https://github.com/LucasHenriqueDiniz/sounddeck/blob/master/LICENSE",
-  "isAccessibleForFree": true,
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "BRL"
-  },
-  "author": {
-    "@type": "Person",
-    "name": "Lucas Henrique Diniz Ostroski",
-    "url": "https://github.com/LucasHenriqueDiniz"
-  },
-  "codeRepository": "https://github.com/LucasHenriqueDiniz/sounddeck"
-}
-</script>
-<link rel="stylesheet" href="site.css" />
+<link rel="icon" href="/favicon.png" type="image/png" />
+<link rel="apple-touch-icon" href="/icon-310.png" />
+<!--HEAD-->
+<link rel="stylesheet" href="/site.css" />
 </head>
 <body>
 <a class="skip-link" href="#main" data-i18n="a11y.skip">Pular para o conteúdo</a>
 <header class="topbar">
   <div class="wrap">
-    <a class="brand" href="/" style="text-decoration:none;color:inherit">
+    <a class="brand" href="{{BASE}}/" style="text-decoration:none;color:inherit">
       <span class="mark" aria-hidden="true"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H2v6h4l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg></span>
       SoundDeck
     </a>
@@ -71,13 +23,10 @@
     <a class="navlink" href="#packs" data-i18n="nav.packs">Packs</a>
     <a class="navlink" href="#recursos" data-i18n="nav.features">Recursos</a>
     <a class="navlink" href="#seguranca" data-i18n="nav.safety">Segurança</a>
-    <a class="navlink" href="/changelog" data-i18n="nav.changelog">Notas de versão</a>
-    <span class="langs" role="group" aria-label="Idioma / Language">
-      <button type="button" data-lang="pt" aria-pressed="true">PT</button>
-      <button type="button" data-lang="en" aria-pressed="false">EN</button>
-    </span>
-    <button class="theme-toggle" type="button" id="themeBtn" aria-label="Alternar tema claro/escuro"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-    <a class="btn btn-primary" href="/download" data-i18n="nav.download">Baixar</a>
+    <a class="navlink" href="{{BASE}}/changelog" data-i18n="nav.changelog">Notas de versão</a>
+    <!--LANGS-->
+    <button class="theme-toggle" type="button" id="themeBtn" data-i18n-aria="a11y.theme"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
+    <a class="btn btn-primary" href="{{BASE}}/download" data-i18n="nav.download">Baixar</a>
   </div>
 </header>
 <main class="wrap" id="main">
@@ -90,7 +39,7 @@
     </h1>
     <p class="sub" data-i18n="hero.sub">Escolha um pack, ouça a prévia, aplique. Vêm inclusos os esquemas do XP, do Vista e do 7, mais dois originais — e o editor troca evento por evento quando você quiser detalhar.</p>
     <div class="row">
-      <a class="btn btn-primary btn-lg" href="/download"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.6v6.9H3zM11 4.4 21 3v8.5H11zM3 12.5h7v6.9L3 18.5zM11 12.5h10V21l-10-1.4z"/></svg><span data-i18n="hero.cta">Baixar para Windows</span></a>
+      <a class="btn btn-primary btn-lg" href="{{BASE}}/download"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.6v6.9H3zM11 4.4 21 3v8.5H11zM3 12.5h7v6.9L3 18.5zM11 12.5h10V21l-10-1.4z"/></svg><span data-i18n="hero.cta">Baixar para Windows</span></a>
       <a class="btn btn-ghost btn-lg" href="#packs" data-i18n="hero.cta2">Ver os packs</a>
     </div>
     <div class="chips">
@@ -237,7 +186,7 @@
       <h3 data-i18n="close.h">Baixe e escolha o seu esquema.</h3>
       <p data-i18n="close.p">Instale, ouça os packs e aplique o que preferir. Se não gostar, o backup devolve o esquema anterior. Gratuito e de código aberto.</p>
       <div class="row">
-        <a class="btn btn-primary btn-lg" href="/download"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.6v6.9H3zM11 4.4 21 3v8.5H11zM3 12.5h7v6.9L3 18.5zM11 12.5h10V21l-10-1.4z"/></svg><span data-i18n="close.cta">Baixar o SoundDeck</span></a>
+        <a class="btn btn-primary btn-lg" href="{{BASE}}/download"><svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.6v6.9H3zM11 4.4 21 3v8.5H11zM3 12.5h7v6.9L3 18.5zM11 12.5h10V21l-10-1.4z"/></svg><span data-i18n="close.cta">Baixar o SoundDeck</span></a>
         <a class="btn btn-ghost btn-lg" href="https://github.com/LucasHenriqueDiniz/sounddeck" data-i18n="close.cta2">Ver o código no GitHub</a>
       </div>
       <p class="fine" data-i18n="close.fine">Windows 10/11 · gratuito · código aberto</p>
@@ -247,12 +196,12 @@
   <footer>
     <span>SoundDeck</span>
     <span data-i18n="foot.tagline">App nativo para Windows · Tauri + Rust</span>
-    <a href="/changelog" data-i18n="foot.changelog">Notas de versão</a>
-    <a href="/privacy" data-i18n="foot.privacy">Privacidade</a>
+    <a href="{{BASE}}/changelog" data-i18n="foot.changelog">Notas de versão</a>
+    <a href="{{BASE}}/privacy" data-i18n="foot.privacy">Privacidade</a>
     <a href="https://github.com/LucasHenriqueDiniz/sounddeck" data-i18n="foot.github">Código no GitHub</a>
     <span data-i18n="foot.legal">Windows é marca da Microsoft. Este projeto não é afiliado à Microsoft.</span>
   </footer>
 </main>
-<script src="site.js"></script>
+<script src="/site.js"></script>
 </body>
 </html>

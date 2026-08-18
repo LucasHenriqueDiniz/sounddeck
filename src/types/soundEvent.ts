@@ -17,12 +17,12 @@ export type EventCategory =
   | "session";
 
 export const EVENT_CATEGORY_LABEL: Record<EventCategory, string> = {
-  system: "Sistema",
-  notifications: "Notificações",
-  devices: "Dispositivos",
-  power: "Energia",
+  system: "System",
+  notifications: "Notifications",
+  devices: "Devices",
+  power: "Power",
   explorer: "Explorer",
-  session: "Sessão",
+  session: "Session",
 };
 
 export const EVENT_CATEGORY_ORDER: EventCategory[] = [

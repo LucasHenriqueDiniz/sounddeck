@@ -41,7 +41,7 @@ export function AppShell() {
         <div className={styles.titlebarStatus}>
           {nativeUnavailable && (
             <IconButton
-              label="Recurso nativo indisponível — aplicação real ao Windows desativada"
+              label="Native capability unavailable — applying to Windows is disabled"
               icon={<PlugOffIcon />}
               variant="ghost"
             />
@@ -54,11 +54,11 @@ export function AppShell() {
         {externallyChanged && (
           <StatusBanner
             severity="warning"
-            title="O esquema de sons do Windows foi alterado fora do SoundDeck"
+            title="The Windows sound scheme was changed outside SoundDeck"
             description={
               appliedPack
-                ? `A última referência conhecida era "${appliedPack.name}". Sincronize para confirmar o estado atual.`
-                : "Sincronize para confirmar o estado atual antes de aplicar um novo pack."
+                ? `The last known reference was "${appliedPack.name}". Sync to confirm the current state.`
+                : "Sync to confirm the current state before applying a new pack."
             }
             action={
               <IconButton

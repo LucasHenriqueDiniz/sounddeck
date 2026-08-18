@@ -22,6 +22,7 @@ npm run build              # tsc + vite build
 npm run tauri build        # instaladores em src-tauri/target/release/bundle
 npm run build:landing-packs  # regenera landing-page/packs-data.js
 npm run build:og             # regenera landing-page/og.png
+npm run build:landing        # gera landing-page/dist/ (site multilíngue)
 ```
 
 Não existe suíte de testes. Verificação é manual, rodando o app.
@@ -108,26 +109,45 @@ Mantenha essa linha.
 
 ## Landing page
 
-`landing-page/` é um site estático — HTML/CSS/JS puro, sem build, sem framework.
-Publicado em **https://sounddeck.lucashdo.com** (Cloudflare Workers).
+Site estático **multilíngue**, gerado por script. Publicado em
+**https://sounddeck.lucashdo.com** (Cloudflare Workers).
+
+```
+landing-page/
+  templates/   HTML de origem, com data-i18n e marcadores {{LANG}} {{BASE}} <!--HEAD--> <!--LANGS-->
+  i18n/        en.json pt.json es.json de.json fr.json  — fonte única das strings
+  static/      site.css site.js og.png favicon.png icon-310.png packs-data.js llms.txt
+  dist/        gerado, fora do git — é o que o wrangler publica
+```
 
 ```bash
+npm run build:landing      # gera dist/
 cd landing-page && npx wrangler deploy
 ```
 
-Convenções que quebram silenciosamente se ignoradas:
+**Nunca edite `dist/` nem os HTML por idioma** — eles são saída. Mexa em
+`templates/` (estrutura) ou `i18n/*.json` (texto).
 
-- **i18n:** elementos com `data-i18n="chave"` têm o conteúdo substituído por
-  `innerHTML` a partir do dicionário em `site.js`. **Sempre deixe o texto em
-  português inline no HTML** — se o elemento ficar vazio, o crawler sem JS não
-  vê nada. Isso já foi um bug real: as seções Recursos e Segurança chegavam
-  vazias ao Google.
-- **URLs sem extensão** (`/download`, `/changelog`, `/privacy`). Links internos,
-  `canonical`, `og:url` e `sitemap.xml` usam essa forma; os `.html` redirecionam.
-- Ao mudar título ou descrição de uma página, atualize os pares
-  `data-desc-pt/en` e `data-og-pt/en` junto — eles trocam com o idioma.
-- `og.png` é gerado por script, não editado à mão. Rode `npm run build:og`.
+Cada idioma tem URL própria: inglês na raiz, os demais em `/pt/`, `/es/`,
+`/de/`, `/fr/`. Isso não é preferência de estilo — um seletor de idioma por
+JavaScript faz o Google indexar só o idioma padrão, que era o problema antes.
+O texto traduzido precisa estar no HTML servido.
+
+Para adicionar um idioma: criar `i18n/<código>.json` com as mesmas chaves e
+acrescentar uma entrada em `LANGS` no build. O build avisa em stderr se
+alguma chave estiver faltando.
+
+Outras convenções:
+
+- Inglês é o padrão e vai para a raiz. É o primeiro item de `LANGS`.
+- O seletor usa **nomes de idioma, nunca bandeiras** — bandeira é país, não
+  idioma (pt = Brasil ou Portugal? en = EUA ou Reino Unido?).
+- `site.js` não traduz nada. As poucas strings que ele usa em runtime
+  (download e changelog, renderizados da API do GitHub) vêm de
+  `window.__I18N`, injetado pelo build.
+- `og.png` é gerado por script: `npm run build:og`.
 - `llms.txt` descreve o site para agentes de IA. Atualize quando o produto mudar.
+
 
 ## Release
 
@@ -163,6 +183,10 @@ winget validate --manifest winget/<versão>
 ## Estado atual
 
 v0.1.0 publicada. Em desenvolvimento ativo.
+
+A interface do app é **em inglês**, hardcoded — não há sistema de i18n no app
+(diferente do site). Se um dia precisar de mais idiomas ali, será preciso criar
+a infra do zero.
 
 O `UpgradeCode` do MSI está **fixado** em `tauri.conf.json`
 (`bundle.windows.wix.upgradeCode`). Não mude esse GUID: ele é o que faz o

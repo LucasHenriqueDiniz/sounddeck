@@ -32,7 +32,7 @@ export function BackupList() {
       <header className={styles.header}>
         <div>
           <h1 className={styles.title}>Backups</h1>
-          <p className={styles.subtitle}>Snapshots criados automaticamente antes de cada aplicação de pack.</p>
+          <p className={styles.subtitle}>Snapshots taken automatically before every pack you apply.</p>
         </div>
       </header>
 
@@ -40,15 +40,15 @@ export function BackupList() {
         {restoreError && (
           <StatusBanner
             severity="danger"
-            title="Não foi possível restaurar o backup"
+            title="Could not restore the backup"
             description={restoreError}
           />
         )}
         {restoredId && (
           <StatusBanner
             severity="success"
-            title="Backup restaurado com sucesso"
-            description="O esquema de sons anterior foi reaplicado."
+            title="Backup restored"
+            description="The previous sound scheme has been reapplied."
             onDismiss={clearRestoredId}
           />
         )}
@@ -66,14 +66,14 @@ export function BackupList() {
         )}
 
         {state.status === "error" && (
-          <ErrorState title="Não foi possível carregar os backups" detail={state.message} onRetry={reload} />
+          <ErrorState title="Could not load the backups" detail={state.message} onRetry={reload} />
         )}
 
         {state.status === "success" && backups.length === 0 && (
           <EmptyState
             icon={<BackupsIcon size={32} />}
-            title="Nenhum backup ainda"
-            description="Backups são criados automaticamente sempre que você aplica um pack."
+            title="No backups yet"
+            description="Backups are created automatically whenever you apply a pack."
           />
         )}
 
@@ -95,22 +95,21 @@ export function BackupList() {
       <Dialog
         open={pending !== null}
         onClose={() => setPendingId(null)}
-        title="Restaurar este backup?"
-        description={pending ? `"${pending.label}" substituirá o esquema de sons atual do Windows.` : undefined}
+        title="Restore this backup?"
+        description={pending ? `"${pending.label}" will replace the current Windows sound scheme.` : undefined}
         footer={
           <>
             <Button variant="ghost" onClick={() => setPendingId(null)}>
               Cancelar
             </Button>
             <Button variant="primary" onClick={confirmRestore}>
-              Restaurar
+              Restore
             </Button>
           </>
         }
       >
         <p style={{ font: "var(--text-sm)", color: "var(--text-secondary)" }}>
-          Essa ação não pode ser desfeita automaticamente — restaure novamente outro backup se precisar
-          voltar atrás.
+          This action cannot be undone automatically — restore another backup if you need to go back.
         </p>
       </Dialog>
     </div>

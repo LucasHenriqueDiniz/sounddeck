@@ -167,7 +167,7 @@ export const SOUND_PACKS: SoundPack[] = [
     origin: "microsoft",
     releaseYear: 2001,
     description:
-      "O esquema clássico do XP: tada de logon, chimes de aviso e o bip curto que todo mundo reconhece.",
+      "The classic XP scheme: the logon tada, warning chimes and the short beep everyone recognises.",
     cover: { gradientFrom: "#2f7fd6", gradientTo: "#8fc44c", glyph: "XP" },
     assignments: xpAssignments,
   },
@@ -178,7 +178,7 @@ export const SOUND_PACKS: SoundPack[] = [
     origin: "microsoft",
     releaseYear: 2006,
     description:
-      "Sons mais longos e orquestrais, incluindo o logon de abertura e o aviso de UAC que marcou a época.",
+      "Longer, orchestral sounds, including the opening logon and the UAC prompt that defined the era.",
     cover: { gradientFrom: "#4a6fa5", gradientTo: "#0f2a4a", glyph: "Vi" },
     assignments: vistaAssignments,
   },
@@ -189,7 +189,7 @@ export const SOUND_PACKS: SoundPack[] = [
     origin: "microsoft",
     releaseYear: 2009,
     description:
-      "O esquema padrão mais usado da história do Windows — equilibrado, discreto e ainda hoje o mais lembrado.",
+      "The most widely used default scheme in Windows history — balanced, restrained and still the best remembered.",
     cover: { gradientFrom: "#5aa6e0", gradientTo: "#12395e", glyph: "7" },
     assignments: win7Assignments,
   },
@@ -199,7 +199,7 @@ export const SOUND_PACKS: SoundPack[] = [
     author: "SoundDeck",
     origin: "sounddeck",
     description:
-      "Quase tudo desativado. Apenas cliques curtos para os eventos essenciais — pensado para quem quer silêncio.",
+      "Almost everything off. Only short clicks for the essential events — made for people who want quiet.",
     cover: { gradientFrom: "#3a3a3a", gradientTo: "#111111", glyph: "—" },
     assignments: minimalAssignments,
   },
@@ -209,7 +209,7 @@ export const SOUND_PACKS: SoundPack[] = [
     author: "SoundDeck",
     origin: "sounddeck",
     description:
-      "Sinos e toques suaves no lugar dos alertas ásperos do Windows. Erros críticos ficam em silêncio.",
+      "Soft bells and chimes instead of the harsh Windows alerts. Critical errors stay silent.",
     cover: { gradientFrom: "#7fb0a0", gradientTo: "#2c4a44", glyph: "☾" },
     assignments: calmAssignments,
   },

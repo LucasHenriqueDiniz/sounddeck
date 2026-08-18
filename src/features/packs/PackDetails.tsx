@@ -10,7 +10,7 @@ import styles from "./PackDetails.module.css";
 
 const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
   microsoft: "Microsoft",
-  community: "Comunidade",
+  community: "Community",
   sounddeck: "SoundDeck",
 };
 
@@ -57,11 +57,11 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
       <div className={styles.stats}>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.totalEvents}</span>
-          <span className={styles.statLabel}>eventos</span>
+          <span className={styles.statLabel}>events</span>
         </div>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.usingPackSound}</span>
-          <span className={styles.statLabel}>sons do pack</span>
+          <span className={styles.statLabel}>pack sounds</span>
         </div>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.disabled}</span>
@@ -78,7 +78,7 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
           Editar eventos
         </Button>
         <Button variant="primary" onClick={onApply} disabled={isApplied}>
-          {isApplied ? "Já aplicado" : "Aplicar pack"}
+          {isApplied ? "Already applied" : "Apply pack"}
         </Button>
       </div>
     </div>

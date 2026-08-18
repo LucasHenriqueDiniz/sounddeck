@@ -25,7 +25,7 @@ export function getConfiguredCatalogBaseUrl(): string | null {
 export async function fetchRemoteCatalog(baseUrl: string): Promise<SoundPack[]> {
   const response = await fetch(`${baseUrl}/catalog.json`);
   if (!response.ok) {
-    throw new Error(`Falha ao buscar catálogo remoto: HTTP ${response.status}`);
+    throw new Error(`Failed to fetch the remote catalog: HTTP ${response.status}`);
   }
   const catalog = (await response.json()) as RemoteCatalog;
   return catalog.packs.map((pack) => {

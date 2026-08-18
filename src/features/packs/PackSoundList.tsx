@@ -30,15 +30,15 @@ export function PackSoundList({ packId, assignments, remoteBaseUrl }: PackSoundL
   if (metaByCategory.length === 0) {
     return (
       <div className={styles.section}>
-        <p className={styles.heading}>Sons do pack</p>
-        <p className={styles.empty}>Este pack não substitui nenhum som — todos os eventos usam o padrão do Windows.</p>
+        <p className={styles.heading}>Pack sounds</p>
+        <p className={styles.empty}>This pack replaces no sounds — every event uses the Windows default.</p>
       </div>
     );
   }
 
   return (
     <div className={styles.section}>
-      <p className={styles.heading}>Sons do pack</p>
+      <p className={styles.heading}>Pack sounds</p>
       <div className={styles.list}>
         {metaByCategory.map(({ category, items }) => (
           <div key={category} className={styles.group}>

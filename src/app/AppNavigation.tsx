@@ -3,13 +3,13 @@ import { BackupsIcon, EditorIcon, LibraryIcon, SettingsIcon } from "../component
 import { useAppState, type ViewId } from "./AppState";
 
 const ITEMS: TabItem<ViewId>[] = [
-  { id: "library", label: "Biblioteca", icon: <LibraryIcon /> },
+  { id: "library", label: "Library", icon: <LibraryIcon /> },
   { id: "editor", label: "Editor", icon: <EditorIcon /> },
   { id: "backups", label: "Backups", icon: <BackupsIcon /> },
-  { id: "settings", label: "Configurações", icon: <SettingsIcon /> },
+  { id: "settings", label: "Settings", icon: <SettingsIcon /> },
 ];
 
 export function AppNavigation() {
   const { view, setView } = useAppState();
-  return <Tabs items={ITEMS} value={view} onChange={setView} aria-label="Navegação principal" />;
+  return <Tabs items={ITEMS} value={view} onChange={setView} aria-label="Main navigation" />;
 }

@@ -78,12 +78,12 @@ export function AudioPreviewButton({
   }
 
   const accessibleLabel = errored
-    ? `Não foi possível carregar a prévia de ${label}`
+    ? `Could not load the ${label} preview`
     : playing
-      ? `Parar prévia de ${label}`
+      ? `Stop the ${label} preview`
       : audioUrl
-        ? `Ouvir prévia de ${label}`
-        : `Ouvir prévia de ${label} (áudio de demonstração)`;
+        ? `Play the ${label} preview`
+        : `Play the ${label} preview (demo audio)`;
 
   return (
     <IconButton

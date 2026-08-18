@@ -18,8 +18,8 @@ const ERA_PREFIXES: Array<{ prefix: string; label: string }> = [
 ];
 
 const ORIGIN_TAG: Record<SoundPack["origin"], string> = {
-  microsoft: "Oficial",
-  community: "Comunidade",
+  microsoft: "Official",
+  community: "Community",
   sounddeck: "SoundDeck",
 };
 
