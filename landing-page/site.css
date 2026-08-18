@@ -375,3 +375,7 @@ html, body { overflow-x: hidden; }
   .shot-body { overflow-x: auto; }
   .shot-side { flex: 0 0 auto; }
 }
+
+/* links das notas de versão — herdavam o azul padrão do navegador */
+.rel-list p a { color: var(--color-accent-700); font-size: 13.5px; }
+html[data-theme="dark"] .rel-list p a { color: var(--color-accent); }
