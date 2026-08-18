@@ -95,12 +95,41 @@ Pipeline de autoria, rodado à mão e **fora do app**:
 
 ```
 zips de esquemas clássicos
-  → scripts/build-catalog.mjs    # extrai, normaliza, gera remote-catalog.json
+  → scripts/build-catalog.mjs    # extrai, normaliza, gera catalog.json
   → scripts/upload-catalog.mjs   # sobe para o R2 via wrangler
 ```
 
-`scripts/build-landing-packs.mjs` é outra coisa: gera `landing-page/packs-data.js`
-para o site, a partir do mesmo catálogo.
+**Nada disso publica sozinho.** Mudar `scripts/cover-images/`, as tabelas
+`COVER_IMAGE_OVERRIDES`/`COVER_PHOTO_CREDITS`, ou qualquer coisa que afete o
+catálogo só tem efeito depois que os dois comandos acima rodam — sempre que
+mexer em algo aqui, rode os dois antes de considerar a mudança concluída.
+`build-catalog.mjs` só funciona com a pasta local dos `.zip` originais
+(`SOURCE_DIR`, hoje em `C:\Users\Lucas Diniz\Downloads\Nova pasta (2)`) — se
+essa pasta não existir no ambiente atual, **não dá pra rodar o pipeline
+completo**, porque ele reprocessa o áudio junto.
+
+Estrutura do bucket, para quem precisar mexer direto:
+`catalog.json` na raiz; cada pack em `packs/<id>/`, com os `.wav` e (se tiver)
+`cover.jpg` dentro. `packService`/`remoteCatalogService.ts` resolvem tudo a
+partir dessas duas convenções — nada de nomes especiais por pack.
+
+Se só a **capa** de um pack mudar (não o áudio) e a pasta local não estiver
+disponível, dá pra fazer o equivalente sem rodar o pipeline completo: baixar o
+`catalog.json` publicado, setar `cover.imageUrl = "cover.jpg"` e atualizar
+`sourceCredit` só nos packs afetados (mesmo formato que `build-catalog.mjs`
+geraria), subir o(s) `cover.jpg` para `packs/<id>/cover.jpg` e o `catalog.json`
+atualizado via `wrangler r2 object put ... --remote`. Isso é um atalho, não o
+caminho normal — só serve para capa/metadado, nunca para trocar áudio, e só
+porque o resultado final é idêntico ao que o pipeline completo produziria
+(as tabelas de override já ficam atualizadas em `build-catalog.mjs` de todo
+jeito, então rodar o pipeline completo depois não desfaz nada).
+
+O bucket público não envia `Cache-Control` no `catalog.json` nem nos `.wav`/
+`.jpg` — navegadores aplicam cache heurístico baseado em `Last-Modified`.
+Depois de publicar algo novo, um `curl` sempre mostra o dado fresco; uma aba
+de navegador já aberta pode continuar mostrando a versão antiga até o cache
+expirar ou um reload forçado (`cache: 'no-store'`) acontecer. Não é bug — é
+como o bucket já estava configurado.
 
 Sobre licenciamento de áudio: os esquemas clássicos vêm de acervos públicos de
 fãs. O site é explícito que não redistribui arquivos da Microsoft, e as capas
