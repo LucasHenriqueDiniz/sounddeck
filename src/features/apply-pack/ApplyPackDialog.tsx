@@ -1,7 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Dialog } from "../../components/Dialog";
 import { Button } from "../../components/Button";
 import { StatusBanner } from "../../components/StatusBanner";
+import { Switch } from "../../components/Switch";
 import { CheckIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
@@ -20,9 +21,13 @@ interface ApplyPackDialogProps {
 export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDialogProps) {
   const t = useT();
   const { state, start, cancel, reset } = useApplyPackFlow(onApplied);
+  const [createBackup, setCreateBackup] = useState(true);
 
   useEffect(() => {
-    if (open) reset();
+    if (open) {
+      reset();
+      setCreateBackup(true);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, pack?.id]);
 
@@ -54,7 +59,7 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
             <Button variant="ghost" onClick={onClose}>
               {t("common.cancel")}
             </Button>
-            <Button variant="primary" onClick={() => start(pack)}>
+            <Button variant="primary" onClick={() => start(pack, { skipBackup: !createBackup })}>
               {t("pack.applyPack")}
             </Button>
           </>
@@ -87,7 +92,7 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
           <ul className={styles.stats}>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.totalEvents}</span>
-              <span className={styles.statLabel}>eventos modificados</span>
+              <span className={styles.statLabel}>{t("apply.eventsModified")}</span>
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.usingPackSound}</span>
@@ -103,9 +108,12 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
             </li>
           </ul>
           <StatusBanner
-            severity="info"
-            title={t("apply.backupNotice.title")}
-            description={t("apply.backupNotice.desc")}
+            severity={createBackup ? "info" : "warning"}
+            title={createBackup ? t("apply.backupNotice.title") : t("apply.backupNotice.offTitle")}
+            description={createBackup ? t("apply.backupNotice.desc") : t("apply.backupNotice.offDesc")}
+            action={
+              <Switch checked={createBackup} onChange={setCreateBackup} label={t("apply.backupToggle")} />
+            }
           />
         </div>
       )}

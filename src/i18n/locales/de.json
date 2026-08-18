@@ -189,5 +189,11 @@
   "event.disabledState": "Deaktiviert",
   "backups.restoredBadge": "Wiederhergestellt",
   "backups.autoLabel": "Vor der Anwendung von {name}",
-  "backups.originalScheme": "Ursprüngliches Systemschema"
+  "backups.originalScheme": "Ursprüngliches Systemschema",
+  "settings.developer": "Entwickleroptionen",
+  "apply.eventsModified": "Ereignisse geändert",
+  "apply.backupToggle": "Sicherung erstellen",
+  "apply.backupNotice.offTitle": "Es wird keine Sicherung erstellt",
+  "apply.backupNotice.offDesc": "Sie können das vorherige Schema nicht über Sicherungen wiederherstellen.",
+  "a11y.dismiss": "Hinweis schließen"
 }

@@ -35,7 +35,7 @@ export function AppShell() {
     <div className={styles.shell}>
       <header className={styles.titlebar} data-tauri-drag-region="deep">
         <div className={styles.brand}>
-          <span className={styles.brandMark} aria-hidden="true" />
+          <img className={styles.brandMark} src="/favicon.png" alt="" aria-hidden="true" />
           <span className={styles.brandName}>SoundDeck</span>
         </div>
         <AppNavigation />

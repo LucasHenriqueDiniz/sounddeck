@@ -15,9 +15,21 @@
   background: var(--surface-hover);
 }
 
-.selected {
+.card:active {
+  background: var(--surface-selected);
+}
+
+/* Selection is the stronger state: it must win over :hover, which shares its
+   specificity (both are one class + one pseudo-class) and would otherwise
+   flicker the card back to "unselected" on mouseover. */
+.card.selected,
+.card.selected:hover {
   border-color: var(--accent);
   background: var(--surface-selected);
+}
+
+.card.selected:active {
+  background: var(--surface-hover);
 }
 
 .coverWrap {

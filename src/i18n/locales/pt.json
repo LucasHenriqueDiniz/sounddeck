@@ -189,5 +189,11 @@
   "event.disabledState": "Desativado",
   "backups.restoredBadge": "Restaurado",
   "backups.autoLabel": "Antes de aplicar {name}",
-  "backups.originalScheme": "Esquema original do sistema"
+  "backups.originalScheme": "Esquema original do sistema",
+  "settings.developer": "Opções de desenvolvedor",
+  "apply.eventsModified": "eventos modificados",
+  "apply.backupToggle": "Criar backup",
+  "apply.backupNotice.offTitle": "Nenhum backup será criado",
+  "apply.backupNotice.offDesc": "Você não poderá restaurar o esquema anterior em Backups.",
+  "a11y.dismiss": "Dispensar aviso"
 }

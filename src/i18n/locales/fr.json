@@ -189,5 +189,11 @@
   "event.disabledState": "Désactivé",
   "backups.restoredBadge": "Restauré",
   "backups.autoLabel": "Avant l'application de {name}",
-  "backups.originalScheme": "Jeu de sons système d'origine"
+  "backups.originalScheme": "Jeu de sons système d'origine",
+  "settings.developer": "Options développeur",
+  "apply.eventsModified": "événements modifiés",
+  "apply.backupToggle": "Créer une sauvegarde",
+  "apply.backupNotice.offTitle": "Aucune sauvegarde ne sera créée",
+  "apply.backupNotice.offDesc": "Vous ne pourrez pas restaurer le jeu de sons précédent depuis Sauvegardes.",
+  "a11y.dismiss": "Ignorer l'avis"
 }

@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { AlertCircleIcon, AlertTriangleIcon, CheckIcon, InfoIcon } from "./icons/icons";
+import { useT } from "../i18n";
 import styles from "./StatusBanner.module.css";
 
 type Severity = "info" | "success" | "warning" | "danger";
@@ -21,6 +22,7 @@ const ICONS: Record<Severity, ReactNode> = {
 
 /** Persistent/contextual banner for system-level status. */
 export function StatusBanner({ severity, title, description, action, onDismiss }: StatusBannerProps) {
+  const t = useT();
   return (
     <div
       className={[styles.banner, styles[severity]].join(" ")}
@@ -34,7 +36,7 @@ export function StatusBanner({ severity, title, description, action, onDismiss }
       </div>
       {action && <div className={styles.action}>{action}</div>}
       {onDismiss && (
-        <button className={styles.dismiss} onClick={onDismiss} aria-label="Dispensar aviso">
+        <button className={styles.dismiss} onClick={onDismiss} aria-label={t("a11y.dismiss")}>
           ×
         </button>
       )}

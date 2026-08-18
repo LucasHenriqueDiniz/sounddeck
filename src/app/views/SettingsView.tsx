@@ -87,16 +87,6 @@ export function SettingsView() {
               />
             )}
           </div>
-
-          <div className={styles.row}>
-            <div className={styles.rowInfo}>
-              <span className={styles.rowTitle}>{t("settings.simulate.title")}</span>
-              <span className={styles.rowDescription}>{t("settings.simulate.desc")}</span>
-            </div>
-            <Button variant="secondary" size="sm" onClick={triggerExternalChangeDemo}>
-              {t("settings.simulate.button")}
-            </Button>
-          </div>
         </section>
 
         <section className={styles.section}>
@@ -117,6 +107,19 @@ export function SettingsView() {
             {t("settings.credit.after")}
           </p>
         </section>
+
+        <details className={styles.devSection}>
+          <summary className={styles.devSummary}>{t("settings.developer")}</summary>
+          <div className={styles.row}>
+            <div className={styles.rowInfo}>
+              <span className={styles.rowTitle}>{t("settings.simulate.title")}</span>
+              <span className={styles.rowDescription}>{t("settings.simulate.desc")}</span>
+            </div>
+            <Button variant="secondary" size="sm" onClick={triggerExternalChangeDemo}>
+              {t("settings.simulate.button")}
+            </Button>
+          </div>
+        </details>
       </div>
     </div>
   );

@@ -20,11 +20,15 @@ export function useApplyPackFlow(onSuccess: () => void) {
   const handleRef = useRef<ApplyPackHandle | null>(null);
 
   const start = useCallback(
-    (pack: SoundPack) => {
+    (pack: SoundPack, options?: { skipBackup?: boolean }) => {
       setState({ phase: "running", progressPhase: "validating", progressValue: 0 });
-      const { promise, handle } = runApplyPack(pack, ({ phase, phaseProgress }) => {
-        setState((prev) => ({ ...prev, progressPhase: phase, progressValue: phaseProgress }));
-      });
+      const { promise, handle } = runApplyPack(
+        pack,
+        ({ phase, phaseProgress }) => {
+          setState((prev) => ({ ...prev, progressPhase: phase, progressValue: phaseProgress }));
+        },
+        options,
+      );
       handleRef.current = handle;
 
       promise.then((outcome: ApplyOutcome) => {

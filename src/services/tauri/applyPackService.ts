@@ -62,6 +62,7 @@ export interface ApplyPackHandle {
 export function runApplyPack(
   pack: SoundPack,
   onProgress: (state: { phase: ApplyPhase; phaseProgress: number }) => void,
+  options: { skipBackup?: boolean } = {},
 ): { promise: Promise<ApplyOutcome>; handle: ApplyPackHandle } {
   let cancelled = false;
   const handle: ApplyPackHandle = {
@@ -70,8 +71,12 @@ export function runApplyPack(
     },
   };
 
+  const phases = options.skipBackup
+    ? APPLY_PHASE_ORDER.filter((phase) => phase !== "creating-backup")
+    : APPLY_PHASE_ORDER;
+
   const promise = (async (): Promise<ApplyOutcome> => {
-    for (const phase of APPLY_PHASE_ORDER) {
+    for (const phase of phases) {
       const duration = PHASE_DURATION_MS[phase];
       const steps = Math.max(1, Math.round(duration / 90));
       for (let step = 1; step <= steps; step += 1) {
@@ -91,15 +96,17 @@ export function runApplyPack(
       }
     }
 
-    pushBackup({
-      id: `bkp-${Date.now()}`,
-      createdAt: new Date().toISOString(),
-      labelKey: "backups.autoLabel",
-      labelVars: { name: pack.name },
-      eventCount: pack.assignments.length,
-      sizeLabel: "2.0 MB",
-      restorable: true,
-    });
+    if (!options.skipBackup) {
+      pushBackup({
+        id: `bkp-${Date.now()}`,
+        createdAt: new Date().toISOString(),
+        labelKey: "backups.autoLabel",
+        labelVars: { name: pack.name },
+        eventCount: pack.assignments.length,
+        sizeLabel: "2.0 MB",
+        restorable: true,
+      });
+    }
     setAppliedPackId(pack.id);
 
     return { status: "success" };

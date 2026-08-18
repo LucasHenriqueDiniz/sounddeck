@@ -189,5 +189,11 @@
   "event.disabledState": "Disabled",
   "backups.restoredBadge": "Restored",
   "backups.autoLabel": "Before applying {name}",
-  "backups.originalScheme": "Original system scheme"
+  "backups.originalScheme": "Original system scheme",
+  "settings.developer": "Developer options",
+  "apply.eventsModified": "events changed",
+  "apply.backupToggle": "Create backup",
+  "apply.backupNotice.offTitle": "No backup will be created",
+  "apply.backupNotice.offDesc": "You will not be able to restore the previous scheme from Backups.",
+  "a11y.dismiss": "Dismiss"
 }
