@@ -135,14 +135,17 @@ Sobre licenciamento de áudio: os esquemas clássicos vêm de acervos públicos 
 fãs. O site é explícito que os arquivos de áudio não são redistribuídos pela
 Microsoft (`packs.note` no site) — isso continua verdade, mantenha essa linha.
 
-Sobre as capas, a regra **default** é a mesma: só imagens livres ou originais,
-nunca logo ou wallpaper com marca — é o que `scripts/build-catalog.mjs` faz na
-maioria dos packs. Existe uma **exceção deliberada**, por decisão explícita do
-autor: `xp-real`, `win10`, `win98` e `win7-delta` usam a logo/tela oficial da
-Microsoft; `win7-characters` e `win7-festival` têm a logo do Windows 7
-composta por cima. Está tudo documentado em `COVER_PHOTO_CREDITS` no próprio
-script, sem esconder que é material da Microsoft. Não generalize essa exceção
-para novos packs sem confirmar de novo — ela vale só para esses seis.
+Sobre as capas, a regra **default** é: só imagens livres ou originais, nunca
+logo ou wallpaper com marca — é o que `scripts/build-catalog.mjs` faz nos
+packs de Vista e Plus! (95 e XP), 11 ao todo. Existe uma **exceção
+deliberada**, por decisão explícita do autor, que hoje cobre todo o conjunto
+Windows 7/8/10/98/XP (17 packs): `xp-real`, `win10`, `win98`, `win8` e
+`win7-delta` usam a logo/tela oficial da Microsoft direto; todos os outros
+`win7-*` — incluindo `win7-heritage`, que é foto pessoal do autor — têm a logo
+do Windows 7 composta por cima. Está tudo documentado em
+`COVER_PHOTO_CREDITS` no próprio script, sem esconder que é material da
+Microsoft. Não generalize essa exceção para Vista/Plus! ou para novos packs
+sem confirmar de novo — não há arquivo de logo para essas sub-marcas hoje.
 
 ## Landing page
 

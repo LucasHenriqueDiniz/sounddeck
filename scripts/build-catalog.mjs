@@ -26,8 +26,9 @@ const OUTPUT_DIR = process.argv[3] ?? join(tmpdir(), "sounddeck-catalog");
 const SOURCE_CREDIT = "Arquivos de som via https://lelegofrog.github.io/wav.html";
 
 // ---------------------------------------------------------------------------
-// Cover images — optional, per pack id. Always freely-licensed or original
-// photos (see PHOTO_CREDITS / DESIGN.md) — never a trademarked logo/wallpaper.
+// Cover images — optional, per pack id. Default is a freely-licensed or
+// original photo (see PHOTO_CREDITS / DESIGN.md), but 17 packs are a
+// documented trademark exception — see the comment above COVER_PHOTO_CREDITS.
 // Falls back to the generated gradient+glyph when a pack has no entry here.
 // ---------------------------------------------------------------------------
 const SCRIPT_DIR = fileURLToPath(new URL(".", import.meta.url));
@@ -64,37 +65,39 @@ const COVER_IMAGE_OVERRIDES = {
   "plusxp-space": "plusxp-space.jpg",
 };
 
-// Most photos below are freely licensed (Unsplash License) and chosen to
-// evoke the pack's theme without reproducing any Microsoft-authored artwork —
-// the DESIGN.md default. Museum-provided reproductions (Art Institute of
-// Chicago) are public-domain photographs of public-domain artworks.
+// Vista/Plus! 95/Plus! XP covers below are freely licensed (Unsplash License)
+// and chosen to evoke the pack's theme without reproducing any
+// Microsoft-authored artwork — the DESIGN.md default. Museum-provided
+// reproductions (Art Institute of Chicago) are public-domain photographs of
+// public-domain artworks.
 //
-// Exception, by explicit product decision (not the DESIGN.md default): xp-real,
-// win10, win98, win7-delta use Microsoft's own official logo/splash/packaging
-// art, and win7-characters/win7-festival get the Windows 7 logo composited on
-// top. These knowingly redistribute Microsoft-branded material — every credit
-// string below says so plainly instead of implying a free license that does
-// not apply. This also means landing-page/privacy.html's "does not
-// redistribute Microsoft files" claim is no longer accurate for these 6 packs
-// and needs updating if this stays in place.
+// Exception, by explicit product decision (not the DESIGN.md default):
+// xp-real/win10/win98/win8/win7-delta use Microsoft's own official
+// logo/splash/packaging art outright, and every other win7-* cover (including
+// the author's personal win7-heritage photo) has the Windows 7 logo
+// composited on top. These knowingly redistribute Microsoft-branded material
+// — every credit string below says so plainly instead of implying a free
+// license that does not apply. This is the full Windows 7/8/10/98/XP set (17
+// packs); Vista and the Plus! packs (11 packs) stay on the DESIGN.md default
+// since no logo asset was supplied for those sub-brands.
 const COVER_PHOTO_CREDITS = {
   "xp-real": "Tela de logo oficial do Windows XP (Microsoft) — uso da marca não coberto por licença livre.",
   win10: "Gráfico de marca oficial do Windows 10 (Microsoft) — uso da marca não coberto por licença livre.",
   win98: "Tela de logo oficial do Windows 98 (Microsoft) — uso da marca não coberto por licença livre.",
-  win8: "Foto de S A via Unsplash (Unsplash License, uso livre)",
-  "win7-afternoon": "Foto de Rui Marinho via Unsplash (Unsplash License, uso livre)",
-  "win7-calligraphy": "Foto de Yifeng Lu via Unsplash (Unsplash License, uso livre)",
+  win8: "Tela de marca oficial do Windows 8 (Microsoft) — uso da marca não coberto por licença livre.",
+  "win7-afternoon": "Foto de Rui Marinho via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-calligraphy": "Foto de Yifeng Lu via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
   "win7-characters": "Render 3D de origem não identificada, via Reddit — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-cityscape": "Foto de Julien Maculan via Unsplash (Unsplash License, uso livre)",
+  "win7-cityscape": "Foto de Julien Maculan via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
   "win7-delta": "Arte oficial da embalagem do Windows 7 Delta Extras Pack (Microsoft) — uso da marca não coberto por licença livre.",
   "win7-festival": "Foto de origem não identificada, via TechTudo/Globo — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-garden": "Foto de Annie Spratt via Unsplash (Unsplash License, uso livre)",
-  "win7-heritage": "Foto pessoal do autor do projeto (ponte de dezessete arcos, Palácio de Verão).",
-  "win7-landscape": "Foto de Mohammed Shonar via Unsplash (Unsplash License, uso livre)",
-  "win7-quirky": "Foto de Karla Vidal via Unsplash (Unsplash License, uso livre)",
-  "win7-raga": "Foto de Gowtham AGM via Unsplash (Unsplash License, uso livre)",
-  "win7-savanna": "Foto de Justin Lane via Unsplash (Unsplash License, uso livre)",
-  "win7-sonata": "Foto de Johannes Plenio via Unsplash (Unsplash License, uso livre)",
+  "win7-garden": "Foto de Annie Spratt via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-heritage": "Foto pessoal do autor do projeto (ponte de dezessete arcos, Palácio de Verão) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-landscape": "Foto de Mohammed Shonar via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-quirky": "Foto de Karla Vidal via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-raga": "Foto de Gowtham AGM via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-savanna": "Foto de Justin Lane via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
+  "win7-sonata": "Foto de Johannes Plenio via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
   "plus95-jungle": "Foto de Geio Tischler via Unsplash (Unsplash License, uso livre)",
   "plus95-musica": "Foto de Gabriel Lerner via Unsplash (Unsplash License, uso livre)",
   "plus95-robotz": "Foto de Emilipothèse via Unsplash (Unsplash License, uso livre)",
