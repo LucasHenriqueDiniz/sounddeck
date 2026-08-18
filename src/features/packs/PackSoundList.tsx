@@ -1,9 +1,10 @@
 import { SOUND_EVENT_CATALOG } from "../../mocks/soundEventCatalog";
 import { AudioPreviewButton } from "../../components/AudioPreviewButton";
-import { EVENT_CATEGORY_LABEL, EVENT_CATEGORY_ORDER, eventKey } from "../../types/soundEvent";
+import { EVENT_CATEGORY_KEY, EVENT_CATEGORY_ORDER, eventKey } from "../../types/soundEvent";
 import type { PackEventAssignment } from "../../types/soundEvent";
 import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
 import styles from "./PackSoundList.module.css";
+import { useT, type TranslationKey } from "../../i18n";
 
 interface PackSoundListProps {
   packId: string;
@@ -18,6 +19,7 @@ interface PackSoundListProps {
  * the summary stats above, not repeated here.
  */
 export function PackSoundList({ packId, assignments, remoteBaseUrl }: PackSoundListProps) {
+  const t = useT();
   const byKey = new Map(assignments.map((a) => [eventKey(a.eventId), a]));
   const metaByCategory = EVENT_CATEGORY_ORDER.map((category) => ({
     category,
@@ -30,31 +32,32 @@ export function PackSoundList({ packId, assignments, remoteBaseUrl }: PackSoundL
   if (metaByCategory.length === 0) {
     return (
       <div className={styles.section}>
-        <p className={styles.heading}>Pack sounds</p>
-        <p className={styles.empty}>This pack replaces no sounds — every event uses the Windows default.</p>
+        <p className={styles.heading}>{t("pack.soundsHeading")}</p>
+        <p className={styles.empty}>{t("pack.noSounds")}</p>
       </div>
     );
   }
 
   return (
     <div className={styles.section}>
-      <p className={styles.heading}>Pack sounds</p>
+      <p className={styles.heading}>{t("pack.soundsHeading")}</p>
       <div className={styles.list}>
         {metaByCategory.map(({ category, items }) => (
           <div key={category} className={styles.group}>
-            <p className={styles.groupLabel}>{EVENT_CATEGORY_LABEL[category]}</p>
+            <p className={styles.groupLabel}>{t(EVENT_CATEGORY_KEY[category] as TranslationKey)}</p>
             {items.map((meta) => {
               const assignment = byKey.get(eventKey(meta.id));
               const audioUrl =
                 remoteBaseUrl && assignment?.fileName
                   ? resolvePackFileUrl(remoteBaseUrl, packId, assignment.fileName)
                   : undefined;
+              const name = t(`soundEvent.${meta.id.event}.name` as TranslationKey);
               return (
                 <div key={eventKey(meta.id)} className={styles.row}>
-                  <span className={styles.name}>{meta.friendlyName}</span>
+                  <span className={styles.name}>{name}</span>
                   <AudioPreviewButton
                     seed={`${meta.id.app}\\${meta.id.event}:${assignment?.fileName ?? ""}`}
-                    label={meta.friendlyName}
+                    label={name}
                     size="sm"
                     audioUrl={audioUrl}
                   />

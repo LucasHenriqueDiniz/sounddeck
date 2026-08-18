@@ -6,6 +6,7 @@ import { formatDuration } from "../../lib/format";
 import type { EventFriendlyMeta, PackEventAssignment } from "../../types/soundEvent";
 import type { PickWavResult } from "../../services/tauri/fileDialogService";
 import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
+import { useT, type TranslationKey } from "../../i18n";
 import { EventStateBadge } from "./EventStateBadge";
 import styles from "./SoundEventRow.module.css";
 
@@ -28,6 +29,13 @@ export function SoundEventRow({
   packId,
   remoteBaseUrl,
 }: SoundEventRowProps) {
+  const t = useT();
+  // `meta.friendlyName`/`meta.description` come from the English demo catalog
+  // (src/mocks/soundEventCatalog.ts) and are used only as keys here — the
+  // displayed text always comes from the soundEvent.<id>.* dictionary entries.
+  const nameKey = `soundEvent.${meta.id.event}.name` as TranslationKey;
+  const descKey = meta.description ? (`soundEvent.${meta.id.event}.desc` as TranslationKey) : undefined;
+
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
 
@@ -35,9 +43,9 @@ export function SoundEventRow({
     setBusy(true);
     const result = await onReplace();
     setBusy(false);
-    if (result.status === "invalid") setError(result.reason);
-    else if (result.status === "unavailable")
-      setError("File selection is only available inside the desktop app.");
+    // `reason`/the "unavailable" case are translation keys, not display text.
+    if (result.status === "invalid") setError(t(result.reason as TranslationKey));
+    else if (result.status === "unavailable") setError(t("event.desktopOnly"));
     else if (result.status === "picked") setError(null);
   }
 
@@ -57,11 +65,13 @@ export function SoundEventRow({
         ? styles.stateDefault
         : styles.stateDisabled;
 
+  const name = t(nameKey);
+
   return (
     <div className={`${styles.row} ${stateClass}`}>
       <div className={styles.info}>
-        <p className={styles.name}>{meta.friendlyName}</p>
-        {meta.description && <p className={styles.description}>{meta.description}</p>}
+        <p className={styles.name}>{name}</p>
+        {descKey && <p className={styles.description}>{t(descKey)}</p>}
       </div>
 
       <div className={styles.state}>
@@ -71,7 +81,7 @@ export function SoundEventRow({
             {assignment.fileName}
           </span>
         ) : (
-          <span className={styles.fileNameMuted}>no file</span>
+          <span className={styles.fileNameMuted}>{t("event.noFile")}</span>
         )}
         <span className={`${styles.duration} tabular-nums`}>{formatDuration(assignment.durationMs)}</span>
       </div>
@@ -79,21 +89,21 @@ export function SoundEventRow({
       <div className={styles.controls}>
         <AudioPreviewButton
           seed={`${meta.id.app}\\${meta.id.event}:${assignment.fileName ?? assignment.state}`}
-          label={meta.friendlyName}
+          label={name}
           size="sm"
           disabled={assignment.state === "disabled"}
           audioUrl={audioUrl}
         />
-        <IconButton label="Replace file" icon={<ReplaceIcon />} size="sm" onClick={handleReplace} disabled={busy} />
+        <IconButton label={t("event.replaceFile")} icon={<ReplaceIcon />} size="sm" onClick={handleReplace} disabled={busy} />
         <IconButton
-          label="Use the Windows default"
+          label={t("event.useDefault")}
           icon={<UndoIcon />}
           size="sm"
           onClick={onUseDefault}
           disabled={assignment.state === "default"}
         />
         <IconButton
-          label="Disable event"
+          label={t("event.disable")}
           icon={<DisableIcon />}
           size="sm"
           onClick={onDisable}

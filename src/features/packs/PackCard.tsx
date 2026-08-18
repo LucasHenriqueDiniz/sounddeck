@@ -5,7 +5,8 @@ import { Button } from "../../components/Button";
 import { CheckIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
-import { derivePackTags } from "../../lib/packTags";
+import { derivePackTags, resolveTagLabel } from "../../lib/packTags";
+import { useT } from "../../i18n";
 import { PackCoverArt } from "./PackCoverArt";
 import styles from "./PackCard.module.css";
 
@@ -25,16 +26,10 @@ interface PackCardProps {
   onApply: () => void;
 }
 
-const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
-  microsoft: "Microsoft",
-  community: "Community",
-  sounddeck: "SoundDeck",
-};
-
-const ORIGIN_TAGS = new Set(["Official", "Community", "SoundDeck"]);
-
 export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, onApply }: PackCardProps) {
-  const eraTags = derivePackTags(pack).filter((tag) => !ORIGIN_TAGS.has(tag));
+  const t = useT();
+  const eraTags = derivePackTags(pack).filter((tag) => !tag.startsWith("pack.origin."));
+  const originTag = derivePackTags(pack).find((tag) => tag.startsWith("pack.origin."));
 
   function handleKeyDown(event: KeyboardEvent<HTMLDivElement>) {
     if (event.key === "Enter" || event.key === " ") {
@@ -55,7 +50,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
       role="button"
       tabIndex={0}
       aria-pressed={isSelected}
-      aria-label={`${pack.name}, ${soundCount} sounds${isApplied ? ", aplicado atualmente" : ""}`}
+      aria-label={t(isApplied ? "pack.cardLabelApplied" : "pack.cardLabel", { name: pack.name, count: soundCount })}
       onClick={onSelect}
       onKeyDown={handleKeyDown}
     >
@@ -64,7 +59,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
         {isApplied && (
           <span className={styles.appliedBadge}>
             <Badge variant="accent" icon={<CheckIcon size={12} />}>
-              Aplicado
+              {t("pack.appliedNow")}
             </Badge>
           </span>
         )}
@@ -73,7 +68,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
       <div className={styles.body}>
         <p className={styles.name}>{pack.name}</p>
         <p className={styles.meta}>
-          {ORIGIN_LABEL[pack.origin]} · {soundCount} sounds
+          {originTag ? resolveTagLabel(t, originTag) : null} · {t("pack.sounds", { count: soundCount })}
         </p>
         {eraTags.length > 0 && (
           <div className={styles.tags}>
@@ -94,7 +89,7 @@ export function PackCard({ pack, soundCount, isApplied, isSelected, onSelect, on
           audioUrl={representativePreviewUrl(pack)}
         />
         <Button size="sm" variant={isSelected ? "primary" : "secondary"} onClick={handleActionClick}>
-          {isSelected ? "Apply" : "Select"}
+          {isSelected ? t("pack.apply") : t("pack.select")}
         </Button>
       </div>
     </div>

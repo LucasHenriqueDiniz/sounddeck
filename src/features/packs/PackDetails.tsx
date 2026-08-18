@@ -3,14 +3,19 @@ import { Button } from "../../components/Button";
 import { CheckIcon, EditorIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
-import { derivePackTags } from "../../lib/packTags";
+import { derivePackTags, resolveTagLabel, ORIGIN_TAG_KEY } from "../../lib/packTags";
+import { useT } from "../../i18n";
 import { PackCoverArt } from "./PackCoverArt";
 import { PackSoundList } from "./PackSoundList";
 import styles from "./PackDetails.module.css";
 
-const ORIGIN_LABEL: Record<SoundPack["origin"], string> = {
+/**
+ * Literal (untranslated) vendor names, as they appear in pack.author data —
+ * used only to detect when the author IS the vendor, so we don't render
+ * "Microsoft · Microsoft". The displayed origin tag is always translated.
+ */
+const ORIGIN_CANONICAL_AUTHOR: Partial<Record<SoundPack["origin"], string>> = {
   microsoft: "Microsoft",
-  community: "Community",
   sounddeck: "SoundDeck",
 };
 
@@ -22,7 +27,10 @@ interface PackDetailsProps {
 }
 
 export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDetailsProps) {
+  const t = useT();
   const summary = buildApplySummary(pack);
+  const originLabel = t(ORIGIN_TAG_KEY[pack.origin]);
+  const authorIsOrigin = pack.author === ORIGIN_CANONICAL_AUTHOR[pack.origin];
 
   return (
     <div className={styles.panel}>
@@ -35,12 +43,12 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
           <h2 className={styles.title}>{pack.name}</h2>
           {isApplied && (
             <Badge variant="accent" icon={<CheckIcon size={12} />}>
-              Aplicado atualmente
+              {t("pack.appliedNow")}
             </Badge>
           )}
         </div>
         <p className={styles.meta}>
-          {pack.author === ORIGIN_LABEL[pack.origin] ? pack.author : `${ORIGIN_LABEL[pack.origin]} · ${pack.author}`}
+          {authorIsOrigin ? pack.author : `${originLabel} · ${pack.author}`}
           {pack.releaseYear ? ` · ${pack.releaseYear}` : ""}
         </p>
         <p className={styles.description}>{pack.description}</p>
@@ -48,7 +56,7 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
         <div className={styles.tags}>
           {derivePackTags(pack).map((tag) => (
             <span key={tag} className={styles.tag}>
-              {tag}
+              {resolveTagLabel(t, tag)}
             </span>
           ))}
         </div>
@@ -57,15 +65,15 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
       <div className={styles.stats}>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.totalEvents}</span>
-          <span className={styles.statLabel}>events</span>
+          <span className={styles.statLabel}>{t("pack.events")}</span>
         </div>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.usingPackSound}</span>
-          <span className={styles.statLabel}>pack sounds</span>
+          <span className={styles.statLabel}>{t("pack.packSounds")}</span>
         </div>
         <div className={styles.stat}>
           <span className={`${styles.statValue} tabular-nums`}>{summary.disabled}</span>
-          <span className={styles.statLabel}>desativados</span>
+          <span className={styles.statLabel}>{t("pack.disabled")}</span>
         </div>
       </div>
 
@@ -75,10 +83,10 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
 
       <div className={styles.actions}>
         <Button variant="secondary" icon={<EditorIcon />} onClick={onEditEvents}>
-          Editar eventos
+          {t("editor.editEvents")}
         </Button>
         <Button variant="primary" onClick={onApply} disabled={isApplied}>
-          {isApplied ? "Already applied" : "Apply pack"}
+          {isApplied ? t("pack.alreadyApplied") : t("pack.applyPack")}
         </Button>
       </div>
     </div>

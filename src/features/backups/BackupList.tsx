@@ -10,8 +10,10 @@ import { useAppState } from "../../app/AppState";
 import { useBackups } from "./useBackups";
 import { BackupRow } from "./BackupRow";
 import styles from "./BackupList.module.css";
+import { useT, type TranslationKey } from "../../i18n";
 
 export function BackupList() {
+  const t = useT();
   const { backupsVersion } = useAppState();
   const { state, reload, restore, restoringId, restoreError, restoredId, clearRestoredId } =
     useBackups(backupsVersion);
@@ -31,8 +33,8 @@ export function BackupList() {
     <div className={styles.wrapper}>
       <header className={styles.header}>
         <div>
-          <h1 className={styles.title}>Backups</h1>
-          <p className={styles.subtitle}>Snapshots taken automatically before every pack you apply.</p>
+          <h1 className={styles.title}>{t("backups.title")}</h1>
+          <p className={styles.subtitle}>{t("backups.subtitle")}</p>
         </div>
       </header>
 
@@ -40,15 +42,15 @@ export function BackupList() {
         {restoreError && (
           <StatusBanner
             severity="danger"
-            title="Could not restore the backup"
-            description={restoreError}
+            title={t("backups.restoreError")}
+            description={restoreError ? t(restoreError as TranslationKey) : undefined}
           />
         )}
         {restoredId && (
           <StatusBanner
             severity="success"
-            title="Backup restored"
-            description="The previous sound scheme has been reapplied."
+            title={t("backups.restored.title")}
+            description={t("backups.restored.desc")}
             onDismiss={clearRestoredId}
           />
         )}
@@ -66,14 +68,14 @@ export function BackupList() {
         )}
 
         {state.status === "error" && (
-          <ErrorState title="Could not load the backups" detail={state.message} onRetry={reload} />
+          <ErrorState title={t("backups.loadError")} detail={state.message} onRetry={reload} />
         )}
 
         {state.status === "success" && backups.length === 0 && (
           <EmptyState
             icon={<BackupsIcon size={32} />}
-            title="No backups yet"
-            description="Backups are created automatically whenever you apply a pack."
+            title={t("backups.empty.title")}
+            description={t("backups.empty.desc")}
           />
         )}
 
@@ -95,21 +97,23 @@ export function BackupList() {
       <Dialog
         open={pending !== null}
         onClose={() => setPendingId(null)}
-        title="Restore this backup?"
-        description={pending ? `"${pending.label}" will replace the current Windows sound scheme.` : undefined}
+        title={t("backups.confirm.title")}
+        description={
+          pending ? t("backups.confirm.desc", { label: t(pending.labelKey, pending.labelVars) }) : undefined
+        }
         footer={
           <>
             <Button variant="ghost" onClick={() => setPendingId(null)}>
-              Cancelar
+              {t("common.cancel")}
             </Button>
             <Button variant="primary" onClick={confirmRestore}>
-              Restore
+              {t("backups.restore")}
             </Button>
           </>
         }
       >
         <p style={{ font: "var(--text-sm)", color: "var(--text-secondary)" }}>
-          This action cannot be undone automatically — restore another backup if you need to go back.
+          {t("backups.confirm.warning")}
         </p>
       </Dialog>
     </div>

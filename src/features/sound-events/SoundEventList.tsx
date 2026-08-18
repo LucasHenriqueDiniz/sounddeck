@@ -1,10 +1,11 @@
 import { SOUND_EVENT_CATALOG } from "../../mocks/soundEventCatalog";
-import { EVENT_CATEGORY_LABEL, EVENT_CATEGORY_ORDER, eventKey } from "../../types/soundEvent";
+import { EVENT_CATEGORY_KEY, EVENT_CATEGORY_ORDER, eventKey } from "../../types/soundEvent";
 import type { PackEventAssignment } from "../../types/soundEvent";
 import type { PickWavResult } from "../../services/tauri/fileDialogService";
 import { SoundEventRow } from "./SoundEventRow";
 import { ChevronDownIcon } from "../../components/icons/icons";
 import styles from "./SoundEventList.module.css";
+import { useT, type TranslationKey } from "../../i18n";
 
 interface SoundEventListProps {
   assignments: PackEventAssignment[];
@@ -24,6 +25,7 @@ export function SoundEventList({
   packId,
   remoteBaseUrl,
 }: SoundEventListProps) {
+  const t = useT();
   const byKey = new Map(assignments.map((a) => [eventKey(a.eventId), a]));
 
   return (
@@ -36,7 +38,7 @@ export function SoundEventList({
           <details key={category} className={styles.group} open>
             <summary className={styles.summary}>
               <ChevronDownIcon size={14} className={styles.chevron} />
-              <span className={styles.groupTitle}>{EVENT_CATEGORY_LABEL[category]}</span>
+              <span className={styles.groupTitle}>{t(EVENT_CATEGORY_KEY[category] as TranslationKey)}</span>
               <span className={styles.groupCount}>{items.length}</span>
             </summary>
             <div className={styles.rows}>

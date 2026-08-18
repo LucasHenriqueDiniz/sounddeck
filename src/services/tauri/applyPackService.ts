@@ -76,7 +76,7 @@ export function runApplyPack(
       const steps = Math.max(1, Math.round(duration / 90));
       for (let step = 1; step <= steps; step += 1) {
         if (cancelled) {
-          return { status: "recoverable-error", message: "Apply cancelled by the user." };
+          return { status: "recoverable-error", message: "error.applyCancelled" };
         }
         await new Promise((resolve) => setTimeout(resolve, duration / steps));
         onProgress({ phase, phaseProgress: step / steps });
@@ -85,8 +85,8 @@ export function runApplyPack(
       if (phase === "writing-registry" && pack.id === "force-error-demo") {
         return {
           status: "unrecoverable-error",
-          message: "Could not write the Windows settings.",
-          detail: "ERROR_ACCESS_DENIED ao escrever em HKCU\\AppEvents\\Schemes\\Apps",
+          message: "error.registryWrite", // translation key, resolved with useT() at the display site
+          detail: "ERROR_ACCESS_DENIED writing to HKCU\\AppEvents\\Schemes\\Apps",
         };
       }
     }
@@ -94,9 +94,10 @@ export function runApplyPack(
     pushBackup({
       id: `bkp-${Date.now()}`,
       createdAt: new Date().toISOString(),
-      label: `Antes de aplicar ${pack.name}`,
+      labelKey: "backups.autoLabel",
+      labelVars: { name: pack.name },
       eventCount: pack.assignments.length,
-      sizeLabel: "2,0 MB",
+      sizeLabel: "2.0 MB",
       restorable: true,
     });
     setAppliedPackId(pack.id);

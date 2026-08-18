@@ -8,6 +8,7 @@ import { buildApplySummary } from "../../services/tauri/applyPackService";
 import { useApplyPackFlow } from "./useApplyPackFlow";
 import { ApplyProgress } from "./ApplyProgress";
 import styles from "./ApplyPackDialog.module.css";
+import { useT, type TranslationKey } from "../../i18n";
 
 interface ApplyPackDialogProps {
   pack: SoundPack | null;
@@ -17,6 +18,7 @@ interface ApplyPackDialogProps {
 }
 
 export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDialogProps) {
+  const t = useT();
   const { state, start, cancel, reset } = useApplyPackFlow(onApplied);
 
   useEffect(() => {
@@ -40,42 +42,42 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
       preventDismiss={running}
       title={
         state.phase === "success"
-          ? "Pack applied"
+          ? t("apply.applied")
           : state.phase === "recoverable-error" || state.phase === "unrecoverable-error"
-            ? "Could not apply the pack"
-            : `Aplicar "${pack.name}"`
+            ? t("apply.failed")
+            : t("apply.dialogTitle", { name: pack.name })
       }
-      description={state.phase === "summary" ? "Review the changes before continuing." : undefined}
+      description={state.phase === "summary" ? t("apply.review") : undefined}
       footer={
         state.phase === "summary" ? (
           <>
             <Button variant="ghost" onClick={onClose}>
-              Cancelar
+              {t("common.cancel")}
             </Button>
             <Button variant="primary" onClick={() => start(pack)}>
-              Apply pack
+              {t("pack.applyPack")}
             </Button>
           </>
         ) : state.phase === "running" ? (
           <Button variant="ghost" onClick={cancel}>
-            Cancelar
+            {t("common.cancel")}
           </Button>
         ) : state.phase === "success" ? (
           <Button variant="primary" onClick={onClose}>
-            Concluir
+            {t("common.done")}
           </Button>
         ) : state.phase === "recoverable-error" ? (
           <>
             <Button variant="ghost" onClick={onClose}>
-              Close
+              {t("common.close")}
             </Button>
             <Button variant="primary" onClick={reset}>
-              Tentar novamente
+              {t("common.tryAgain")}
             </Button>
           </>
         ) : (
           <Button variant="primary" onClick={onClose}>
-            Close
+            {t("common.close")}
           </Button>
         )
       }
@@ -89,21 +91,21 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.usingPackSound}</span>
-              <span className={styles.statLabel}>will use pack sounds</span>
+              <span className={styles.statLabel}>{t("apply.willUsePack")}</span>
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.usingWindowsDefault}</span>
-              <span className={styles.statLabel}>will keep the Windows default</span>
+              <span className={styles.statLabel}>{t("apply.willKeepDefault")}</span>
             </li>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.disabled}</span>
-              <span className={styles.statLabel}>will be disabled</span>
+              <span className={styles.statLabel}>{t("apply.willDisable")}</span>
             </li>
           </ul>
           <StatusBanner
             severity="info"
-            title="A backup of the current scheme will be created automatically"
-            description="You can restore it at any time from Backups."
+            title={t("apply.backupNotice.title")}
+            description={t("apply.backupNotice.desc")}
           />
         </div>
       )}
@@ -117,20 +119,20 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
           <div className={styles.successIcon}>
             <CheckIcon size={22} />
           </div>
-          <p className={styles.resultTitle}>{`"${pack.name}" foi aplicado com sucesso`}</p>
+          <p className={styles.resultTitle}>{t("apply.successTitle", { name: pack.name })}</p>
           <p className={styles.resultDescription}>
-            {summary.usingPackSound} sons foram atualizados. O esquema anterior foi salvo em Backups.
+            {t("apply.successDesc", { count: summary.usingPackSound })}
           </p>
         </div>
       )}
 
       {(state.phase === "recoverable-error" || state.phase === "unrecoverable-error") && (
         <div className={styles.result}>
-          <p className={styles.resultTitle}>{state.errorMessage}</p>
+          <p className={styles.resultTitle}>{state.errorMessage ? t(state.errorMessage as TranslationKey) : null}</p>
           <p className={styles.resultDescription}>
             {state.phase === "unrecoverable-error"
-              ? "No partial changes were kept. Check the Backups area if you need to restore something."
-              : "No changes were applied. You can try again."}
+              ? t("apply.noPartial")
+              : t("apply.noChanges")}
           </p>
           {state.errorDetail && <pre className={styles.detail}>{state.errorDetail}</pre>}
         </div>

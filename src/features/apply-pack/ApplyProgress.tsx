@@ -1,8 +1,9 @@
-import { APPLY_PHASE_LABEL, APPLY_PHASE_ORDER } from "../../types/applyPack";
+import { APPLY_PHASE_KEY, APPLY_PHASE_ORDER } from "../../types/applyPack";
 import type { ApplyPhase } from "../../types/applyPack";
 import { ProgressBar } from "../../components/ProgressBar";
 import { CheckIcon } from "../../components/icons/icons";
 import styles from "./ApplyProgress.module.css";
+import { useT, type TranslationKey } from "../../i18n";
 
 interface ApplyProgressProps {
   currentPhase: ApplyPhase;
@@ -10,6 +11,7 @@ interface ApplyProgressProps {
 }
 
 export function ApplyProgress({ currentPhase, currentPhaseProgress }: ApplyProgressProps) {
+  const t = useT();
   const currentIndex = APPLY_PHASE_ORDER.indexOf(currentPhase);
 
   return (
@@ -24,7 +26,7 @@ export function ApplyProgress({ currentPhase, currentPhaseProgress }: ApplyProgr
               className={[styles.step, done ? styles.done : "", active ? styles.active : ""].join(" ")}
             >
               <span className={styles.marker}>{done ? <CheckIcon size={12} /> : index + 1}</span>
-              <span className={styles.label}>{APPLY_PHASE_LABEL[phase]}</span>
+              <span className={styles.label}>{t(APPLY_PHASE_KEY[phase] as TranslationKey)}</span>
             </li>
           );
         })}
@@ -33,9 +35,9 @@ export function ApplyProgress({ currentPhase, currentPhaseProgress }: ApplyProgr
       <div className={styles.progress}>
         <ProgressBar
           value={currentPhase === "complete" ? 1 : currentPhaseProgress}
-          label={`Current phase: ${APPLY_PHASE_LABEL[currentPhase]}`}
+          label={t("apply.currentPhase", { phase: t(APPLY_PHASE_KEY[currentPhase] as TranslationKey) })}
         />
-        <p className={styles.progressLabel}>{APPLY_PHASE_LABEL[currentPhase]}…</p>
+        <p className={styles.progressLabel}>{t(APPLY_PHASE_KEY[currentPhase] as TranslationKey)}…</p>
       </div>
     </div>
   );

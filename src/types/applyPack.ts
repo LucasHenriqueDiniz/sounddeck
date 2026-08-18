@@ -17,14 +17,15 @@ export const APPLY_PHASE_ORDER: ApplyPhase[] = [
   "complete",
 ];
 
-export const APPLY_PHASE_LABEL: Record<ApplyPhase, string> = {
-  validating: "Validating pack and events",
-  "creating-backup": "Backing up the current scheme",
-  "processing-audio": "Processing sounds",
-  "copying-files": "Copying files",
-  "writing-registry": "Writing Windows settings",
-  verifying: "Verifying",
-  complete: "Done",
+/** Translation keys — resolve with useT() at render time. */
+export const APPLY_PHASE_KEY: Record<ApplyPhase, string> = {
+  validating: "apply.phase.validating",
+  "creating-backup": "apply.phase.creatingBackup",
+  "processing-audio": "apply.phase.processingAudio",
+  "copying-files": "apply.phase.copyingFiles",
+  "writing-registry": "apply.phase.writingRegistry",
+  verifying: "apply.phase.verifying",
+  complete: "apply.phase.complete",
 };
 
 export interface ApplySummary {

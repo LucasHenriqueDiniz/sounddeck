@@ -2,6 +2,7 @@ import { useState } from "react";
 import { AlertCircleIcon } from "./icons/icons";
 import { Button } from "./Button";
 import styles from "./ErrorState.module.css";
+import { useT } from "../i18n";
 
 interface ErrorStateProps {
   title: string;
@@ -12,6 +13,7 @@ interface ErrorStateProps {
 }
 
 export function ErrorState({ title, description, detail, onRetry, recoverable = true }: ErrorStateProps) {
+  const t = useT();
   const [showDetail, setShowDetail] = useState(false);
 
   return (
@@ -24,12 +26,12 @@ export function ErrorState({ title, description, detail, onRetry, recoverable = 
       <div className={styles.actions}>
         {recoverable && onRetry && (
           <Button variant="primary" onClick={onRetry}>
-            Tentar novamente
+            {t("common.tryAgain")}
           </Button>
         )}
         {detail && (
           <Button variant="ghost" onClick={() => setShowDetail((v) => !v)}>
-            {showDetail ? "Hide details" : "Technical details"}
+            {showDetail ? t("error.hideDetails") : t("error.showDetails")}
           </Button>
         )}
       </div>

@@ -1,52 +1,67 @@
 import { Button } from "../../components/Button";
 import { StatusBanner } from "../../components/StatusBanner";
-import { Tabs } from "../../components/Tabs";
+import { Tabs, type TabItem } from "../../components/Tabs";
 import { MoonIcon, RefreshIcon, SettingsIcon, SunIcon } from "../../components/icons/icons";
 import { useAppState } from "../AppState";
+import { useI18n, useT, LANGUAGES, type LangPreference } from "../../i18n";
 import styles from "./SettingsView.module.css";
 
 export function SettingsView() {
   const { theme, setTheme, nativeCapability, recheckNativeCapability, triggerExternalChangeDemo } =
     useAppState();
+  const t = useT();
+  const { preference, setPreference } = useI18n();
+
+  const langItems: TabItem<LangPreference>[] = [
+    { id: "system", label: t("settings.language.system"), icon: <SettingsIcon size={14} /> },
+    ...LANGUAGES.map((l) => ({ id: l.code, label: l.label })),
+  ];
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.inner}>
         <section className={styles.section}>
-          <h1 className={styles.sectionTitle}>Appearance</h1>
+          <h1 className={styles.sectionTitle}>{t("settings.appearance")}</h1>
           <div className={styles.row}>
             <div className={styles.rowInfo}>
-              <span className={styles.rowTitle}>Theme</span>
-              <span className={styles.rowDescription}>Light, dark, or follow the system.</span>
+              <span className={styles.rowTitle}>{t("settings.theme")}</span>
+              <span className={styles.rowDescription}>{t("settings.themeDesc")}</span>
             </div>
             <Tabs
-              aria-label="Theme"
+              aria-label={t("settings.theme")}
               value={theme}
               onChange={setTheme}
               items={[
-                { id: "light", label: "Light", icon: <SunIcon size={14} /> },
-                { id: "dark", label: "Dark", icon: <MoonIcon size={14} /> },
-                { id: "system", label: "System", icon: <SettingsIcon size={14} /> },
+                { id: "light", label: t("settings.theme.light"), icon: <SunIcon size={14} /> },
+                { id: "dark", label: t("settings.theme.dark"), icon: <MoonIcon size={14} /> },
+                { id: "system", label: t("settings.theme.system"), icon: <SettingsIcon size={14} /> },
               ]}
             />
+          </div>
+
+          <div className={styles.row}>
+            <div className={styles.rowInfo}>
+              <span className={styles.rowTitle}>{t("settings.language")}</span>
+              <span className={styles.rowDescription}>{t("settings.languageDesc")}</span>
+            </div>
+            <Tabs aria-label={t("settings.language")} value={preference} onChange={setPreference} items={langItems} />
           </div>
         </section>
 
         <section className={styles.section}>
-          <h1 className={styles.sectionTitle}>Diagnostics</h1>
+          <h1 className={styles.sectionTitle}>{t("settings.diagnostics")}</h1>
           <div className={styles.diagnostics}>
             {nativeCapability.status === "loading" && (
-              <StatusBanner severity="info" title="Checking access to the Windows registry…" />
+              <StatusBanner severity="info" title={t("settings.checking")} />
             )}
             {nativeCapability.status === "success" && (
               <StatusBanner
                 severity={nativeCapability.data.available ? "success" : "warning"}
-                title={
-                  nativeCapability.data.available
-                    ? "Native capability available"
-                    : "Native capability unavailable"
+                title={nativeCapability.data.available ? t("settings.available") : t("settings.unavailable")}
+                description={
+                  t(nativeCapability.data.messageKey, { count: nativeCapability.data.eventCount ?? 0 }) +
+                  (nativeCapability.data.detail ? `: ${nativeCapability.data.detail}` : "")
                 }
-                description={nativeCapability.data.message}
                 action={
                   <Button
                     variant="secondary"
@@ -54,7 +69,7 @@ export function SettingsView() {
                     icon={<RefreshIcon size={14} />}
                     onClick={recheckNativeCapability}
                   >
-                    Check again
+                    {t("settings.checkAgain")}
                   </Button>
                 }
               />
@@ -62,11 +77,11 @@ export function SettingsView() {
             {nativeCapability.status === "error" && (
               <StatusBanner
                 severity="danger"
-                title="Could not check the native capability"
+                title={t("settings.checkFailed")}
                 description={nativeCapability.message}
                 action={
                   <Button variant="secondary" size="sm" onClick={recheckNativeCapability}>
-                    Tentar novamente
+                    {t("settings.tryAgain")}
                   </Button>
                 }
               />
@@ -75,43 +90,31 @@ export function SettingsView() {
 
           <div className={styles.row}>
             <div className={styles.rowInfo}>
-              <span className={styles.rowTitle}>Simulate an external change</span>
-              <span className={styles.rowDescription}>
-                Demo tool: simulates another program changing the Windows sound scheme while SoundDeck
-                is open.
-              </span>
+              <span className={styles.rowTitle}>{t("settings.simulate.title")}</span>
+              <span className={styles.rowDescription}>{t("settings.simulate.desc")}</span>
             </div>
             <Button variant="secondary" size="sm" onClick={triggerExternalChangeDemo}>
-              Simulate
+              {t("settings.simulate.button")}
             </Button>
           </div>
         </section>
 
         <section className={styles.section}>
-          <h1 className={styles.sectionTitle}>About</h1>
-          <p className={styles.about}>
-            SoundDeck 0.1.0 — a sound scheme manager for Windows 10 and 11. The library already shows
-            real packs; applying to the system and the backup history are still simulated.
-          </p>
+          <h1 className={styles.sectionTitle}>{t("settings.about")}</h1>
+          <p className={styles.about}>{t("settings.about.summary", { version: "0.1.0" })}</p>
           <ul className={styles.limitations}>
-            <li>
-              The pack library and the audio previews come from a real, publicly hosted catalog (28
-              classic schemes). Packs from any other origin play a synthesized tone instead of the file.
-            </li>
-            <li>Events per pack reflect the real files of each scheme — not every pack covers every event.</li>
-            <li>Applying a pack still simulates the phases — nothing is written to the registry yet.</li>
-            <li>Backups are demo data; they do not come from the system.</li>
-            <li>
-              Real registry reads (the diagnostics above) and the native file picker are already wired
-              up.
-            </li>
+            <li>{t("settings.limit.catalog")}</li>
+            <li>{t("settings.limit.events")}</li>
+            <li>{t("settings.limit.apply")}</li>
+            <li>{t("settings.limit.backups")}</li>
+            <li>{t("settings.limit.wired")}</li>
           </ul>
           <p className={styles.credit}>
-            Thanks to{" "}
+            {t("settings.credit.before")}{" "}
             <a href="https://lelegofrog.github.io/wav.html" target="_blank" rel="noreferrer">
               lelegofrog.github.io
             </a>{" "}
-            for the archive of classic Windows sound schemes.
+            {t("settings.credit.after")}
           </p>
         </section>
       </div>

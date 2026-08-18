@@ -16,13 +16,14 @@ export type EventCategory =
   | "explorer"
   | "session";
 
-export const EVENT_CATEGORY_LABEL: Record<EventCategory, string> = {
-  system: "System",
-  notifications: "Notifications",
-  devices: "Devices",
-  power: "Power",
-  explorer: "Explorer",
-  session: "Session",
+/** Translation keys — resolve with useT() at render time. */
+export const EVENT_CATEGORY_KEY: Record<EventCategory, string> = {
+  system: "eventCategory.system",
+  notifications: "eventCategory.notifications",
+  devices: "eventCategory.devices",
+  power: "eventCategory.power",
+  explorer: "eventCategory.explorer",
+  session: "eventCategory.session",
 };
 
 export const EVENT_CATEGORY_ORDER: EventCategory[] = [

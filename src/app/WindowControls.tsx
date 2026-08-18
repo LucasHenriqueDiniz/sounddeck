@@ -8,6 +8,7 @@ import {
 } from "../components/icons/icons";
 import { isRunningInTauri } from "../services/tauri/windowsSoundService";
 import styles from "./WindowControls.module.css";
+import { useT } from "../i18n";
 
 /**
  * Replaces the native Windows caption buttons — decorations are turned off
@@ -17,6 +18,7 @@ import styles from "./WindowControls.module.css";
  * inert: there is no real window to control.
  */
 export function WindowControls() {
+  const t = useT();
   const inTauri = isRunningInTauri();
   const [maximized, setMaximized] = useState(false);
 
@@ -54,13 +56,13 @@ export function WindowControls() {
 
   return (
     <div className={styles.controls}>
-      <button type="button" className={styles.control} aria-label="Minimise" onClick={minimize}>
+      <button type="button" className={styles.control} aria-label={t("window.minimise")} onClick={minimize}>
         <WindowMinimizeIcon />
       </button>
       <button
         type="button"
         className={styles.control}
-        aria-label={maximized ? "Restore size" : "Maximise"}
+        aria-label={maximized ? t("window.restoreSize") : t("window.maximise")}
         onClick={toggleMaximize}
       >
         {maximized ? <WindowRestoreIcon /> : <WindowMaximizeIcon />}
@@ -68,7 +70,7 @@ export function WindowControls() {
       <button
         type="button"
         className={`${styles.control} ${styles.close}`}
-        aria-label="Close"
+        aria-label={t("window.close")}
         onClick={close}
       >
         <WindowCloseIcon />

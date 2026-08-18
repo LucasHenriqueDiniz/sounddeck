@@ -10,8 +10,10 @@ import { EditorView } from "./views/EditorView";
 import { BackupsView } from "./views/BackupsView";
 import { SettingsView } from "./views/SettingsView";
 import styles from "./AppShell.module.css";
+import { useT } from "../i18n";
 
 export function AppShell() {
+  const t = useT();
   const {
     view,
     nativeCapability,
@@ -41,7 +43,7 @@ export function AppShell() {
         <div className={styles.titlebarStatus}>
           {nativeUnavailable && (
             <IconButton
-              label="Native capability unavailable — applying to Windows is disabled"
+              label={t("shell.nativeUnavailable")}
               icon={<PlugOffIcon />}
               variant="ghost"
             />
@@ -54,15 +56,15 @@ export function AppShell() {
         {externallyChanged && (
           <StatusBanner
             severity="warning"
-            title="The Windows sound scheme was changed outside SoundDeck"
+            title={t("shell.externalChange.title")}
             description={
               appliedPack
-                ? `The last known reference was "${appliedPack.name}". Sync to confirm the current state.`
-                : "Sync to confirm the current state before applying a new pack."
+                ? t("shell.externalChange.known", { pack: appliedPack.name })
+                : t("shell.externalChange.unknown")
             }
             action={
               <IconButton
-                label="Sincronizar novamente"
+                label={t("shell.resync")}
                 icon={<RefreshIcon />}
                 variant="default"
                 onClick={acknowledgeExternalChange}

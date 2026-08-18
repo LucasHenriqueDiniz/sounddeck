@@ -34,7 +34,7 @@ export async function pickReplacementWav(): Promise<PickWavResult> {
   const fileName = selection.split(/[\\/]/).pop() ?? selection;
   const extension = fileName.split(".").pop()?.toLowerCase();
   if (!extension || !AUDIO_EXTENSIONS.includes(extension)) {
-    return { status: "invalid", reason: "Select a valid .wav file." };
+    return { status: "invalid", reason: "error.invalidWav" };
   }
 
   return { status: "picked", path: selection, fileName };

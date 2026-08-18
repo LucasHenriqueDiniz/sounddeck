@@ -24,10 +24,10 @@ export async function restoreBackup(id: string): Promise<{ ok: true } | { ok: fa
   await delay(undefined, 900);
   const entry = backups.find((b) => b.id === id);
   if (!entry) {
-    return { ok: false, message: "Backup not found." };
+    return { ok: false, message: "error.backupNotFound" };
   }
   if (!entry.restorable) {
-    return { ok: false, message: "This backup cannot be restored automatically." };
+    return { ok: false, message: "error.backupNotRestorable" };
   }
   return { ok: true };
 }

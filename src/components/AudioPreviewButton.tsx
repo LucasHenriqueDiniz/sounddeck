@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { playPreviewTone, type TonePreviewHandle } from "../services/audio/tonePreview";
+import { useT } from "../i18n";
 import { IconButton } from "./IconButton";
 import { AlertCircleIcon, PauseIcon, PlayIcon } from "./icons/icons";
 
@@ -28,6 +29,7 @@ export function AudioPreviewButton({
   size = "md",
   audioUrl,
 }: AudioPreviewButtonProps) {
+  const t = useT();
   const [playing, setPlaying] = useState(false);
   const [errored, setErrored] = useState(false);
   const toneHandleRef = useRef<TonePreviewHandle | null>(null);
@@ -78,12 +80,12 @@ export function AudioPreviewButton({
   }
 
   const accessibleLabel = errored
-    ? `Could not load the ${label} preview`
+    ? t("preview.failed", { label })
     : playing
-      ? `Stop the ${label} preview`
+      ? t("preview.stop", { label })
       : audioUrl
-        ? `Play the ${label} preview`
-        : `Play the ${label} preview (demo audio)`;
+        ? t("preview.play", { label })
+        : t("preview.playDemo", { label });
 
   return (
     <IconButton

@@ -6,7 +6,8 @@ import { Skeleton } from "../../components/Skeleton";
 import { ChevronRightIcon, LibraryIcon, SearchIcon } from "../../components/icons/icons";
 import { useAppState } from "../../app/AppState";
 import { useContainerWidth } from "../../hooks/useContainerWidth";
-import { collectAllTags, derivePackTags } from "../../lib/packTags";
+import { collectAllTags, derivePackTags, resolveTagLabel } from "../../lib/packTags";
+import { useT } from "../../i18n";
 import { PackCard } from "./PackCard";
 import { PackDetails } from "./PackDetails";
 import styles from "./PackLibrary.module.css";
@@ -14,6 +15,7 @@ import styles from "./PackLibrary.module.css";
 const COMPACT_BREAKPOINT = 900;
 
 export function PackLibrary() {
+  const t = useT();
   const {
     packsState,
     reloadPacks,
@@ -61,6 +63,13 @@ export function PackLibrary() {
   const showGrid = !compact || !selectedPack;
   const showDetails = !compact || Boolean(selectedPack);
 
+  const noResultsDescription =
+    query && activeTags.size > 0
+      ? t("library.noResultsForQueryAndTags", { query })
+      : query
+        ? t("library.noResultsForQuery", { query })
+        : t("library.noResults.desc");
+
   return (
     <div className={styles.layout} ref={ref}>
       {showGrid && (
@@ -71,20 +80,18 @@ export function PackLibrary() {
                 <SearchIcon size={15} />
                 <input
                   type="search"
-                  placeholder="Search packs by name or author…"
+                  placeholder={t("library.searchPlaceholder")}
                   value={query}
                   onChange={(event) => setQuery(event.target.value)}
-                  aria-label="Search packs"
+                  aria-label={t("library.searchLabel")}
                 />
               </label>
               {packsState.status === "success" && (
-                <span className={styles.count}>
-                  {filtered.length} of {packs.length} packs
-                </span>
+                <span className={styles.count}>{t("library.count", { shown: filtered.length, total: packs.length })}</span>
               )}
             </div>
             {allTags.length > 0 && (
-              <div className={styles.tagFilter} role="group" aria-label="Filtrar por tag">
+              <div className={styles.tagFilter} role="group" aria-label={t("library.filterByTag")}>
                 {allTags.map((tag) => {
                   const active = activeTags.has(tag);
                   return (
@@ -95,13 +102,13 @@ export function PackLibrary() {
                       aria-pressed={active}
                       onClick={() => toggleTag(tag)}
                     >
-                      {tag}
+                      {resolveTagLabel(t, tag)}
                     </button>
                   );
                 })}
                 {activeTags.size > 0 && (
                   <button type="button" className={styles.tagClear} onClick={() => setActiveTags(new Set())}>
-                    Limpar filtros
+                    {t("library.clearFilters")}
                   </button>
                 )}
               </div>
@@ -123,8 +130,8 @@ export function PackLibrary() {
 
             {packsState.status === "error" && (
               <ErrorState
-                title="Could not load the library"
-                description="Something went wrong while fetching the available packs."
+                title={t("library.loadError.title")}
+                description={t("library.loadError.desc")}
                 detail={packsState.message}
                 onRetry={reloadPacks}
               />
@@ -133,22 +140,16 @@ export function PackLibrary() {
             {packsState.status === "success" && packs.length === 0 && (
               <EmptyState
                 icon={<LibraryIcon size={32} />}
-                title="Your library is empty"
-                description="You do not have any sound packs installed yet."
+                title={t("library.empty.title")}
+                description={t("library.empty.desc")}
               />
             )}
 
             {packsState.status === "success" && packs.length > 0 && filtered.length === 0 && (
               <EmptyState
                 icon={<SearchIcon size={32} />}
-                title="No results found"
-                description={
-                  query && activeTags.size > 0
-                    ? `Nenhum pack corresponde a "${query}" com as tags selecionadas.`
-                    : query
-                      ? `Nenhum pack corresponde a "${query}".`
-                      : "No pack matches the selected tags."
-                }
+                title={t("library.noResults.title")}
+                description={noResultsDescription}
                 action={
                   <button
                     type="button"
@@ -158,7 +159,7 @@ export function PackLibrary() {
                       setActiveTags(new Set());
                     }}
                   >
-                    Limpar busca e filtros
+                    {t("library.clearSearch")}
                   </button>
                 }
               />
@@ -190,7 +191,7 @@ export function PackLibrary() {
               {compact && (
                 <div className={styles.backRow}>
                   <IconButton
-                    label="Back to the library"
+                    label={t("library.back")}
                     icon={<ChevronRightIcon style={{ transform: "rotate(180deg)" }} />}
                     onClick={() => selectPack(null)}
                   />
@@ -206,8 +207,8 @@ export function PackLibrary() {
           ) : (
             <EmptyState
               icon={<LibraryIcon size={28} />}
-              title="No pack selected"
-              description="Pick a pack in the library to see its cover, author and events."
+              title={t("library.noPack.title")}
+              description={t("library.noPack.desc")}
             />
           )}
         </div>

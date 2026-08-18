@@ -10,23 +10,13 @@ import { isRunningInTauri, scanEvents } from "./windowsSoundService";
  */
 export async function checkNativeCapability(): Promise<NativeCapabilityStatus> {
   if (!isRunningInTauri()) {
-    return {
-      available: false,
-      message: "Running outside the Tauri runtime — registry access unavailable.",
-    };
+    return { available: false, messageKey: "capability.offline" };
   }
 
   try {
     const events = await scanEvents();
-    return {
-      available: true,
-      eventCount: events.length,
-      message: `Windows registry reachable — ${events.length} events found.`,
-    };
+    return { available: true, eventCount: events.length, messageKey: "capability.online" };
   } catch (error) {
-    return {
-      available: false,
-      message: `Falha ao ler o Registro do Windows: ${String(error)}`,
-    };
+    return { available: false, messageKey: "capability.readError", detail: String(error) };
   }
 }
