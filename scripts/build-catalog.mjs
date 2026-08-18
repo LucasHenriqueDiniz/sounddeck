@@ -35,10 +35,68 @@ const COVER_IMAGES_DIR = join(SCRIPT_DIR, "cover-images");
 
 const COVER_IMAGE_OVERRIDES = {
   "xp-real": "xp-real.jpg",
+  win10: "win10.jpg",
+  win98: "win98.jpg",
+  win8: "win8.jpg",
+  "win7-afternoon": "win7-afternoon.jpg",
+  "win7-calligraphy": "win7-calligraphy.jpg",
+  "win7-characters": "win7-characters.jpg",
+  "win7-cityscape": "win7-cityscape.jpg",
+  "win7-delta": "win7-delta.jpg",
+  "win7-festival": "win7-festival.jpg",
+  "win7-garden": "win7-garden.jpg",
+  "win7-heritage": "win7-heritage.jpg",
+  "win7-landscape": "win7-landscape.jpg",
+  "win7-quirky": "win7-quirky.jpg",
+  "win7-raga": "win7-raga.jpg",
+  "win7-savanna": "win7-savanna.jpg",
+  "win7-sonata": "win7-sonata.jpg",
+  "plus95-jungle": "plus95-jungle.jpg",
+  "plus95-musica": "plus95-musica.jpg",
+  "plus95-robotz": "plus95-robotz.jpg",
+  "plus95-utopia": "plus95-utopia.jpg",
+  "vista-glass": "vista-glass.jpg",
+  "vista-pearl": "vista-pearl.jpg",
+  "vista-tinker": "vista-tinker.jpg",
+  "plusxp-aquarium": "plusxp-aquarium.jpg",
+  "plusxp-davinci": "plusxp-davinci.jpg",
+  "plusxp-nature": "plusxp-nature.jpg",
+  "plusxp-space": "plusxp-space.jpg",
 };
 
+// Every photo below is freely licensed (Unsplash License) and chosen to evoke
+// the pack's theme without reproducing any Microsoft-authored wallpaper —
+// see DESIGN.md. Museum-provided reproductions (Art Institute of Chicago) are
+// public-domain photographs of public-domain artworks.
 const COVER_PHOTO_CREDITS = {
   "xp-real": "Foto de Spencer DeMera via Unsplash (Unsplash License, uso livre)",
+  win10: "Foto de Daniel Roe via Unsplash (Unsplash License, uso livre)",
+  win98: "Foto de Filip Baotić via Unsplash (Unsplash License, uso livre)",
+  win8: "Foto de S A via Unsplash (Unsplash License, uso livre)",
+  "win7-afternoon": "Foto de Rui Marinho via Unsplash (Unsplash License, uso livre)",
+  "win7-calligraphy": "Foto de Yifeng Lu via Unsplash (Unsplash License, uso livre)",
+  "win7-characters": "Foto de note thanun via Unsplash (Unsplash License, uso livre)",
+  "win7-cityscape": "Foto de Julien Maculan via Unsplash (Unsplash License, uso livre)",
+  "win7-delta": "Foto de William Bayreuther via Unsplash (Unsplash License, uso livre)",
+  "win7-festival": "Foto de Melanie Magdalena via Unsplash (Unsplash License, uso livre)",
+  "win7-garden": "Foto de Annie Spratt via Unsplash (Unsplash License, uso livre)",
+  "win7-heritage": "Foto de Gigi via Unsplash (Unsplash License, uso livre)",
+  "win7-landscape": "Foto de Mohammed Shonar via Unsplash (Unsplash License, uso livre)",
+  "win7-quirky": "Foto de Karla Vidal via Unsplash (Unsplash License, uso livre)",
+  "win7-raga": "Foto de Gowtham AGM via Unsplash (Unsplash License, uso livre)",
+  "win7-savanna": "Foto de Justin Lane via Unsplash (Unsplash License, uso livre)",
+  "win7-sonata": "Foto de Johannes Plenio via Unsplash (Unsplash License, uso livre)",
+  "plus95-jungle": "Foto de Geio Tischler via Unsplash (Unsplash License, uso livre)",
+  "plus95-musica": "Foto de Gabriel Lerner via Unsplash (Unsplash License, uso livre)",
+  "plus95-robotz": "Foto de Emilipothèse via Unsplash (Unsplash License, uso livre)",
+  "plus95-utopia": "Foto de Jivan Garcha via Unsplash (Unsplash License, uso livre)",
+  "vista-glass": "Foto de A. C. via Unsplash (Unsplash License, uso livre)",
+  "vista-pearl": "Foto de Rick Rothenberg via Unsplash (Unsplash License, uso livre)",
+  "vista-tinker": "Foto de Tim Mossholder via Unsplash (Unsplash License, uso livre)",
+  "plusxp-aquarium": "Foto de J Cruikshank via Unsplash (Unsplash License, uso livre)",
+  "plusxp-davinci": "Reprodução do Art Institute of Chicago via Unsplash (domínio público)",
+  "plusxp-nature": "Foto de Geranimo via Unsplash (Unsplash License, uso livre)",
+  "plusxp-space": "Foto de Aron Visuals via Unsplash (Unsplash License, uso livre)",
 };
 
 // ---------------------------------------------------------------------------
