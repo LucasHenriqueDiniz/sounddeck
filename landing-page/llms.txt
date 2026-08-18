@@ -1,0 +1,36 @@
+# SoundDeck
+
+> A free, open-source desktop app for Windows 10 and 11 that replaces the
+> built-in sound scheme editor. Browse sound packs, preview every system event,
+> and apply a whole scheme in one click — with an automatic backup of the
+> previous scheme before any change.
+
+SoundDeck is built with Tauri 2, React 19 and Rust. It runs without
+administrator privileges, never modifies Windows system files, and writes only
+to the current user's registry hive (HKCU\AppEvents\Schemes\Apps) — the same
+location the official Control Panel applet uses. Every apply is reversible.
+
+Five packs ship with the app: recreations of the Windows XP (2001), Vista (2006)
+and 7 (2009) schemes, plus two originals — Minimal (near-silent) and Calm
+(soft chimes). A per-event editor swaps individual sounds for the roughly thirty
+Windows sound events.
+
+The project is not affiliated with Microsoft. Windows is a Microsoft trademark.
+
+## Pages
+
+- [Home](https://sounddeck.lucashdo.com/): what the app does, the five packs, safety model
+- [Download](https://sounddeck.lucashdo.com/download): installers, requirements, install steps
+- [Changelog](https://sounddeck.lucashdo.com/changelog): every published release
+- [Privacy](https://sounddeck.lucashdo.com/privacy): no account, no telemetry, no data leaves the machine
+
+## Install
+
+- winget: `winget install LucasHenriqueDiniz.SoundDeck`
+- Direct download: https://github.com/LucasHenriqueDiniz/sounddeck/releases/latest
+
+## Source
+
+- [GitHub repository](https://github.com/LucasHenriqueDiniz/sounddeck)
+- [MIT license](https://github.com/LucasHenriqueDiniz/sounddeck/blob/master/LICENSE)
+- [Issue tracker](https://github.com/LucasHenriqueDiniz/sounddeck/issues)

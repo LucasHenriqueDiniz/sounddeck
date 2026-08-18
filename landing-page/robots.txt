@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
+# Agentes de IA: veja /llms.txt para um resumo estruturado do site.
 Sitemap: https://sounddeck.lucashdo.com/sitemap.xml

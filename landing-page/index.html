@@ -25,6 +25,38 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" data-og-pt="SoundDeck — um seletor de sons para o Windows" data-og-en="SoundDeck — a sound picker for Windows" content="SoundDeck — um seletor de sons para o Windows" />
 <meta name="twitter:description" data-desc-pt="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." data-desc-en="Change the Windows 10 and 11 sound scheme in one click. Five packs included — XP, Vista, 7, Minimal and Calm — with previews, a per-event editor and automatic backups." content="Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático." />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "SoundDeck",
+  "applicationCategory": "UtilitiesApplication",
+  "applicationSubCategory": "Personalization",
+  "operatingSystem": "Windows 10, Windows 11",
+  "softwareVersion": "0.1.0",
+  "url": "https://sounddeck.lucashdo.com/",
+  "downloadUrl": "https://sounddeck.lucashdo.com/download",
+  "installUrl": "https://sounddeck.lucashdo.com/download",
+  "softwareHelp": "https://sounddeck.lucashdo.com/download",
+  "releaseNotes": "https://sounddeck.lucashdo.com/changelog",
+  "image": "https://sounddeck.lucashdo.com/og.png",
+  "screenshot": "https://sounddeck.lucashdo.com/og.png",
+  "description": "Troque os sons do Windows 10 e 11 em um clique. Cinco packs inclusos — XP, Vista, 7, Minimal e Calm — com prévia, editor evento a evento e backup automático.",
+  "license": "https://github.com/LucasHenriqueDiniz/sounddeck/blob/master/LICENSE",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "BRL"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Lucas Henrique Diniz Ostroski",
+    "url": "https://github.com/LucasHenriqueDiniz"
+  },
+  "codeRepository": "https://github.com/LucasHenriqueDiniz/sounddeck"
+}
+</script>
 <link rel="stylesheet" href="site.css" />
 </head>
 <body>
@@ -172,20 +204,20 @@
     <h2 class="sec" data-i18n="feat.h">O que o app faz.</h2>
     <div style="height:var(--leading)"></div>
     <div class="feature">
-      <h3 class="f-title" data-i18n="feat.1t"></h3>
-      <p class="f-copy" data-i18n="feat.1c"></p>
+      <h3 class="f-title" data-i18n="feat.1t">Biblioteca de packs</h3>
+      <p class="f-copy" data-i18n="feat.1c">Os packs aparecem como cards com prévia de som. Ouça, clique em aplicar e o esquema inteiro entra no lugar.</p>
     </div>
     <div class="feature">
-      <h3 class="f-title" data-i18n="feat.2t"></h3>
-      <p class="f-copy" data-i18n="feat.2c"></p>
+      <h3 class="f-title" data-i18n="feat.2t">Editor evento a evento</h3>
+      <p class="f-copy" data-i18n="feat.2c">Dá para trocar o som de um evento só — asterisco do sistema, notificação, dispositivo conectado ou desconectado, bateria fraca, logon, logoff, UAC — com prévia antes de aplicar.</p>
     </div>
     <div class="feature">
-      <h3 class="f-title" data-i18n="feat.3t"></h3>
-      <p class="f-copy" data-i18n="feat.3c"></p>
+      <h3 class="f-title" data-i18n="feat.3t">Backups com restauração de um clique</h3>
+      <p class="f-copy" data-i18n="feat.3c">Cada vez que você aplica algo, o esquema anterior é salvo. Para voltar, basta escolher o backup na lista.</p>
     </div>
     <div class="feature">
-      <h3 class="f-title" data-i18n="feat.4t"></h3>
-      <p class="f-copy" data-i18n="feat.4c"></p>
+      <h3 class="f-title" data-i18n="feat.4t">Detecção de mudança externa</h3>
+      <p class="f-copy" data-i18n="feat.4c">Se outro programa ou o Painel de Controle mudar o esquema, o app avisa e oferece resincronizar com o que está no sistema.</p>
     </div>
   </section>
 
@@ -193,10 +225,10 @@
     <span class="kicker" data-i18n="safe.kicker">Segurança</span>
     <h2 class="sec" data-i18n="safe.h">Mexe pouco, e só no que dá para desfazer.</h2>
     <div class="trust-grid">
-      <div class="tcard"><h4 data-i18n="safe.1t"></h4><p data-i18n="safe.1c"></p></div>
-      <div class="tcard"><h4 data-i18n="safe.2t"></h4><p data-i18n="safe.2c"></p></div>
-      <div class="tcard"><h4 data-i18n="safe.3t"></h4><p data-i18n="safe.3c"></p></div>
-      <div class="tcard"><h4 data-i18n="safe.4t"></h4><p data-i18n="safe.4c"></p></div>
+      <div class="tcard"><h4 data-i18n="safe.1t">Sem privilégios de admin</h4><p data-i18n="safe.1c">Roda na sua conta de usuário, sem pedir elevação.</p></div>
+      <div class="tcard"><h4 data-i18n="safe.2t">Sem tocar em arquivos do sistema</h4><p data-i18n="safe.2c">Nenhuma DLL do Windows é modificada ou substituída.</p></div>
+      <div class="tcard"><h4 data-i18n="safe.3t">Só o registro do usuário</h4><p data-i18n="safe.3c">Escreve apenas em <code class="reg">HKCU</code> — o mesmo lugar que o painel oficial usa.</p></div>
+      <div class="tcard"><h4 data-i18n="safe.4t">Reversível e aberto</h4><p data-i18n="safe.4c">Backup a cada aplicação, e o código é aberto para você conferir o que ele faz.</p></div>
     </div>
   </section>
 
