@@ -1,6 +1,11 @@
 // SoundDeck site — tema, prévias de áudio e idioma (pt-BR / en)
 const I18N = {
  "pt": {
+  "a11y.skip": "Pular para o conteúdo",
+  "nf.code": "Erro 404",
+  "nf.h": "Essa página não existe.",
+  "nf.p": "O endereço pode ter mudado ou o link estar errado. Os atalhos abaixo cobrem tudo o que o site tem.",
+  "nf.cta": "Ir para a página inicial",
   "nav.problem": "O problema",
   "nav.packs": "Packs",
   "nav.features": "Recursos",
@@ -119,6 +124,11 @@ const I18N = {
   "pv.updated": "Atualizado em julho de 2026."
  },
  "en": {
+  "a11y.skip": "Skip to content",
+  "nf.code": "Error 404",
+  "nf.h": "This page does not exist.",
+  "nf.p": "The address may have changed, or the link is wrong. The shortcuts below cover everything the site has.",
+  "nf.cta": "Go to the home page",
   "nav.problem": "The problem",
   "nav.packs": "Packs",
   "nav.features": "Features",
@@ -262,6 +272,14 @@ const I18N = {
     document.querySelectorAll('.langs button').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.lang === lang)));
     const t = document.querySelector('title[data-title-pt]');
     if (t) t.textContent = lang === 'en' ? t.dataset.titleEn : t.dataset.titlePt;
+    document.querySelectorAll('[data-desc-pt]').forEach((el) => {
+      el.setAttribute('content', lang === 'en' ? el.dataset.descEn : el.dataset.descPt);
+    });
+    document.querySelectorAll('[data-og-pt]').forEach((el) => {
+      el.setAttribute('content', lang === 'en' ? el.dataset.ogEn : el.dataset.ogPt);
+    });
+    const ogLocale = document.querySelector('meta[property="og:locale"]');
+    if (ogLocale) ogLocale.setAttribute('content', lang === 'en' ? 'en_US' : 'pt_BR');
     renderDownload(lang);
     renderChangelog(lang);
   };

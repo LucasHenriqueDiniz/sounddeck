@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://sounddeck.lucas-hdo.workers.dev/sitemap.xml
