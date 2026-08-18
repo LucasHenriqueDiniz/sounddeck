@@ -151,6 +151,25 @@ export function VolumeIcon(props: IconProps) {
   );
 }
 
+export function PlusIcon(props: IconProps) {
+  return (
+    <svg {...iconBaseProps(props.size ?? 16, props)}>
+      <line x1="10" y1="3.5" x2="10" y2="16.5" />
+      <line x1="3.5" y1="10" x2="16.5" y2="10" />
+    </svg>
+  );
+}
+
+export function TrashIcon(props: IconProps) {
+  return (
+    <svg {...iconBaseProps(props.size ?? 16, props)}>
+      <path d="M4 6h12" />
+      <path d="M8 6V4.2a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1V6" />
+      <path d="M5.5 6l.7 9.5a1 1 0 0 0 1 .9h5.6a1 1 0 0 0 1-.9L14.5 6" />
+    </svg>
+  );
+}
+
 export function SearchIcon(props: IconProps) {
   return (
     <svg {...iconBaseProps(props.size ?? 16, props)}>

@@ -195,5 +195,20 @@
   "apply.backupToggle": "Create backup",
   "apply.backupNotice.offTitle": "No backup will be created",
   "apply.backupNotice.offDesc": "You will not be able to restore the previous scheme from Backups.",
-  "a11y.dismiss": "Dismiss"
+  "a11y.dismiss": "Dismiss",
+  "pack.origin.custom": "Custom",
+  "library.createCustom": "Create custom pack",
+  "customPack.title": "Create custom pack",
+  "customPack.subtitle": "Pick a .wav for each event you want to customise — everything else keeps the Windows default. Saved locally, only on this computer.",
+  "customPack.nameLabel": "Pack name",
+  "customPack.namePlaceholder": "My pack",
+  "customPack.nameRequired": "Give your pack a name before saving.",
+  "customPack.needsSound": "Pick at least one sound before saving.",
+  "customPack.eventsHint": "Replace the events you care about — anything left as \"Windows default\" won't be touched.",
+  "customPack.save": "Save pack",
+  "customPack.you": "You",
+  "customPack.autoDescription": "Custom pack with {count} sounds, created locally.",
+  "customPack.delete": "Delete pack",
+  "customPack.deleteConfirm.title": "Delete this pack?",
+  "customPack.deleteConfirm.desc": "\"{name}\" will be removed from your library. This cannot be undone."
 }

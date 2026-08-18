@@ -3,7 +3,8 @@ import { EmptyState } from "../../components/EmptyState";
 import { ErrorState } from "../../components/ErrorState";
 import { IconButton } from "../../components/IconButton";
 import { Skeleton } from "../../components/Skeleton";
-import { ChevronRightIcon, LibraryIcon, SearchIcon } from "../../components/icons/icons";
+import { Button } from "../../components/Button";
+import { ChevronRightIcon, LibraryIcon, PlusIcon, SearchIcon } from "../../components/icons/icons";
 import { useAppState } from "../../app/AppState";
 import { useContainerWidth } from "../../hooks/useContainerWidth";
 import { collectAllTags, derivePackTags, resolveTagLabel } from "../../lib/packTags";
@@ -25,6 +26,7 @@ export function PackLibrary() {
     selectPack,
     goToEditor,
     openApplyDialog,
+    goToCreateCustomPack,
   } = useAppState();
   const [query, setQuery] = useState("");
   const [activeTags, setActiveTags] = useState<Set<string>>(new Set());
@@ -89,6 +91,9 @@ export function PackLibrary() {
               {packsState.status === "success" && (
                 <span className={styles.count}>{t("library.count", { shown: filtered.length, total: packs.length })}</span>
               )}
+              <Button variant="secondary" size="sm" icon={<PlusIcon size={14} />} onClick={goToCreateCustomPack}>
+                {t("library.createCustom")}
+              </Button>
             </div>
             {allTags.length > 0 && (
               <div className={styles.tagFilter} role="group" aria-label={t("library.filterByTag")}>
@@ -202,6 +207,10 @@ export function PackLibrary() {
                 isApplied={selectedPack.id === appliedPackId}
                 onApply={() => openApplyDialog()}
                 onEditEvents={() => goToEditor(selectedPack.id)}
+                onDeleted={() => {
+                  selectPack(null);
+                  reloadPacks();
+                }}
               />
             </div>
           ) : (

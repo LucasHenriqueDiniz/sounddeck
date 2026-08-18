@@ -1,8 +1,11 @@
+import { useState } from "react";
 import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
-import { CheckIcon, EditorIcon } from "../../components/icons/icons";
+import { Dialog } from "../../components/Dialog";
+import { CheckIcon, EditorIcon, TrashIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
+import { deleteCustomPack } from "../../services/tauri/customPackService";
 import { derivePackTags, resolveTagLabel, ORIGIN_TAG_KEY } from "../../lib/packTags";
 import { useT } from "../../i18n";
 import { PackCoverArt } from "./PackCoverArt";
@@ -24,13 +27,21 @@ interface PackDetailsProps {
   isApplied: boolean;
   onApply: () => void;
   onEditEvents: () => void;
+  onDeleted?: () => void;
 }
 
-export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDetailsProps) {
+export function PackDetails({ pack, isApplied, onApply, onEditEvents, onDeleted }: PackDetailsProps) {
   const t = useT();
   const summary = buildApplySummary(pack);
   const originLabel = t(ORIGIN_TAG_KEY[pack.origin]);
   const authorIsOrigin = pack.author === ORIGIN_CANONICAL_AUTHOR[pack.origin];
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
+
+  function confirmDelete() {
+    deleteCustomPack(pack.id);
+    setConfirmingDelete(false);
+    onDeleted?.();
+  }
 
   return (
     <div className={styles.panel}>
@@ -82,6 +93,11 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
       </div>
 
       <div className={styles.actions}>
+        {pack.origin === "custom" && (
+          <Button variant="ghost" icon={<TrashIcon />} onClick={() => setConfirmingDelete(true)}>
+            {t("customPack.delete")}
+          </Button>
+        )}
         <Button variant="secondary" icon={<EditorIcon />} onClick={onEditEvents}>
           {t("editor.editEvents")}
         </Button>
@@ -89,6 +105,27 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents }: PackDeta
           {isApplied ? t("pack.alreadyApplied") : t("pack.applyPack")}
         </Button>
       </div>
+
+      {pack.origin === "custom" && (
+        <Dialog
+          open={confirmingDelete}
+          onClose={() => setConfirmingDelete(false)}
+          title={t("customPack.deleteConfirm.title")}
+          description={t("customPack.deleteConfirm.desc", { name: pack.name })}
+          footer={
+            <>
+              <Button variant="ghost" onClick={() => setConfirmingDelete(false)}>
+                {t("common.cancel")}
+              </Button>
+              <Button variant="danger" onClick={confirmDelete}>
+                {t("customPack.delete")}
+              </Button>
+            </>
+          }
+        >
+          {null}
+        </Dialog>
+      )}
     </div>
   );
 }

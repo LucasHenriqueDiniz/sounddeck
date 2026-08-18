@@ -22,7 +22,7 @@ import { usePackEditor } from "../features/sound-events/usePackEditor";
 import type { PackEventAssignment, WindowsEventId } from "../types/soundEvent";
 import type { PickWavResult } from "../services/tauri/fileDialogService";
 
-export type ViewId = "library" | "editor" | "backups" | "settings";
+export type ViewId = "library" | "editor" | "backups" | "settings" | "createCustomPack";
 
 interface PackEditorHandle {
   assignments: PackEventAssignment[];
@@ -52,6 +52,8 @@ interface AppStateValue {
   selectedPackId: string | null;
   selectPack: (id: string | null) => void;
   goToEditor: (id: string) => void;
+  goToCreateCustomPack: () => void;
+  onCustomPackCreated: (pack: SoundPack) => void;
 
   /** Selected pack with any in-session edits from the Editor already merged in. */
   selectedPack: SoundPack | null;
@@ -133,6 +135,19 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
     setView("editor");
   }, []);
 
+  const goToCreateCustomPack = useCallback(() => {
+    setView("createCustomPack");
+  }, []);
+
+  const onCustomPackCreated = useCallback(
+    (pack: SoundPack) => {
+      reloadPacks();
+      setSelectedPackId(pack.id);
+      setView("library");
+    },
+    [reloadPacks],
+  );
+
   const openApplyDialog = useCallback(() => setApplyDialogOpen(true), []);
   const closeApplyDialog = useCallback(() => setApplyDialogOpen(false), []);
 
@@ -168,6 +183,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       selectedPackId,
       selectPack,
       goToEditor,
+      goToCreateCustomPack,
+      onCustomPackCreated,
       selectedPack,
       editor: editorState,
       nativeCapability,
@@ -192,6 +209,8 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       selectedPackId,
       selectPack,
       goToEditor,
+      goToCreateCustomPack,
+      onCustomPackCreated,
       selectedPack,
       editorState,
       nativeCapability,

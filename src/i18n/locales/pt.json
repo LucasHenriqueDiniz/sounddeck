@@ -195,5 +195,20 @@
   "apply.backupToggle": "Criar backup",
   "apply.backupNotice.offTitle": "Nenhum backup será criado",
   "apply.backupNotice.offDesc": "Você não poderá restaurar o esquema anterior em Backups.",
-  "a11y.dismiss": "Dispensar aviso"
+  "a11y.dismiss": "Dispensar aviso",
+  "pack.origin.custom": "Personalizado",
+  "library.createCustom": "Criar pack personalizado",
+  "customPack.title": "Criar pack personalizado",
+  "customPack.subtitle": "Escolha um .wav para cada evento que quiser personalizar — o resto mantém o padrão do Windows. Salvo localmente, só neste computador.",
+  "customPack.nameLabel": "Nome do pack",
+  "customPack.namePlaceholder": "Meu pack",
+  "customPack.nameRequired": "Dê um nome ao seu pack antes de salvar.",
+  "customPack.needsSound": "Escolha pelo menos um som antes de salvar.",
+  "customPack.eventsHint": "Substitua os eventos que quiser; o que ficar como \"Padrão do Windows\" não será alterado.",
+  "customPack.save": "Salvar pack",
+  "customPack.you": "Você",
+  "customPack.autoDescription": "Pack personalizado com {count} sons, criado localmente.",
+  "customPack.delete": "Excluir pack",
+  "customPack.deleteConfirm.title": "Excluir este pack?",
+  "customPack.deleteConfirm.desc": "\"{name}\" será removido da sua biblioteca. Isso não pode ser desfeito."
 }

@@ -195,5 +195,20 @@
   "apply.backupToggle": "Créer une sauvegarde",
   "apply.backupNotice.offTitle": "Aucune sauvegarde ne sera créée",
   "apply.backupNotice.offDesc": "Vous ne pourrez pas restaurer le jeu de sons précédent depuis Sauvegardes.",
-  "a11y.dismiss": "Ignorer l'avis"
+  "a11y.dismiss": "Ignorer l'avis",
+  "pack.origin.custom": "Personnalisé",
+  "library.createCustom": "Créer un pack personnalisé",
+  "customPack.title": "Créer un pack personnalisé",
+  "customPack.subtitle": "Choisissez un .wav pour chaque événement à personnaliser — le reste garde le son par défaut de Windows. Enregistré localement, uniquement sur cet ordinateur.",
+  "customPack.nameLabel": "Nom du pack",
+  "customPack.namePlaceholder": "Mon pack",
+  "customPack.nameRequired": "Donnez un nom à votre pack avant de l'enregistrer.",
+  "customPack.needsSound": "Choisissez au moins un son avant d'enregistrer.",
+  "customPack.eventsHint": "Remplacez les événements qui vous intéressent ; tout ce qui reste sur \"Par défaut de Windows\" ne sera pas modifié.",
+  "customPack.save": "Enregistrer le pack",
+  "customPack.you": "Vous",
+  "customPack.autoDescription": "Pack personnalisé avec {count} sons, créé localement.",
+  "customPack.delete": "Supprimer le pack",
+  "customPack.deleteConfirm.title": "Supprimer ce pack ?",
+  "customPack.deleteConfirm.desc": "« {name} » sera retiré de votre bibliothèque. Cette action est irréversible."
 }

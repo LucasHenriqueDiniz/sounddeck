@@ -9,6 +9,7 @@ import { LibraryView } from "./views/LibraryView";
 import { EditorView } from "./views/EditorView";
 import { BackupsView } from "./views/BackupsView";
 import { SettingsView } from "./views/SettingsView";
+import { CreateCustomPackView } from "../features/custom-pack/CreateCustomPackView";
 import styles from "./AppShell.module.css";
 import { useT } from "../i18n";
 
@@ -25,6 +26,8 @@ export function AppShell() {
     applyDialogOpen,
     closeApplyDialog,
     onApplySuccess,
+    setView,
+    onCustomPackCreated,
   } = useAppState();
 
   const nativeUnavailable = nativeCapability.status === "success" && !nativeCapability.data.available;
@@ -110,6 +113,11 @@ export function AppShell() {
           className={styles.panel}
         >
           <SettingsView />
+        </section>
+        <section hidden={view !== "createCustomPack"} className={styles.panel}>
+          {view === "createCustomPack" && (
+            <CreateCustomPackView onCancel={() => setView("library")} onCreated={onCustomPackCreated} />
+          )}
         </section>
       </div>
 

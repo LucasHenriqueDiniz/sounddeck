@@ -195,5 +195,20 @@
   "apply.backupToggle": "Sicherung erstellen",
   "apply.backupNotice.offTitle": "Es wird keine Sicherung erstellt",
   "apply.backupNotice.offDesc": "Sie können das vorherige Schema nicht über Sicherungen wiederherstellen.",
-  "a11y.dismiss": "Hinweis schließen"
+  "a11y.dismiss": "Hinweis schließen",
+  "pack.origin.custom": "Eigene",
+  "library.createCustom": "Eigenes Pack erstellen",
+  "customPack.title": "Eigenes Pack erstellen",
+  "customPack.subtitle": "Wähle für jedes Ereignis, das du anpassen möchtest, eine .wav-Datei — der Rest behält den Windows-Standard. Wird nur lokal auf diesem Computer gespeichert.",
+  "customPack.nameLabel": "Pack-Name",
+  "customPack.namePlaceholder": "Mein Pack",
+  "customPack.nameRequired": "Gib deinem Pack einen Namen, bevor du speicherst.",
+  "customPack.needsSound": "Wähle mindestens einen Sound aus, bevor du speicherst.",
+  "customPack.eventsHint": "Ersetze die Ereignisse, die dir wichtig sind; alles, was auf \"Windows-Vorgabe\" bleibt, wird nicht verändert.",
+  "customPack.save": "Pack speichern",
+  "customPack.you": "Du",
+  "customPack.autoDescription": "Eigenes Pack mit {count} Sounds, lokal erstellt.",
+  "customPack.delete": "Pack löschen",
+  "customPack.deleteConfirm.title": "Dieses Pack löschen?",
+  "customPack.deleteConfirm.desc": "\"{name}\" wird aus deiner Bibliothek entfernt. Das kann nicht rückgängig gemacht werden."
 }

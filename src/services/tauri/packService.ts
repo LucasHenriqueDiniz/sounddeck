@@ -1,6 +1,7 @@
 import { CURRENT_APPLIED_PACK_ID, SOUND_PACKS } from "../../mocks/packs";
 import type { SoundPack } from "../../types/pack";
 import { fetchRemoteCatalog, getConfiguredCatalogBaseUrl } from "./remoteCatalogService";
+import { listCustomPacks } from "./customPackService";
 
 /**
  * Pack listing source. Real by default when VITE_PACKS_BASE_URL is
@@ -25,10 +26,10 @@ let externallyChanged = false;
 
 export async function listPacks(): Promise<SoundPack[]> {
   const baseUrl = getConfiguredCatalogBaseUrl();
-  if (baseUrl) {
-    return fetchRemoteCatalog(baseUrl);
-  }
-  return delay(SOUND_PACKS);
+  const basePacks = baseUrl ? await fetchRemoteCatalog(baseUrl) : await delay(SOUND_PACKS);
+  // Custom packs are local-only (see customPackService.ts) and always shown
+  // first, regardless of which base catalog is active.
+  return [...listCustomPacks(), ...basePacks];
 }
 
 /**

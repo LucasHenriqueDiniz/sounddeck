@@ -26,6 +26,7 @@ export const ORIGIN_TAG_KEY: Record<SoundPack["origin"], TranslationKey> = {
   microsoft: "pack.origin.official",
   community: "pack.origin.community",
   sounddeck: "pack.origin.sounddeck",
+  custom: "pack.origin.custom",
 };
 
 const ORIGIN_TAG_KEYS = new Set<string>(Object.values(ORIGIN_TAG_KEY));
