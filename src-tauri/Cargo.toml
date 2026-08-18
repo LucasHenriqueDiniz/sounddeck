@@ -1,10 +1,13 @@
 [package]
 name = "sounddeck"
 version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+description = "A sound scheme picker for Windows 10 and 11."
+authors = ["Lucas Henrique Diniz Ostroski"]
 edition = "2021"
 default-run = "sounddeck"
+license = "MIT"
+repository = "https://github.com/LucasHenriqueDiniz/sounddeck"
+homepage = "https://sounddeck.lucashdo.com"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

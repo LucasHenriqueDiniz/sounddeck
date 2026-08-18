@@ -164,10 +164,12 @@ winget validate --manifest winget/<versão>
 
 v0.1.0 publicada. Em desenvolvimento ativo.
 
+O `UpgradeCode` do MSI está **fixado** em `tauri.conf.json`
+(`bundle.windows.wix.upgradeCode`). Não mude esse GUID: ele é o que faz o
+Windows reconhecer uma versão nova como atualização da anterior em vez de
+instalar as duas lado a lado. Ele foi lido do MSI da 0.1.0 já distribuída.
+
 Pendências conhecidas que valem arrumar quando encostar perto:
 
-- `src-tauri/Cargo.toml` ainda tem metadados de template: `description = "A Tauri App"`,
-  `authors = ["you"]`.
-- `tauri.conf.json` não define `publisher`, então o MSI sai com
-  `Manufacturer: sounddeck` em vez do nome real.
-- `README.md` diz "ainda sem release empacotado", o que ficou desatualizado.
+- `README.md` diz "ainda sem release empacotado", o que ficou desatualizado
+  desde a v0.1.0.
