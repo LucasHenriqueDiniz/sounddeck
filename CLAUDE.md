@@ -132,9 +132,17 @@ expirar ou um reload forçado (`cache: 'no-store'`) acontecer. Não é bug — �
 como o bucket já estava configurado.
 
 Sobre licenciamento de áudio: os esquemas clássicos vêm de acervos públicos de
-fãs. O site é explícito que não redistribui arquivos da Microsoft, e as capas
-usam só imagens livres ou originais — **nunca logo ou wallpaper com marca**.
-Mantenha essa linha.
+fãs. O site é explícito que os arquivos de áudio não são redistribuídos pela
+Microsoft (`packs.note` no site) — isso continua verdade, mantenha essa linha.
+
+Sobre as capas, a regra **default** é a mesma: só imagens livres ou originais,
+nunca logo ou wallpaper com marca — é o que `scripts/build-catalog.mjs` faz na
+maioria dos packs. Existe uma **exceção deliberada**, por decisão explícita do
+autor: `xp-real`, `win10`, `win98` e `win7-delta` usam a logo/tela oficial da
+Microsoft; `win7-characters` e `win7-festival` têm a logo do Windows 7
+composta por cima. Está tudo documentado em `COVER_PHOTO_CREDITS` no próprio
+script, sem esconder que é material da Microsoft. Não generalize essa exceção
+para novos packs sem confirmar de novo — ela vale só para esses seis.
 
 ## Landing page
 
