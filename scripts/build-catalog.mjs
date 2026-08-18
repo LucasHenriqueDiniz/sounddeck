@@ -227,6 +227,20 @@ function coverFor(name, baseHue) {
 // "whistler" schemes) is skipped too: inconsistent, typo'd naming conventions
 // would need a lot of one-off special-casing for two novelty packs — a
 // reasonable follow-up, not done here.
+//
+// NOTE: the live catalog also has a "win7" pack (plain default Windows 7
+// scheme, 20 events, id "win7") that is NOT represented below. It was
+// published as a one-off exception directly to R2 — sourced from a
+// different place than everything else here (the Internet Archive item
+// "windows-7-windows-media-Default-Sound", a real Windows 7 install's
+// Media folder, not lelegofrog.github.io) — because no local archive for it
+// exists in SOURCE_DIR. This script's own output has no "win7" entry, so a
+// full rerun of build-catalog.mjs + upload-catalog.mjs WOULD wholesale-
+// overwrite catalog.json and silently drop "win7" from the live catalog
+// again (its .wav files would stay in R2, just orphaned/unreferenced). If
+// you run the full pipeline before adding a matching MANIFEST entry (or a
+// script step that reads it back from R2 first), re-add "win7" to the
+// output catalog by hand before uploading.
 
 const MANIFEST = [
   { source: "10wav.zip", kind: "flat", id: "win10", name: "Windows 10", releaseYear: 2015, hue: 200 },
