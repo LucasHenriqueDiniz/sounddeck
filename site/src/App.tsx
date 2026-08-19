@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { useLatestRelease, RELEASES_URL } from './useLatestRelease';
+import { PACKS, PACK_COUNT } from './packs.generated';
 import {
   ArrowDownToLine,
   ArrowUpRight,
@@ -16,7 +17,6 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Sparkles,
-  Volume2,
   X,
 } from 'lucide-react';
 
@@ -24,15 +24,8 @@ const iconPath = '/assets/chimer-icon.png';
 const REPO = 'LucasHenriqueDiniz/sounddeck';
 const REPO_URL = `https://github.com/${REPO}`;
 
-// A selection from the published catalog. Every name here is a real pack —
-// the mock shipped invented "Minimal" and "Calm" entries.
-const packs = [
-  { name: 'Windows XP', detail: 'Bright, familiar cues', color: '#f0a15f', tag: 'Classic' },
-  { name: 'Windows Vista', detail: 'Soft and cinematic', color: '#cf6d82', tag: 'Atmospheric' },
-  { name: 'Windows 7', detail: 'Quiet, polished tones', color: '#7d9ca1', tag: 'Balanced' },
-  { name: 'Windows 98', detail: 'Where it all started', color: '#8d8a82', tag: 'Classic' },
-  { name: 'Microsoft Plus!', detail: 'Jungle, Utopia and friends', color: '#a4a878', tag: 'Themed' },
-];
+/** How many cards show before the grid is expanded. */
+const FEATURED_COUNT = 6;
 
 const features = [
   { icon: Sparkles, title: 'Pack library', text: 'Preview complete sound schemes and switch your system mood in one click.' },
@@ -43,7 +36,30 @@ const features = [
 function App() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [notice, setNotice] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [playingId, setPlayingId] = useState<string | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   const { release, failed } = useLatestRelease();
+
+  const visiblePacks = showAll ? PACKS : PACKS.slice(0, FEATURED_COUNT);
+
+  /**
+   * Plays the pack's real logon chime. Only one at a time — clicking a second
+   * card stops the first, otherwise the previews stack into noise.
+   */
+  const playPreview = (id: string, url: string | null) => {
+    if (!url) return;
+    audioRef.current?.pause();
+    if (playingId === id) {
+      setPlayingId(null);
+      return;
+    }
+    const audio = new Audio(url);
+    audioRef.current = audio;
+    audio.volume = 0.7;
+    audio.onended = () => setPlayingId((current) => (current === id ? null : current));
+    void audio.play().then(() => setPlayingId(id)).catch(() => setPlayingId(null));
+  };
 
   // Until the API answers, point at the releases page: it always resolves, so
   // the button is never dead, it just takes one extra click.
@@ -84,8 +100,8 @@ function App() {
       <section className="hero container" id="top">
         <div className="hero-copy">
           <div className="eyebrow"><span className="status-dot" /> Made for Windows 10 & 11</div>
-          <h1>Make Windows<br /><em>sound like yours.</em></h1>
-          <p className="hero-text">Chimer brings back the character of Windows sounds. Pick a pack, hear the preview, and make it yours in one click.</p>
+          <h1>Change every Windows sound<br /><em>in one click.</em></h1>
+          <p className="hero-text">Pick a pack, hear it before you commit, and apply the whole scheme at once. Your old sounds are backed up, so you can go back whenever you want.</p>
           <div className="hero-actions">
             <a className="primary-button" href={downloadHref} onClick={onDownload}><ArrowDownToLine size={18} /> Download for Windows</a>
             <a className="text-link" href="#packs">Explore the packs <ArrowUpRight size={16} /></a>
@@ -94,7 +110,6 @@ function App() {
         </div>
         <div className="hero-art" aria-label="Chimer app interface">
           <div className="screenshot-frame">
-            <div className="screenshot-topline"><span className="screenshot-dot" /><span>Chimer · Library</span><span className="screenshot-caption">The real app</span></div>
             <img src="/assets/app-screenshot.png" alt="Chimer app showing a library of Windows sound packs and the Apply button" />
           </div>
           <div className="floating-label">
@@ -107,8 +122,38 @@ function App() {
       <section className="ticker" aria-label="Chimer benefits"><div className="ticker-track"><span><Headphones size={16} /> Listen before you apply</span><i /> <span><RotateCcw size={16} /> Undo whenever you want</span><i /> <span><ShieldCheck size={16} /> Nothing gets overwritten</span><i /> <span><Headphones size={16} /> Listen before you apply</span></div></section>
 
       <section className="packs-section container" id="packs">
-        <div className="section-heading"><div><p className="eyebrow">The collection</p><h2>Thirty ways to hear<br /><em>your desktop.</em></h2></div><p className="section-intro">The default schemes from Windows 98 through 10, the Windows 7 bonus themes, the Vista themes and the Microsoft Plus! packs — each applied as one cohesive soundscape.</p></div>
-        <div className="pack-grid">{packs.map((pack, index) => <article className={`pack-card ${index === 0 ? 'featured-pack' : ''}`} key={pack.name}><div className="pack-swatch" style={{ background: `linear-gradient(135deg, ${pack.color}, #242323)` }}><Volume2 size={20} /></div><div className="pack-meta"><span>{pack.tag}</span><small>0{index + 1}</small></div><h3>{pack.name}</h3><p>{pack.detail}</p><button className="listen-button"><CirclePlay size={16} /> Listen to preview</button></article>)}</div>
+        <div className="section-heading"><div><p className="eyebrow">The collection</p><h2>{PACK_COUNT} ways to hear<br /><em>your desktop.</em></h2></div><p className="section-intro">The default schemes from Windows 98 through 10, the Windows 7 bonus themes, the Vista themes and the Microsoft Plus! packs — each applied as one cohesive soundscape.</p></div>
+        <div className="pack-grid">
+          {visiblePacks.map((pack) => (
+            <article className="pack-card" key={pack.id}>
+              <div
+                className="pack-cover"
+                style={pack.coverUrl ? undefined : { background: `linear-gradient(135deg, ${pack.gradientFrom}, ${pack.gradientTo})` }}
+              >
+                {pack.coverUrl && <img src={pack.coverUrl} alt="" loading="lazy" />}
+              </div>
+              <div className="pack-meta">
+                <span>{pack.author}</span>
+                <small>{pack.releaseYear ?? ''}</small>
+              </div>
+              <h3>{pack.name}</h3>
+              <p>{pack.soundCount} sounds</p>
+              <button
+                className="listen-button"
+                onClick={() => playPreview(pack.id, pack.previewUrl)}
+                disabled={!pack.previewUrl}
+              >
+                <CirclePlay size={16} /> {playingId === pack.id ? 'Playing…' : 'Listen to preview'}
+              </button>
+            </article>
+          ))}
+        </div>
+        {PACK_COUNT > FEATURED_COUNT && (
+          <button className="expand-button" onClick={() => setShowAll((open) => !open)}>
+            {showAll ? 'Show fewer packs' : `Show all ${PACK_COUNT} packs`}
+            <ChevronRight size={16} className={showAll ? 'expand-chevron is-open' : 'expand-chevron'} />
+          </button>
+        )}
       </section>
 
       <section className="feature-section" id="features"><div className="container"><div className="feature-title"><p className="eyebrow">Small tool, big difference</p><h2>Good sound design<br />is <em>felt, not noticed.</em></h2></div><div className="features-grid">{features.map(({ icon: Icon, title, text }, index) => <article className="feature-card" key={title}><div className="feature-number">0{index + 1}</div><div className="feature-icon"><Icon size={21} /></div><h3>{title}</h3><p>{text}</p><a href="#download">Learn more <ChevronRight size={15} /></a></article>)}</div></div></section>
