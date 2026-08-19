@@ -132,20 +132,27 @@ expirar ou um reload forçado (`cache: 'no-store'`) acontecer. Não é bug — �
 como o bucket já estava configurado.
 
 Sobre licenciamento de áudio: os esquemas clássicos vêm de acervos públicos de
-fãs. O site é explícito que os arquivos de áudio não são redistribuídos pela
-Microsoft (`packs.note` no site) — isso continua verdade, mantenha essa linha.
+fãs (`lelegofrog.github.io`). O site é explícito que os arquivos de áudio não
+são redistribuídos pela Microsoft (`packs.note` no site) — isso continua
+verdade, mantenha essa linha. Dois packs fogem dessa fonte: `win7` e `vista`
+(esquemas "puros", sem tema — algo que `lelegofrog` não tinha) vêm de itens do
+archive.org que preservam a pasta `Media` de instalações reais do Windows 7 e
+Vista. Publicados como exceção pontual direto no R2, fora do pipeline normal
+— ver a nota em `scripts/build-catalog.mjs` sobre o risco de um rerun
+completo sobrescrever `catalog.json` e derrubar os dois silenciosamente.
 
 Sobre as capas, a regra **default** é: só imagens livres ou originais, nunca
 logo ou wallpaper com marca — é o que `scripts/build-catalog.mjs` faz nos
-packs de Vista e Plus! (95 e XP), 11 ao todo. Existe uma **exceção
-deliberada**, por decisão explícita do autor, que hoje cobre todo o conjunto
-Windows 7/8/10/98/XP (17 packs): `xp-real`, `win10`, `win98`, `win8` e
-`win7-delta` usam a logo/tela oficial da Microsoft direto; todos os outros
-`win7-*` — incluindo `win7-heritage`, que é foto pessoal do autor — têm a logo
-do Windows 7 composta por cima. Está tudo documentado em
-`COVER_PHOTO_CREDITS` no próprio script, sem esconder que é material da
-Microsoft. Não generalize essa exceção para Vista/Plus! ou para novos packs
-sem confirmar de novo — não há arquivo de logo para essas sub-marcas hoje.
+packs de Plus! (95 e XP) e nos temas nomeados de Vista (Glass/Pearl/Tinker),
+11 ao todo. Existe uma **exceção deliberada**, por decisão explícita do
+autor, que hoje cobre todo o conjunto Windows 7/8/10/98/XP/Vista (18 packs):
+`xp-real`, `win10`, `win98`, `win8`, `win7-delta` e `vista` usam a logo/tela
+oficial da Microsoft direto; todos os outros `win7-*` — incluindo
+`win7-heritage`, que é foto pessoal do autor — têm a logo do Windows 7
+composta por cima. Está tudo documentado em `COVER_PHOTO_CREDITS` no próprio
+script, sem esconder que é material da Microsoft. Não generalize essa
+exceção para os temas nomeados de Vista, para Plus!, ou para novos packs sem
+confirmar de novo — não há arquivo de logo para essas sub-marcas hoje.
 
 ## Landing page
 

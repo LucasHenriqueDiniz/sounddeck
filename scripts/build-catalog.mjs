@@ -228,19 +228,20 @@ function coverFor(name, baseHue) {
 // would need a lot of one-off special-casing for two novelty packs — a
 // reasonable follow-up, not done here.
 //
-// NOTE: the live catalog also has a "win7" pack (plain default Windows 7
-// scheme, 20 events, id "win7") that is NOT represented below. It was
-// published as a one-off exception directly to R2 — sourced from a
-// different place than everything else here (the Internet Archive item
-// "windows-7-windows-media-Default-Sound", a real Windows 7 install's
-// Media folder, not lelegofrog.github.io) — because no local archive for it
-// exists in SOURCE_DIR. This script's own output has no "win7" entry, so a
+// NOTE: the live catalog also has "win7" and "vista" packs (plain default
+// schemes, 20 events each, ids "win7"/"vista") that are NOT represented
+// below. Both were published as one-off exceptions directly to R2 — sourced
+// from a different place than everything else here (Internet Archive items
+// "windows-7-windows-media-Default-Sound" and
+// "WindowsVista.InboxMedium.SoundScheme", real Windows installs' Media
+// folders, not lelegofrog.github.io) — because no local archive for either
+// exists in SOURCE_DIR. This script's own output has neither entry, so a
 // full rerun of build-catalog.mjs + upload-catalog.mjs WOULD wholesale-
-// overwrite catalog.json and silently drop "win7" from the live catalog
-// again (its .wav files would stay in R2, just orphaned/unreferenced). If
-// you run the full pipeline before adding a matching MANIFEST entry (or a
-// script step that reads it back from R2 first), re-add "win7" to the
-// output catalog by hand before uploading.
+// overwrite catalog.json and silently drop both packs from the live catalog
+// again (their .wav files would stay in R2, just orphaned/unreferenced). If
+// you run the full pipeline before adding matching MANIFEST entries (or a
+// script step that reads them back from R2 first), re-add "win7" and
+// "vista" to the output catalog by hand before uploading.
 
 const MANIFEST = [
   { source: "10wav.zip", kind: "flat", id: "win10", name: "Windows 10", releaseYear: 2015, hue: 200 },
