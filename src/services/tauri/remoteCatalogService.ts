@@ -11,10 +11,6 @@ import { eventKey } from "../../types/soundEvent";
  *
  * The base URL is never hardcoded — it comes from build-time configuration,
  * so this module can't silently point at a placeholder that looks real.
- * Applying a remote pack is still fully simulated (see applyPackService.ts):
- * only listing and audio preview are connected to real data so far —
- * writing files to disk for an actual apply is still pending
- * (packDownloadService.ts is ready but unused until that flow is built).
  */
 
 export function getConfiguredCatalogBaseUrl(): string | null {
@@ -50,6 +46,8 @@ export async function fetchRemoteCatalog(baseUrl: string): Promise<SoundPack[]> 
       origin: pack.origin,
       releaseYear: pack.releaseYear,
       description: pack.description,
+      descriptionKey: pack.descriptionKey,
+      descriptionVars: pack.descriptionVars,
       cover: pack.cover.imageUrl
         ? { ...pack.cover, imageUrl: resolvePackFileUrl(baseUrl, pack.id, pack.cover.imageUrl) }
         : pack.cover,

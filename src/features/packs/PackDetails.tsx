@@ -3,7 +3,7 @@ import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
 import { Dialog } from "../../components/Dialog";
 import { CheckIcon, EditorIcon, TrashIcon } from "../../components/icons/icons";
-import type { SoundPack } from "../../types/pack";
+import { resolvePackDescription, type SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
 import { deleteCustomPack } from "../../services/tauri/customPackService";
 import { derivePackTags, resolveTagLabel, ORIGIN_TAG_KEY } from "../../lib/packTags";
@@ -62,7 +62,7 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents, onDeleted 
           {authorIsOrigin ? pack.author : `${originLabel} · ${pack.author}`}
           {pack.releaseYear ? ` · ${pack.releaseYear}` : ""}
         </p>
-        <p className={styles.description}>{pack.description}</p>
+        <p className={styles.description}>{resolvePackDescription(pack, t)}</p>
         {pack.sourceCredit && <p className={styles.credit}>{pack.sourceCredit}</p>}
         <div className={styles.tags}>
           {derivePackTags(pack).map((tag) => (

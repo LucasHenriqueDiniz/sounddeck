@@ -131,9 +131,19 @@ The UI has real i18n: `src/i18n/index.tsx` (the `useT()` hook + `TranslationKey`
 and `src/i18n/locales/{en,pt,es,de,fr}.json` — English is the source of
 truth (`TranslationKey = keyof typeof en`), the others translate the same
 keys. "system" follows the OS/webview language; any other value pins one
-language. Pack description/credit (`SoundPack.description`/`sourceCredit`)
-**do not** go through this system — they're literal strings defined in the
-catalog, not translation keys.
+language.
+
+**Pack descriptions are translated too.** The catalog stores a
+`descriptionKey` + `descriptionVars` per pack (`packDesc.systemDefault`,
+`packDesc.bundledTheme`, `packDesc.plusTheme`) rather than prose, so the same
+catalog reads correctly in every UI language. Render them with
+`resolvePackDescription(pack, t)`, never `pack.description` directly — that
+field is only the fallback for packs with no key (custom packs, or a catalog
+published before this change). `build-catalog.mjs` emits both.
+
+`sourceCredit` is **still literal Portuguese** and still untranslated — 30
+bespoke strings mixing attribution, photographer names and trademark notes,
+which don't reduce to a few templates the way descriptions did.
 
 ## Pack catalog
 

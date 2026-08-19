@@ -234,5 +234,8 @@
   "tour.custom.title": "Créez le vôtre",
   "tour.custom.body": "Créez un pack à partir de vos propres fichiers .wav. Il reste sur votre ordinateur — rien n'est envoyé.",
   "whatsNew.title": "Nouveautés de la version {version}",
-  "whatsNew.subtitle": "Voici ce qui a changé depuis votre version précédente."
+  "whatsNew.subtitle": "Voici ce qui a changé depuis votre version précédente.",
+  "packDesc.systemDefault": "Le jeu de sons original de {system}.",
+  "packDesc.bundledTheme": "Le jeu officiel « {theme} », l'un des thèmes sonores inclus dans {system}.",
+  "packDesc.plusTheme": "Le thème « {theme} » de Microsoft Plus! pour {system}."
 }

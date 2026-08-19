@@ -21,6 +21,9 @@ export interface RemoteCatalogPack {
   origin: PackOrigin;
   releaseYear?: number;
   description: string;
+  /** Present since the descriptions were keyed; older catalogs only have prose. */
+  descriptionKey?: string;
+  descriptionVars?: Record<string, string>;
   cover: PackCoverArt;
   /** Attribution for where the source audio came from, shown in pack details. */
   sourceCredit?: string;

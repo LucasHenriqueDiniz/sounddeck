@@ -234,5 +234,8 @@
   "tour.custom.title": "Monte o seu",
   "tour.custom.body": "Crie um pack com seus próprios arquivos .wav. Fica só no seu computador — nada é enviado.",
   "whatsNew.title": "Novidades da versão {version}",
-  "whatsNew.subtitle": "O que mudou desde a versão que você tinha."
+  "whatsNew.subtitle": "O que mudou desde a versão que você tinha.",
+  "packDesc.systemDefault": "Esquema de sons original do {system}.",
+  "packDesc.bundledTheme": "Esquema oficial \"{theme}\", um dos temas de som incluídos no {system}.",
+  "packDesc.plusTheme": "Tema \"{theme}\" do Microsoft Plus! para {system}."
 }

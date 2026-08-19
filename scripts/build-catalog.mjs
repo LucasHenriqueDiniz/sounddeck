@@ -243,6 +243,24 @@ function coverFor(name, baseHue) {
 // script step that reads them back from R2 first), re-add "win7" and
 // "vista" to the output catalog by hand before uploading.
 
+// Descriptions are stored as a translation key plus its variables, not as
+// prose. The app renders them through src/i18n, so one catalog reads
+// correctly in every UI language instead of only Portuguese. The literal
+// `description` is still emitted as a fallback for app versions released
+// before descriptions were keyed.
+const DESCRIPTION_TEMPLATES = {
+  "packDesc.systemDefault": (v) => `Esquema de sons original do ${v.system}.`,
+  "packDesc.bundledTheme": (v) =>
+    `Esquema oficial "${v.theme}", um dos temas de som incluídos no ${v.system}.`,
+  "packDesc.plusTheme": (v) => `Tema "${v.theme}" do Microsoft Plus! para ${v.system}.`,
+};
+
+function describe(key, vars) {
+  const template = DESCRIPTION_TEMPLATES[key];
+  if (!template) throw new Error(`Unknown description key: ${key}`);
+  return { descriptionKey: key, descriptionVars: vars, description: template(vars) };
+}
+
 const MANIFEST = [
   { source: "10wav.zip", kind: "flat", id: "win10", name: "Windows 10", releaseYear: 2015, hue: 200 },
   { source: "98wav.zip", kind: "flat", id: "win98", name: "Windows 98", releaseYear: 1998, hue: 210 },
@@ -254,7 +272,7 @@ const MANIFEST = [
     idPrefix: "win7",
     releaseYear: 2009,
     hue: 205,
-    description: (name) => `Esquema oficial "${name}", um dos temas de som incluídos no Windows 7.`,
+    describeFor: (name) => describe("packDesc.bundledTheme", { theme: name, system: "Windows 7" }),
   },
   {
     source: "95wavall.zip",
@@ -262,7 +280,7 @@ const MANIFEST = [
     idPrefix: "plus95",
     releaseYear: 1995,
     hue: 30,
-    description: (name) => `Tema "${name}" do Microsoft Plus! para Windows 95.`,
+    describeFor: (name) => describe("packDesc.plusTheme", { theme: name, system: "Windows 95" }),
   },
   {
     source: "vistawavall.zip",
@@ -270,7 +288,7 @@ const MANIFEST = [
     idPrefix: "vista",
     releaseYear: 2006,
     hue: 220,
-    description: (name) => `Esquema oficial "${name}", um dos temas de som incluídos no Windows Vista.`,
+    describeFor: (name) => describe("packDesc.bundledTheme", { theme: name, system: "Windows Vista" }),
   },
   {
     source: "xpwavall.zip",
@@ -278,7 +296,7 @@ const MANIFEST = [
     idPrefix: "plusxp",
     releaseYear: 2001,
     hue: 40,
-    description: (name) => `Tema "${name}" do Microsoft Plus! para Windows XP.`,
+    describeFor: (name) => describe("packDesc.plusTheme", { theme: name, system: "Windows XP" }),
   },
 ];
 
@@ -331,7 +349,7 @@ function readNestedGroups(entry) {
   return groups;
 }
 
-function buildPack(id, name, releaseYear, description, hue, files, stagingRoot) {
+function buildPack(id, name, releaseYear, described, hue, files, stagingRoot) {
   const seenEvents = new Set();
   const catalogFiles = [];
   const packDir = join(stagingRoot, "packs", id);
@@ -372,7 +390,7 @@ function buildPack(id, name, releaseYear, description, hue, files, stagingRoot) 
     author: "Microsoft",
     origin: "microsoft",
     releaseYear,
-    description,
+    ...described,
     cover,
     sourceCredit,
     files: catalogFiles,
@@ -395,7 +413,7 @@ function main() {
         entry.id,
         entry.name,
         entry.releaseYear,
-        `Esquema de sons original do ${entry.name}.`,
+        describe("packDesc.systemDefault", { system: entry.name }),
         entry.hue,
         files,
         OUTPUT_DIR,
@@ -418,7 +436,7 @@ function main() {
           id,
           folder,
           entry.releaseYear,
-          entry.description(folder),
+          entry.describeFor(folder),
           entry.hue,
           files,
           OUTPUT_DIR,
