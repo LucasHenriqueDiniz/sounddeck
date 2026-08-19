@@ -52,7 +52,7 @@ const runtimeKeys = (d) => Object.fromEntries(Object.entries(d).filter(([k]) => 
 function head(lang, page) {
   const d = dict[lang.code];
   const desc = d[`meta.${page.file}.desc`] ?? '';
-  const title = d[`meta.${page.file}.title`] ?? 'SoundDeck';
+  const title = d[`meta.${page.file}.title`] ?? 'Chimer';
   const path = page.path ?? '/404';
   const canonical = urlFor(lang.code, path);
 
@@ -68,7 +68,7 @@ function head(lang, page) {
           {
             '@context': 'https://schema.org',
             '@type': 'SoftwareApplication',
-            name: 'SoundDeck',
+            name: 'Chimer',
             applicationCategory: 'UtilitiesApplication',
             applicationSubCategory: 'Personalization',
             operatingSystem: 'Windows 10, Windows 11',
@@ -100,7 +100,7 @@ function head(lang, page) {
     `<link rel="canonical" href="${canonical}" />`,
     alternates,
     `<meta property="og:type" content="website" />`,
-    `<meta property="og:site_name" content="SoundDeck" />`,
+    `<meta property="og:site_name" content="Chimer" />`,
     `<meta property="og:locale" content="${lang.ogLocale}" />`,
     ...LANGS.filter((l) => l.code !== lang.code).map(
       (l) => `<meta property="og:locale:alternate" content="${l.ogLocale}" />`,
@@ -150,7 +150,7 @@ function render(lang, page) {
 
   html = html
     .replace(/\{\{LANG\}\}/g, lang.htmlLang)
-    .replace(/\{\{TITLE\}\}/g, esc(d[`meta.${page.file}.title`] ?? 'SoundDeck'))
+    .replace(/\{\{TITLE\}\}/g, esc(d[`meta.${page.file}.title`] ?? 'Chimer'))
     .replace(/\{\{BASE\}\}/g, base(lang.code))
     .replace('<!--HEAD-->', head(lang, page))
     .replace('<!--LANGS-->', langSwitcher(lang, page));

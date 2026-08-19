@@ -1,7 +1,7 @@
 import type { TranslationKey } from "../i18n";
 import type { PackEventAssignment } from "./soundEvent";
 
-export type PackOrigin = "microsoft" | "community" | "sounddeck" | "custom";
+export type PackOrigin = "microsoft" | "community" | "chimer" | "custom";
 
 export interface PackCoverArt {
   /** Two-stop gradient used as the cover surface — also the fallback if `imageUrl` fails to load. */

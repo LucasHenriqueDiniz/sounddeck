@@ -4,7 +4,7 @@ import { isRunningInTauri } from "./windowsSoundService";
 /**
  * Real integration: uses the already-installed `@tauri-apps/plugin-dialog`
  * to open the native file picker. This only returns a path the user
- * explicitly chose — SoundDeck does not read the file's contents (no
+ * explicitly chose — Chimer does not read the file's contents (no
  * filesystem capability is granted for that), it just records the file name
  * against a pack event assignment for the (currently simulated) apply flow.
  */

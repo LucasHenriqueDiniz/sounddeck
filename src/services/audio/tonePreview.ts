@@ -1,5 +1,5 @@
 /**
- * SoundDeck ships no bundled audio assets and the app has no filesystem
+ * Chimer ships no bundled audio assets and the app has no filesystem
  * permission to read arbitrary local WAV files (by design — see DESIGN.md /
  * capabilities). So "listening" to a pack or event sound in this version
  * plays a short synthesized tone stand-in via the Web Audio API instead of

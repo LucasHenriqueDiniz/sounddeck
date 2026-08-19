@@ -6,7 +6,7 @@
 // the same alias-resolution path Windows itself uses for system sounds
 // (HKCU\AppEvents\Schemes\Apps\.Default\<alias>\.Current).
 
-use sounddeck_lib::windows_sound;
+use chimer_lib::windows_sound;
 use std::path::Path;
 
 #[link(name = "winmm")]
@@ -25,7 +25,7 @@ fn play_alias(alias: &str) -> bool {
 }
 
 fn main() {
-    println!("== SoundDeck Fase 0 probe ==\n");
+    println!("== Chimer Fase 0 probe ==\n");
 
     let events = windows_sound::list_events().expect("list_events failed");
     println!("1) list_events(): {} eventos encontrados", events.len());
@@ -89,7 +89,7 @@ fn main() {
         played_b
     );
 
-    let bogus = r"C:\Windows\Media\sounddeck-probe-arquivo-que-nao-existe.wav".to_string();
+    let bogus = r"C:\Windows\Media\chimer-probe-arquivo-que-nao-existe.wav".to_string();
     windows_sound::apply_sound(&candidate.app, &candidate.event, &bogus).expect("apply_sound(bogus) falhou");
     let played_bogus = play_alias(&candidate.event);
     println!(

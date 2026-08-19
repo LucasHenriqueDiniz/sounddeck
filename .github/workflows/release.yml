@@ -38,7 +38,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tagName: ${{ github.ref_name }}
-          releaseName: "SoundDeck ${{ github.ref_name }}"
+          releaseName: "Chimer ${{ github.ref_name }}"
           # Placeholder only. The release is created as a draft — replace this
           # with the real notes before publishing: the landing page's
           # changelog renders each line of this body as a bullet, so whatever

@@ -56,7 +56,7 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" v
     <path d="M11 5 6 9H2v6h4l5 4z" />
     <path d="M15.5 8.5a5 5 0 0 1 0 7" />
   </g>
-  <text x="172" y="123" font-family="${FONT}" font-size="34" font-weight="600" fill="${INK}">SoundDeck</text>
+  <text x="172" y="123" font-family="${FONT}" font-size="34" font-weight="600" fill="${INK}">Chimer</text>
 
   <!-- headline -->
   <text x="96" y="252" font-family="${FONT}" font-size="76" font-weight="600"

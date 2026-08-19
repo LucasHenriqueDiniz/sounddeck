@@ -1,11 +1,11 @@
-# SoundDeck
+# Chimer
 
 > A free, open-source desktop app for Windows 10 and 11 that replaces the
 > built-in sound scheme editor. Browse sound packs, preview every system event,
 > and apply a whole scheme in one click — with an automatic backup of the
 > previous scheme before any change.
 
-SoundDeck is built with Tauri 2, React 19 and Rust. It runs without
+Chimer is built with Tauri 2, React 19 and Rust. It runs without
 administrator privileges, never modifies Windows system files, and writes only
 to the current user's registry hive (HKCU\AppEvents\Schemes\Apps) — the same
 location the official Control Panel applet uses. Every apply is reversible.

@@ -196,8 +196,8 @@ export const SOUND_PACKS: SoundPack[] = [
   {
     id: "minimal",
     name: "Minimal",
-    author: "SoundDeck",
-    origin: "sounddeck",
+    author: "Chimer",
+    origin: "chimer",
     description:
       "Almost everything off. Only short clicks for the essential events — made for people who want quiet.",
     cover: { gradientFrom: "#3a3a3a", gradientTo: "#111111", glyph: "—" },
@@ -206,8 +206,8 @@ export const SOUND_PACKS: SoundPack[] = [
   {
     id: "calm",
     name: "Calm",
-    author: "SoundDeck",
-    origin: "sounddeck",
+    author: "Chimer",
+    origin: "chimer",
     description:
       "Soft bells and chimes instead of the harsh Windows alerts. Critical errors stay silent.",
     cover: { gradientFrom: "#7fb0a0", gradientTo: "#2c4a44", glyph: "☾" },

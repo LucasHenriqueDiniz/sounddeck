@@ -19,7 +19,7 @@ import styles from "./PackDetails.module.css";
  */
 const ORIGIN_CANONICAL_AUTHOR: Partial<Record<SoundPack["origin"], string>> = {
   microsoft: "Microsoft",
-  sounddeck: "SoundDeck",
+  chimer: "Chimer",
 };
 
 interface PackDetailsProps {

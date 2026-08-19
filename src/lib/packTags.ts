@@ -25,7 +25,7 @@ const ERA_PREFIXES: Array<{ prefix: string; label: string }> = [
 export const ORIGIN_TAG_KEY: Record<SoundPack["origin"], TranslationKey> = {
   microsoft: "pack.origin.official",
   community: "pack.origin.community",
-  sounddeck: "pack.origin.sounddeck",
+  chimer: "pack.origin.chimer",
   custom: "pack.origin.custom",
 };
 

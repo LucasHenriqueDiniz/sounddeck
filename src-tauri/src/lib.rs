@@ -221,7 +221,7 @@ mod apply_tests {
 
     fn temp_backups_dir(tag: &str) -> PathBuf {
         let mut dir = std::env::temp_dir();
-        dir.push(format!("sounddeck-test-{tag}"));
+        dir.push(format!("chimer-test-{tag}"));
         let _ = std::fs::remove_dir_all(&dir);
         dir
     }

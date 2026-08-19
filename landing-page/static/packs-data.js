@@ -40,8 +40,8 @@ window.SOUNDDECK_PACKS = [
   {
     "id": "minimal",
     "name": "Minimal",
-    "author": "SoundDeck",
-    "origin": "sounddeck",
+    "author": "Chimer",
+    "origin": "chimer",
     "releaseYear": null,
     "cover": {
       "gradientFrom": "#3a3a3a",
@@ -52,8 +52,8 @@ window.SOUNDDECK_PACKS = [
   {
     "id": "calm",
     "name": "Calm",
-    "author": "SoundDeck",
-    "origin": "sounddeck",
+    "author": "Chimer",
+    "origin": "chimer",
     "releaseYear": null,
     "cover": {
       "gradientFrom": "#7fb0a0",

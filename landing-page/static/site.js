@@ -1,9 +1,9 @@
-// SoundDeck site — tema, prévias de áudio e idioma (pt-BR / en)
+// Chimer site — tema, prévias de áudio e idioma (pt-BR / en)
 
 (() => {
   const root = document.documentElement;
-  const savedTheme = localStorage.getItem('sounddeck-theme');
-  const setTheme = (t) => { root.dataset.theme = t; localStorage.setItem('sounddeck-theme', t); };
+  const savedTheme = localStorage.getItem('chimer-theme');
+  const setTheme = (t) => { root.dataset.theme = t; localStorage.setItem('chimer-theme', t); };
   setTheme(savedTheme || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'));
   const tb = document.getElementById('themeBtn');
   if (tb) tb.addEventListener('click', () => setTheme(root.dataset.theme === 'dark' ? 'light' : 'dark'));
@@ -17,7 +17,7 @@
   // alguém publicar manualmente no GitHub), as duas páginas mostram um
   // estado honesto de "ainda não lançamos uma versão" em vez de inventar
   // uma.
-  const GITHUB_REPO = 'LucasHenriqueDiniz/sounddeck';
+  const GITHUB_REPO = 'LucasHenriqueDiniz/chimer';
   const DOWNLOAD_ICON =
     '<svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M3 5.5 10 4.6v6.9H3zM11 4.4 21 3v8.5H11zM3 12.5h7v6.9L3 18.5zM11 12.5h10V21l-10-1.4z"/></svg>';
   let releasesPromise = null;
@@ -60,7 +60,7 @@
       if (msi) buttons.push(`<a class="btn btn-ghost btn-lg" href="${msi.browser_download_url}">${t['dl.msi']}</a>`);
       if (zip) buttons.push(`<a class="btn btn-ghost btn-lg" href="${zip.browser_download_url}">${t['dl.zip']}</a>`);
       card.innerHTML =
-        `<h2>SoundDeck ${rel.tag_name}</h2>` +
+        `<h2>Chimer ${rel.tag_name}</h2>` +
         `<div class="dl-meta"><span>${t['dl.published']} ${formatDate(rel.published_at)}</span></div>` +
         `<div class="dl-actions">${buttons.join('')}</div>` +
         `<p class="dl-alt"><a href="${rel.html_url}">${t['dl.viewrelease']}</a></p>`;
@@ -118,7 +118,7 @@
   // ---- prévias de áudio ----
   // XP, Vista e 7 tocam o áudio real desses esquemas, servido pelo mesmo
   // catálogo público (R2) que o app usa (services/tauri/remoteCatalogService.ts).
-  // Minimal e Calm são conceitos originais do SoundDeck sem gravação de
+  // Minimal e Calm são conceitos originais do Chimer sem gravação de
   // referência, então continuam com um tom sintetizado no navegador,
   // deixado claro no texto da seção de packs (packs.note).
   const REAL_AUDIO_BASE = 'https://pub-a7bb18fa003c4b529e764f1c308a7146.r2.dev';

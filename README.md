@@ -1,4 +1,4 @@
-# SoundDeck
+# Chimer
 
 Windows 10/11 sound scheme manager. Pick a pack, preview it, apply it —
 no need to touch Control Panel — with an automatic backup of the current
@@ -88,7 +88,7 @@ scripts/
 Classic scheme audio files come from public fan archives, such as
 [lelegofrog.github.io/wav.html](https://lelegofrog.github.io/wav.html), plus
 a couple of items on [archive.org](https://archive.org) preserving real
-Windows installs (see [AGENTS.md](AGENTS.md) for details). SoundDeck is not
+Windows installs (see [AGENTS.md](AGENTS.md) for details). Chimer is not
 affiliated with Microsoft. Windows is a trademark of Microsoft.
 
 ## License

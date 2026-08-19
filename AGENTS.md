@@ -335,7 +335,7 @@ GitHub Actions builds on `windows-latest` via `tauri-action` and creates a
 The version lives in **three places** and they must match:
 `package.json`, `src-tauri/Cargo.toml`, `src-tauri/tauri.conf.json`.
 `src-tauri/Cargo.lock` carries it too and won't update itself — patch its
-`[[package]] name = "sounddeck"` entry, or the next build silently rewrites
+`[[package]] name = "chimer"` entry, or the next build silently rewrites
 the lockfile.
 
 **Write the release notes before publishing the draft.** The workflow only
