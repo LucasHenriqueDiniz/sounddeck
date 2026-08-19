@@ -27,7 +27,19 @@ npm run build:og             # regenerates landing-page/og.png
 npm run build:landing        # generates landing-page/dist/ (multilingual site)
 ```
 
-There is no test suite. Verification is manual, by running the app.
+The Rust side has round-trip tests for the registry write path. They're
+`#[ignore]`d because they write to the **live** `HKCU` sound scheme — each
+one restores what it touched, but a plain `cargo test` shouldn't mutate the
+machine it runs on:
+
+```bash
+cd src-tauri && cargo test -- --ignored --test-threads=1
+```
+
+They cover apply/disable/Windows-default per event, the full
+apply → backup → restore cycle, byte-and-type exactness on restore, and that
+a missing `.wav` aborts before anything is written. Everything else is
+verified manually by running the app.
 
 ## Architecture
 

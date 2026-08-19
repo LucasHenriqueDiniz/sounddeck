@@ -136,6 +136,88 @@ pub fn disable_sound(app: &str, event: &str) -> windows_registry::Result<()> {
     current_key.set_string("", "")
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Picks a real event off this machine rather than assuming a fixed one —
+    /// which events exist varies by Windows version and installed apps.
+    fn some_event_with_sound() -> SoundEvent {
+        list_events()
+            .expect("registry readable")
+            .into_iter()
+            .find(|e| e.current_sound.is_some())
+            .expect("at least one event has a sound")
+    }
+
+    // These write to the live HKCU sound scheme, so they're opt-in:
+    //   cargo test -- --ignored
+    // Each one restores what it touched before returning.
+
+    #[test]
+    #[ignore = "writes to the live HKCU sound scheme"]
+    fn apply_then_restore_is_byte_exact() {
+        let target = some_event_with_sound();
+        let original = snapshot_event(&target.app, &target.event);
+        let original_raw = original.previous_raw.clone().expect("event has a raw value");
+
+        let probe = "C:\\Windows\\Media\\Windows Ding.wav";
+        apply_sound(&target.app, &target.event, probe).expect("apply");
+        assert_eq!(
+            get_current_sound(&target.app, &target.event).as_deref(),
+            Some(probe),
+            "apply should have written the probe path"
+        );
+
+        restore_sound(&original).expect("restore");
+        let after = snapshot_event(&target.app, &target.event)
+            .previous_raw
+            .expect("value still present after restore");
+
+        // Byte-and-type equality, not just string equality: REG_EXPAND_SZ
+        // values must not silently come back as REG_SZ.
+        assert_eq!(after.reg_type, original_raw.reg_type, "registry type changed");
+        assert_eq!(after.bytes, original_raw.bytes, "registry bytes changed");
+    }
+
+    #[test]
+    #[ignore = "writes to the live HKCU sound scheme"]
+    fn disable_then_restore_round_trip() {
+        let target = some_event_with_sound();
+        let original = snapshot_event(&target.app, &target.event);
+
+        disable_sound(&target.app, &target.event).expect("disable");
+        assert_eq!(
+            get_current_sound(&target.app, &target.event),
+            None,
+            "disabled event should read as no sound"
+        );
+
+        restore_sound(&original).expect("restore");
+        assert_eq!(
+            get_current_sound(&target.app, &target.event),
+            original.previous_sound,
+            "restore should bring the original sound back"
+        );
+    }
+
+    #[test]
+    #[ignore = "writes to the live HKCU sound scheme"]
+    fn windows_default_then_restore_round_trip() {
+        let target = some_event_with_sound();
+        let original = snapshot_event(&target.app, &target.event);
+
+        apply_windows_default(&target.app, &target.event).expect("apply default");
+        restore_sound(&original).expect("restore");
+
+        assert_eq!(
+            get_current_sound(&target.app, &target.event),
+            original.previous_sound,
+            "restore should bring the original sound back"
+        );
+    }
+}
+
 pub fn restore_sound(snapshot: &EventSnapshot) -> windows_registry::Result<()> {
     let current_key = CURRENT_USER.create(current_key_path(&snapshot.app, &snapshot.event))?;
 

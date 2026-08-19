@@ -7,11 +7,10 @@
 // the bundle identifier, not by the install path, so reinstalling or
 // upgrading to a new version keeps them.
 
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::time::{SystemTime, UNIX_EPOCH};
 
 use serde::{Deserialize, Serialize};
-use tauri::Manager;
 
 use crate::windows_sound::EventSnapshot;
 
@@ -35,11 +34,10 @@ pub struct BackupSummary {
     pub size_bytes: u64,
 }
 
-fn backups_dir(app: &tauri::AppHandle) -> Result<PathBuf, String> {
-    let mut dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
-    dir.push("backups");
-    std::fs::create_dir_all(&dir).map_err(|e| e.to_string())?;
-    Ok(dir)
+/// Takes the directory rather than an AppHandle so the whole backup cycle is
+/// exercisable in tests without a running Tauri app.
+fn ensure_dir(dir: &Path) -> Result<(), String> {
+    std::fs::create_dir_all(dir).map_err(|e| e.to_string())
 }
 
 /// Backup ids are generated here rather than accepted from the frontend so a
@@ -52,7 +50,7 @@ fn new_id() -> String {
     format!("bkp-{millis}")
 }
 
-fn record_path(app: &tauri::AppHandle, id: &str) -> Result<PathBuf, String> {
+fn record_path(dir: &Path, id: &str) -> Result<PathBuf, String> {
     // Ids are generated internally, but this is the boundary where one is
     // turned back into a filesystem path — reject anything that isn't the
     // shape we generate rather than trusting the caller.
@@ -64,13 +62,13 @@ fn record_path(app: &tauri::AppHandle, id: &str) -> Result<PathBuf, String> {
     if !safe {
         return Err("Invalid backup id.".to_string());
     }
-    let mut path = backups_dir(app)?;
+    let mut path = PathBuf::from(dir);
     path.push(format!("{id}.json"));
     Ok(path)
 }
 
 pub fn save(
-    app: &tauri::AppHandle,
+    dir: &Path,
     created_at: String,
     label: String,
     pack_name: Option<String>,
@@ -83,15 +81,16 @@ pub fn save(
         pack_name,
         snapshots,
     };
-    let path = record_path(app, &record.id)?;
+    ensure_dir(dir)?;
+    let path = record_path(dir, &record.id)?;
     let json = serde_json::to_vec_pretty(&record).map_err(|e| e.to_string())?;
     std::fs::write(&path, json).map_err(|e| e.to_string())?;
     Ok(record)
 }
 
-pub fn list(app: &tauri::AppHandle) -> Result<Vec<BackupSummary>, String> {
-    let dir = backups_dir(app)?;
-    let entries = match std::fs::read_dir(&dir) {
+pub fn list(dir: &Path) -> Result<Vec<BackupSummary>, String> {
+    ensure_dir(dir)?;
+    let entries = match std::fs::read_dir(dir) {
         Ok(entries) => entries,
         Err(_) => return Ok(Vec::new()),
     };
@@ -126,13 +125,13 @@ pub fn list(app: &tauri::AppHandle) -> Result<Vec<BackupSummary>, String> {
     Ok(summaries)
 }
 
-pub fn read(app: &tauri::AppHandle, id: &str) -> Result<BackupRecord, String> {
-    let path = record_path(app, id)?;
+pub fn read(dir: &Path, id: &str) -> Result<BackupRecord, String> {
+    let path = record_path(dir, id)?;
     let bytes = std::fs::read(&path).map_err(|_| "Backup not found.".to_string())?;
     serde_json::from_slice(&bytes).map_err(|e| e.to_string())
 }
 
-pub fn delete(app: &tauri::AppHandle, id: &str) -> Result<(), String> {
-    let path = record_path(app, id)?;
+pub fn delete(dir: &Path, id: &str) -> Result<(), String> {
+    let path = record_path(dir, id)?;
     std::fs::remove_file(&path).map_err(|e| e.to_string())
 }
