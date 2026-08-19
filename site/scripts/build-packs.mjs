@@ -37,29 +37,82 @@ const catalog = await response.json();
  */
 const PREVIEW_EVENTS = ['WindowsLogon', 'SystemAsterisk', 'DeviceConnect', 'Notification.Default', '.Default'];
 
-function previewUrlFor(pack) {
-  for (const event of PREVIEW_EVENTS) {
-    const file = pack.files.find((f) => f.eventId.event === event);
-    if (file) return `${BASE}/packs/${pack.id}/${encodeURIComponent(file.fileName)}`;
+/**
+ * Whether a .wav can actually be previewed in a browser.
+ *
+ * This exists because win98's logon sound is a 31ms MS-ADPCM stub: the button
+ * was enabled, the request returned 200, and nothing played. Two distinct
+ * reasons a file can be a dead preview, both visible in the header:
+ *
+ *  - Format. Browsers decode PCM (1), float (3) and — verified, not assumed —
+ *    MP3-in-WAV (85), which is what the thirteen Windows 7 themes ship. They
+ *    do not decode MS-ADPCM (2) or IMA-ADPCM (17).
+ *  - Length. A file that decodes but lasts 31ms is silence to a listener.
+ *
+ * Only the first 4 KB is fetched, so probing all thirty packs costs ~120 KB.
+ */
+const DECODABLE_FORMATS = new Set([1, 3, 85]);
+const MIN_PREVIEW_SECONDS = 0.3;
+
+async function isPlayable(url) {
+  const response = await fetch(url, { headers: { Range: 'bytes=0-4095' } });
+  if (!response.ok && response.status !== 206) return false;
+  const view = new DataView(await response.arrayBuffer());
+  if (view.byteLength < 44) return false;
+
+  let offset = 12;
+  let bytesPerSecond = 0;
+  let format = 0;
+  while (offset + 8 <= view.byteLength) {
+    const id = String.fromCharCode(...new Uint8Array(view.buffer, offset, 4));
+    const size = view.getUint32(offset + 4, true);
+    if (id === 'fmt ') {
+      format = view.getUint16(offset + 8, true);
+      bytesPerSecond = view.getUint32(offset + 16, true);
+    } else if (id === 'data') {
+      const seconds = bytesPerSecond ? size / bytesPerSecond : 0;
+      return DECODABLE_FORMATS.has(format) && seconds >= MIN_PREVIEW_SECONDS;
+    }
+    offset += 8 + size + (size % 2);
   }
-  const first = pack.files[0];
-  return first ? `${BASE}/packs/${pack.id}/${encodeURIComponent(first.fileName)}` : null;
+  return false;
 }
 
-const packs = catalog.packs.map((pack) => ({
+async function previewUrlFor(pack) {
+  const ordered = [
+    ...PREVIEW_EVENTS.map((event) => pack.files.find((f) => f.eventId.event === event)).filter(Boolean),
+    ...pack.files,
+  ];
+  const seen = new Set();
+  for (const file of ordered) {
+    if (seen.has(file.fileName)) continue;
+    seen.add(file.fileName);
+    const url = `${BASE}/packs/${pack.id}/${encodeURIComponent(file.fileName)}`;
+    if (await isPlayable(url)) {
+      if (file !== ordered[0]) {
+        console.warn(`  ${pack.id}: falling back to ${file.fileName} — the preferred sound is not playable`);
+      }
+      return url;
+    }
+  }
+  console.warn(`  ${pack.id}: no playable sound, preview disabled`);
+  return null;
+}
+
+const packs = await Promise.all(catalog.packs.map(async (pack) => ({
   id: pack.id,
   name: pack.name,
   author: pack.author,
   releaseYear: pack.releaseYear ?? null,
   soundCount: pack.files.length,
-  previewUrl: previewUrlFor(pack),
+  previewUrl: await previewUrlFor(pack),
   family: familyOf(pack),
   // Every pack in the catalog carries a cover today; fall back to the
   // generated gradient rather than rendering a broken image if one doesn't.
   coverUrl: pack.cover?.imageUrl ? `${BASE}/packs/${pack.id}/${pack.cover.imageUrl}` : null,
   gradientFrom: pack.cover?.gradientFrom ?? '#444',
   gradientTo: pack.cover?.gradientTo ?? '#222',
-}));
+})));
 
 // Most recognisable first — these are the ones people come looking for.
 const FEATURED = ['xp-real', 'vista', 'win7', 'win98', 'win10', 'win8'];
