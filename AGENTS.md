@@ -284,32 +284,50 @@ when publishing the release. They're English-only for that reason, even
 though the rest of the UI is translated. `releaseService.ts` caches the API
 response for 6h — GitHub rate-limits unauthenticated calls.
 
-## Site (new, not yet deployed)
+## Site (`site/`)
 
-`site/` is a Vite + React + Tailwind single-page site, imported from the
-`chimer-mock` design repo and wired up to real data. It is **not deployed** —
-`landing-page/` is still what serves sounddeck.lucashdo.com.
+The Chimer site: Vite + React + Tailwind, **prerendered to static HTML** — one
+file per language per page. `landing-page/` is the previous generator and still
+serves the domain until the cutover.
 
 ```bash
-npm run dev --prefix site      # local
-npm run build --prefix site    # -> site/dist
-cd site && npx wrangler deploy # publishes; see the warning below
+npm run dev --prefix site          # local, port 5173
+npm run build --prefix site        # client -> SSR -> prerender, into site/dist
+npm run build:packs --prefix site  # refresh the catalog data
+cd site && npx wrangler deploy     # publishes; see the warning below
 ```
 
+`npm run build` is three passes: a normal client build, an SSR build of
+`src/entry-server.tsx`, then `scripts/prerender.mjs`, which renders every
+(language, page) pair with `renderToString` and writes it into the client's
+`index.html` shell. The client hydrates that markup instead of replacing it.
+
+**Why prerendered and not a plain SPA.** The site must serve translated HTML at
+a real URL per language. A JavaScript switcher got only the default language
+indexed once already; rendering the content client-side would repeat that,
+because the served file would be an empty `<div id="root">`. If you change the
+routing or the entry points, verify the built HTML still contains the copy —
+`grep` the headline out of `dist/pt/index.html`.
+
+- **Languages:** English at the root, the rest under `/pt/`, `/es/`, `/de/`,
+  `/fr/`. Add one by dropping a `src/i18n/<code>.json` with the same keys and
+  adding the code to `LANGS` in `src/i18n.ts`.
+- **Strings** live in `site/src/i18n/*.json`. English is the source of truth —
+  `TranslationKey` derives from it, so an unknown key is a type error. The
+  privacy, download, changelog and 404 copy was reused verbatim from
+  `landing-page/i18n`; don't re-author it.
+- **Pack data** is generated into `src/packs.generated.ts` at build time from
+  the published catalog, never fetched at runtime: the pack list belongs in the
+  served HTML, and the bucket sends no `Cache-Control`. Re-run `build:packs`
+  after publishing catalog changes.
+- **Release data** (download links, changelog) is fetched client-side, because
+  it changes without a rebuild. Nothing about a version or filename is
+  hardcoded — a stale link 404s silently.
+- `prerender.mjs` also emits `sitemap.xml`, `robots.txt` and a root `404.html`.
+
 Both `site/wrangler.jsonc` and `landing-page/wrangler.jsonc` claim the same
-custom domain. Deploying `site` moves that domain onto the new worker — that
-is the cutover, not a preview, so don't run it casually.
-
-Three things the old site has and this one doesn't, all of which were
-deliberate there:
-
-- **Five languages on their own URLs.** This one is English-only. The old site
-  serves translated HTML per language precisely because a JS-based switcher
-  got only the default language indexed.
-- **Server-rendered content.** This one paints from JavaScript.
-- **The download, changelog, privacy and 404 pages** (21 pages in total).
-
-Resolve those before cutting over, or the cutover is an SEO regression.
+custom domain. Deploying `site` moves that domain onto the new worker — that is
+the cutover, not a preview, so don't run it casually.
 
 ## Landing page
 

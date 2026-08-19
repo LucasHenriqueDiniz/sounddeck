@@ -77,3 +77,48 @@ h1 em, h2 em { color: var(--coral); font-style: normal; }
 @media (max-width: 900px) { .hero { grid-template-columns: 1fr; padding-top: 70px; } .hero-copy { max-width: 620px; } .hero-art { margin-top: -10px; } .screenshot-frame { max-width: 460px; } .pack-grid { grid-template-columns: repeat(3, 1fr); } .pack-card:nth-child(4), .pack-card:nth-child(5) { margin-top: 0; } .safety-section { gap: 45px; } }
 @media (max-width: 680px) { .container { padding-left: 20px; padding-right: 20px; } .nav { height: 75px; } .github-link, .nav-links { display: none; } .nav-actions { margin-left: auto; } .nav-download { padding: 10px 12px; } .menu-button { display: block; } .nav-links.is-open { position: absolute; display: flex; flex-direction: column; align-items: flex-start; gap: 0; top: 70px; left: 20px; right: 20px; z-index: 5; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); box-shadow: 0 15px 30px rgba(83,55,42,.1); } .nav-links.is-open a { width: 100%; padding: 13px; } .hero { padding-top: 55px; padding-bottom: 60px; } .hero h1 { font-size: 53px; } .hero-text { font-size: 15px; } .hero-actions { align-items: flex-start; flex-direction: column; gap: 18px; } .hero-art { height: auto; padding: 0 4px; margin-bottom: 0; } .screenshot-frame { max-width: 100%; transform: none; } .floating-label { display: none; } .ticker-track { justify-content: flex-start; } .packs-section, .safety-section { padding-top: 82px; padding-bottom: 90px; } .section-heading, .feature-title { display: block; } .section-intro { margin-top: 24px; } .pack-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; } .pack-card { min-height: 250px; } .pack-card:last-child { grid-column: span 2; } .feature-section { padding: 85px 0; } .features-grid { grid-template-columns: 1fr; margin-top: 48px; } .feature-card, .feature-card:not(:first-child) { min-height: auto; padding: 25px 0 28px; border-right: 0; border-bottom: 1px solid #494440; } .feature-card:last-child { border-bottom: 0; } .safety-section { grid-template-columns: 1fr; gap: 50px; } .safety-visual { height: 280px; } .ring-one { width: 270px; height: 270px; } .download-card { display: block; padding: 38px 28px; } .download-large { margin-top: 30px; } .footer { flex-wrap: wrap; padding-top: 28px; padding-bottom: 28px; } .footer > span { order: 3; flex-basis: 100%; } }
 @media (max-width: 390px) { .nav-download { display: none; } .hero h1 { font-size: 47px; } .pack-card { padding: 12px; } }
+
+/* ---- Secondary pages (download, changelog, privacy, 404) ---------------
+   The mock only had a home page. These reuse its type scale and palette so
+   the extra pages don't read as a different site. */
+.page { padding: 78px 0 90px; max-width: 760px; }
+.page h1 { margin: 0; font-size: 44px; letter-spacing: -.045em; }
+.page-sub { margin: 18px 0 0; color: var(--muted); font-size: 15px; line-height: 1.6; }
+.page-h2 { margin: 44px 0 12px; font-size: 19px; font-weight: 600; letter-spacing: -.03em; }
+.page-body { display: flex; align-items: flex-start; gap: 9px; margin: 0; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.page-body svg { flex: 0 0 auto; margin-top: 3px; color: var(--coral); }
+.page-note { display: flex; align-items: center; gap: 7px; margin: 26px 0 0; color: var(--muted); font: 11px var(--mono); }
+.page-card { margin-top: 34px; padding: 26px 28px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.page-card h2 { margin: 0 0 10px; font-size: 20px; }
+.page-card p { margin: 0 0 20px; color: var(--muted); font-size: 13px; line-height: 1.6; }
+.page-list, .page-steps { margin: 0; padding-left: 0; list-style: none; color: var(--muted); font-size: 13px; line-height: 1.7; }
+.page-steps { counter-reset: step; }
+.page-steps li { position: relative; padding: 11px 0 11px 34px; border-top: 1px solid var(--line); }
+.page-steps li::before { counter-increment: step; content: counter(step); position: absolute; left: 0; top: 12px; width: 21px; height: 21px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--coral); font: 10px var(--mono); }
+.page-list li { display: flex; align-items: flex-start; gap: 9px; padding: 10px 0; border-top: 1px solid var(--line); }
+.page-list svg { flex: 0 0 auto; margin-top: 2px; color: #639922; }
+.asset-list { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.asset { display: inline-flex; align-items: center; gap: 9px; padding: 13px 18px; border: 1px solid var(--line); border-radius: 10px; color: var(--ink); background: var(--bg); font-size: 13px; font-weight: 600; }
+.asset:hover { border-color: var(--coral); color: var(--coral); }
+.release { padding: 28px 0; border-top: 1px solid var(--line); }
+.release header { display: flex; align-items: center; gap: 12px; }
+.release header h2 { margin: 0; font-size: 21px; letter-spacing: -.03em; }
+.release-badge { padding: 4px 9px; border-radius: 999px; color: white; background: var(--coral); font: 9px var(--mono); text-transform: uppercase; letter-spacing: .05em; }
+.release-date { margin-left: auto; color: var(--muted); font: 10px var(--mono); }
+.release ul { margin: 16px 0 18px; padding-left: 18px; color: var(--muted); font-size: 13px; line-height: 1.75; }
+.page-404 { text-align: center; padding-top: 120px; }
+.page-404 .hero-actions { justify-content: center; }
+
+/* Real links, one per language — never a JavaScript switcher. */
+.lang-bar { display: flex; flex-wrap: wrap; gap: 16px; padding-top: 22px; padding-bottom: 4px; border-top: 1px solid var(--line); }
+.lang-bar a { color: var(--muted); font-size: 11px; }
+.lang-bar a:hover { color: var(--coral); }
+.lang-bar a.is-current { color: var(--ink); font-weight: 600; }
+.legal { padding-bottom: 34px; color: #a79e96; font-size: 10px; line-height: 1.6; }
+
+@media (max-width: 680px) {
+  .page { padding: 54px 0 66px; }
+  .page h1 { font-size: 34px; }
+  .release header { flex-wrap: wrap; }
+  .release-date { margin-left: 0; flex-basis: 100%; }
+}
