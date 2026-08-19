@@ -246,7 +246,7 @@ function coverFor(name, baseHue) {
 const MANIFEST = [
   { source: "10wav.zip", kind: "flat", id: "win10", name: "Windows 10", releaseYear: 2015, hue: 200 },
   { source: "98wav.zip", kind: "flat", id: "win98", name: "Windows 98", releaseYear: 1998, hue: 210 },
-  { source: "xpwav.zip", kind: "flat", id: "xp-real", name: "Windows XP (original)", releaseYear: 2001, hue: 205 },
+  { source: "xpwav.zip", kind: "flat", id: "xp-real", name: "Windows XP", releaseYear: 2001, hue: 205 },
   { source: "win8", kind: "folder", id: "win8", name: "Windows 8", releaseYear: 2012, hue: 195 },
   {
     source: "7wav.zip",
