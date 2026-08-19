@@ -52,8 +52,9 @@ Build de produção:
 npm run tauri build
 ```
 
-Veja [CLAUDE.md](CLAUDE.md) para a arquitetura em detalhe e [DESIGN.md](DESIGN.md) para o
-contrato de design.
+Veja [AGENTS.md](AGENTS.md) para a arquitetura em detalhe e [DESIGN.md](DESIGN.md) para o
+contrato de design. (`CLAUDE.md` existe só como um import de uma linha, para
+o Claude Code também ler o mesmo arquivo.)
 
 ## Estrutura
 
