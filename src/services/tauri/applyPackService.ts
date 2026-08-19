@@ -79,8 +79,11 @@ async function resolveWavPath(
     throw new Error(`"${pack.name}" has no downloadable audio for ${fileName}.`);
   }
 
-  const url = resolvePackFileUrl(pack.remoteBaseUrl, pack.id, fileName);
-  const result = await downloadPackAsset(url, pack.id, fileName);
+  // A sound borrowed from another pack lives under that pack's prefix in the
+  // bucket; resolving it against the pack being applied would 404.
+  const ownerId = assignment.sourcePackId ?? pack.id;
+  const url = resolvePackFileUrl(pack.remoteBaseUrl, ownerId, fileName);
+  const result = await downloadPackAsset(url, ownerId, fileName);
   if (result.status !== "downloaded") {
     throw new Error(
       result.status === "error" ? result.message : "Download unavailable outside the desktop app.",

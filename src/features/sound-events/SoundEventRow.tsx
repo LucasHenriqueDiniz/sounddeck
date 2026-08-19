@@ -3,11 +3,13 @@ import { AudioPreviewButton } from "../../components/AudioPreviewButton";
 import { IconButton } from "../../components/IconButton";
 import { AlertCircleIcon, DisableIcon, ReplaceIcon, UndoIcon } from "../../components/icons/icons";
 import { formatDuration } from "../../lib/format";
+import type { SoundPack } from "../../types/pack";
 import type { EventFriendlyMeta, PackEventAssignment } from "../../types/soundEvent";
 import type { PickWavResult } from "../../services/tauri/fileDialogService";
 import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
 import { useT, type TranslationKey } from "../../i18n";
 import { EventStateBadge } from "./EventStateBadge";
+import { SoundPickerDialog, type LibrarySound } from "./SoundPickerDialog";
 import styles from "./SoundEventRow.module.css";
 
 interface SoundEventRowProps {
@@ -16,6 +18,9 @@ interface SoundEventRowProps {
   onUseDefault: () => void;
   onDisable: () => void;
   onReplace: () => Promise<PickWavResult>;
+  /** Absent in the custom-pack builder, which has no library to borrow from. */
+  onUseLibrarySound?: (sound: LibrarySound) => void;
+  library?: SoundPack[];
   packId?: string;
   remoteBaseUrl?: string;
 }
@@ -26,6 +31,8 @@ export function SoundEventRow({
   onUseDefault,
   onDisable,
   onReplace,
+  onUseLibrarySound,
+  library,
   packId,
   remoteBaseUrl,
 }: SoundEventRowProps) {
@@ -36,26 +43,32 @@ export function SoundEventRow({
   const nameKey = `soundEvent.${meta.id.event}.name` as TranslationKey;
   const descKey = meta.description ? (`soundEvent.${meta.id.event}.desc` as TranslationKey) : undefined;
 
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const canPick = Boolean(onUseLibrarySound && library);
 
-  async function handleReplace() {
+  // Only used when there is no picker (the custom-pack builder). Inside the
+  // picker the same failures are reported in the dialog instead.
+  async function handleReplaceDirect() {
     setBusy(true);
     const result = await onReplace();
     setBusy(false);
-    // `reason`/the "unavailable" case are translation keys, not display text.
     if (result.status === "invalid") setError(t(result.reason as TranslationKey));
     else if (result.status === "unavailable") setError(t("event.desktopOnly"));
     else if (result.status === "picked") setError(null);
   }
 
-  // Only valid for the pack's original remote file — if the user replaced it
-  // via the native dialog, `fileName` now names a local file with no R2 key,
-  // and this URL 404s. That's an honest failure (the preview button shows
-  // its "couldn't load" state), not a false success.
+  /**
+   * A borrowed sound resolves against the pack it came from, not the one being
+   * edited — the file only exists under its own pack's prefix in the bucket.
+   * A file the user picked from disk has no remote URL at all, so the preview
+   * button falls back to its synthesized tone rather than 404ing.
+   */
+  const sourcePackId = assignment.sourcePackId ?? packId;
   const audioUrl =
-    remoteBaseUrl && packId && assignment.state === "pack" && assignment.fileName
-      ? resolvePackFileUrl(remoteBaseUrl, packId, assignment.fileName)
+    remoteBaseUrl && sourcePackId && assignment.state === "pack" && assignment.fileName && !assignment.filePath
+      ? resolvePackFileUrl(remoteBaseUrl, sourcePackId, assignment.fileName)
       : undefined;
 
   const stateClass =
@@ -66,6 +79,14 @@ export function SoundEventRow({
         : styles.stateDisabled;
 
   const name = t(nameKey);
+
+  // Where this sound came from, shown under the file name so a borrowed or
+  // custom sound is never mistaken for one the pack itself ships.
+  const origin = assignment.sourcePackName
+    ? t("event.fromPack", { pack: assignment.sourcePackName })
+    : assignment.filePath
+      ? t("event.fromFile")
+      : undefined;
 
   return (
     <div className={`${styles.row} ${stateClass}`}>
@@ -83,6 +104,7 @@ export function SoundEventRow({
         ) : (
           <span className={styles.fileNameMuted}>{t("event.noFile")}</span>
         )}
+        {origin && <span className={styles.origin}>{origin}</span>}
         <span className={`${styles.duration} tabular-nums`}>{formatDuration(assignment.durationMs)}</span>
       </div>
 
@@ -94,7 +116,13 @@ export function SoundEventRow({
           disabled={assignment.state === "disabled"}
           audioUrl={audioUrl}
         />
-        <IconButton label={t("event.replaceFile")} icon={<ReplaceIcon />} size="sm" onClick={handleReplace} disabled={busy} />
+        <IconButton
+          label={canPick ? t("event.chooseSound") : t("event.replaceFile")}
+          icon={<ReplaceIcon />}
+          size="sm"
+          onClick={canPick ? () => setPickerOpen(true) : handleReplaceDirect}
+          disabled={busy}
+        />
         <IconButton
           label={t("event.useDefault")}
           icon={<UndoIcon />}
@@ -115,6 +143,28 @@ export function SoundEventRow({
         <p className={styles.error} role="alert">
           <AlertCircleIcon size={13} /> {error}
         </p>
+      )}
+
+      {/*
+        Mounted only while open. Rendering it alongside every row put ~30
+        native <dialog> elements in the tree at once, each holding the full
+        sound list — and Dialog hardcodes id="dialog-title", so they also
+        collided on a duplicate id that aria-labelledby resolves to the
+        first match.
+      */}
+      {canPick && pickerOpen && (
+        <SoundPickerDialog
+          open
+          meta={meta}
+          assignment={assignment}
+          library={library ?? []}
+          currentPackId={packId}
+          onClose={() => setPickerOpen(false)}
+          onChooseLibrary={(sound) => onUseLibrarySound?.(sound)}
+          onChooseCustom={onReplace}
+          onUseDefault={onUseDefault}
+          onDisable={onDisable}
+        />
       )}
     </div>
   );

@@ -2,6 +2,8 @@ import { SOUND_EVENT_CATALOG } from "../../mocks/soundEventCatalog";
 import { EVENT_CATEGORY_KEY, EVENT_CATEGORY_ORDER, eventKey } from "../../types/soundEvent";
 import type { PackEventAssignment } from "../../types/soundEvent";
 import type { PickWavResult } from "../../services/tauri/fileDialogService";
+import type { SoundPack } from "../../types/pack";
+import type { LibrarySound } from "./SoundPickerDialog";
 import { SoundEventRow } from "./SoundEventRow";
 import { ChevronDownIcon } from "../../components/icons/icons";
 import styles from "./SoundEventList.module.css";
@@ -12,6 +14,10 @@ interface SoundEventListProps {
   onUseDefault: (id: PackEventAssignment["eventId"]) => void;
   onDisable: (id: PackEventAssignment["eventId"]) => void;
   onReplace: (id: PackEventAssignment["eventId"]) => Promise<PickWavResult>;
+  /** Both set together, and only where borrowing makes sense — the
+   *  custom-pack builder has no pack to borrow into. */
+  onUseLibrarySound?: (id: PackEventAssignment["eventId"], sound: LibrarySound) => void;
+  library?: SoundPack[];
   /** Set together — lets rows stream the real file instead of a synthesized tone. */
   packId?: string;
   remoteBaseUrl?: string;
@@ -22,6 +28,8 @@ export function SoundEventList({
   onUseDefault,
   onDisable,
   onReplace,
+  onUseLibrarySound,
+  library,
   packId,
   remoteBaseUrl,
 }: SoundEventListProps) {
@@ -53,6 +61,10 @@ export function SoundEventList({
                     onUseDefault={() => onUseDefault(meta.id)}
                     onDisable={() => onDisable(meta.id)}
                     onReplace={() => onReplace(meta.id)}
+                    onUseLibrarySound={
+                      onUseLibrarySound ? (sound) => onUseLibrarySound(meta.id, sound) : undefined
+                    }
+                    library={library}
                     packId={packId}
                     remoteBaseUrl={remoteBaseUrl}
                   />

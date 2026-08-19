@@ -58,6 +58,16 @@ export interface PackEventAssignment {
    * real path, so dropping this on save would make a custom pack unappliable.
    */
   filePath?: string;
+  /**
+   * Set when the sound was borrowed from a *different* pack in the library —
+   * the Editor lets any event take its sound from any pack that has one.
+   * Apply resolves the download against this id instead of the pack being
+   * applied; without it the file would be looked up under the wrong pack and
+   * 404. `sourcePackName` is carried alongside so the row can name the origin
+   * without holding the whole catalog.
+   */
+  sourcePackId?: string;
+  sourcePackName?: string;
   durationMs?: number;
 }
 

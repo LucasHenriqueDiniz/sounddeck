@@ -1,56 +1,114 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { PackEventAssignment, WindowsEventId } from "../../types/soundEvent";
 import { eventKey } from "../../types/soundEvent";
 import type { SoundPack } from "../../types/pack";
 import { pickReplacementWav, type PickWavResult } from "../../services/tauri/fileDialogService";
+import {
+  applyOverrides,
+  clearAllOverrides,
+  clearOverride,
+  listOverrides,
+  saveOverride,
+  type EventOverride,
+} from "../../services/tauri/eventOverrideService";
 
 /**
- * Local, in-session editor for a pack's event assignments. Edits are not
- * persisted anywhere — there is no "save pack" native command yet — but the
- * result feeds the (simulated) apply flow so the review-before-apply summary
- * reflects real edits made in this screen.
+ * Editor for a pack's event assignments.
+ *
+ * Edits used to live only in React state: swap a sound, navigate away, and it
+ * was gone. They are now written to eventOverrideService, keyed by pack, so a
+ * pack keeps its edits between sessions and two packs never share them.
+ *
+ * "Dirty" therefore no longer means "unsaved" — everything is saved
+ * immediately. It means "differs from the pack as published", which is what
+ * the Editor's banner and Discard button are actually about: the registry
+ * still holds whatever was last applied.
  */
 export function usePackEditor(pack: SoundPack | null) {
-  const [assignments, setAssignments] = useState<PackEventAssignment[]>(pack?.assignments ?? []);
-  const original = useRef<PackEventAssignment[]>(pack?.assignments ?? []);
+  const packId = pack?.id;
+  const published = useRef<PackEventAssignment[]>(pack?.assignments ?? []);
+  const [assignments, setAssignments] = useState<PackEventAssignment[]>(() =>
+    pack ? applyOverrides(pack.assignments, listOverrides(pack.id)) : [],
+  );
 
   useEffect(() => {
-    setAssignments(pack?.assignments ?? []);
-    original.current = pack?.assignments ?? [];
-  }, [pack?.id]);
+    published.current = pack?.assignments ?? [];
+    setAssignments(pack ? applyOverrides(pack.assignments, listOverrides(pack.id)) : []);
+  }, [packId, pack?.assignments]);
 
-  const dirty = JSON.stringify(assignments) !== JSON.stringify(original.current);
+  const dirty = JSON.stringify(assignments) !== JSON.stringify(published.current);
 
-  function update(id: WindowsEventId, patch: Partial<PackEventAssignment>) {
-    setAssignments((prev) =>
-      prev.map((a) => (eventKey(a.eventId) === eventKey(id) ? { ...a, ...patch } : a)),
-    );
-  }
+  /**
+   * Writes one event, in state and in storage together. Storing the whole
+   * override rather than a patch keeps the two representations identical —
+   * a partial write is what would let state and storage drift apart.
+   */
+  const set = useCallback(
+    (id: WindowsEventId, override: EventOverride) => {
+      setAssignments((prev) =>
+        prev.map((a) =>
+          eventKey(a.eventId) === eventKey(id) ? { eventId: a.eventId, ...override } : a,
+        ),
+      );
+      if (!packId) return;
+      const original = published.current.find((a) => eventKey(a.eventId) === eventKey(id));
+      const matchesPublished =
+        original &&
+        original.state === override.state &&
+        original.fileName === override.fileName &&
+        !override.sourcePackId &&
+        !override.filePath;
+      // Storing an override identical to the pack's own value would pin the
+      // event to today's catalog: a pack that later ships a real sound for it
+      // would be shadowed forever.
+      if (matchesPublished) clearOverride(packId, id);
+      else saveOverride(packId, id, override);
+    },
+    [packId],
+  );
 
-  function useDefault(id: WindowsEventId) {
-    update(id, { state: "default", fileName: undefined, filePath: undefined, durationMs: undefined });
-  }
+  const useDefault = useCallback(
+    (id: WindowsEventId) => set(id, { state: "default" }),
+    [set],
+  );
 
-  function disable(id: WindowsEventId) {
-    update(id, { state: "disabled", fileName: undefined, filePath: undefined, durationMs: undefined });
-  }
+  const disable = useCallback((id: WindowsEventId) => set(id, { state: "disabled" }), [set]);
 
-  async function replaceFile(id: WindowsEventId): Promise<PickWavResult> {
-    const result = await pickReplacementWav();
-    if (result.status === "picked") {
-      update(id, {
+  /** Takes the sound from another pack in the library — or from this one. */
+  const useLibrarySound = useCallback(
+    (
+      id: WindowsEventId,
+      sound: { packId: string; packName: string; fileName: string; durationMs?: number },
+    ) => {
+      set(id, {
         state: "pack",
-        fileName: result.fileName,
-        filePath: result.path,
-        durationMs: undefined,
+        fileName: sound.fileName,
+        // Only tag a source when it is genuinely another pack; tagging the
+        // pack's own id would make every untouched event look borrowed.
+        sourcePackId: sound.packId === packId ? undefined : sound.packId,
+        sourcePackName: sound.packId === packId ? undefined : sound.packName,
+        durationMs: sound.durationMs,
       });
-    }
-    return result;
-  }
+    },
+    [set, packId],
+  );
 
-  function reset() {
-    setAssignments(original.current);
-  }
+  const replaceFile = useCallback(
+    async (id: WindowsEventId): Promise<PickWavResult> => {
+      const result = await pickReplacementWav();
+      if (result.status === "picked") {
+        set(id, { state: "pack", fileName: result.fileName, filePath: result.path });
+      }
+      return result;
+    },
+    [set],
+  );
 
-  return { assignments, dirty, useDefault, disable, replaceFile, reset };
+  /** Drops every override, putting the pack back to how it is published. */
+  const reset = useCallback(() => {
+    if (packId) clearAllOverrides(packId);
+    setAssignments(published.current);
+  }, [packId]);
+
+  return { assignments, dirty, useDefault, disable, useLibrarySound, replaceFile, reset };
 }

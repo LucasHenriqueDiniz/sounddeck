@@ -31,6 +31,11 @@ interface PackEditorHandle {
   useDefault: (id: WindowsEventId) => void;
   disable: (id: WindowsEventId) => void;
   replaceFile: (id: WindowsEventId) => Promise<PickWavResult>;
+  /** Borrows a sound from another pack in the library. */
+  useLibrarySound: (
+    id: WindowsEventId,
+    sound: { packId: string; packName: string; fileName: string; durationMs?: number },
+  ) => void;
   reset: () => void;
 }
 

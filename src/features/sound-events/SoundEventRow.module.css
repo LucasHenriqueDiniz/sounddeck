@@ -78,6 +78,18 @@
   max-width: 220px;
 }
 
+/* Where the sound came from — another pack, or a file on this PC. Only
+   rendered when it is not the pack's own, so the common case stays quiet. */
+.origin {
+  font: var(--text-xs);
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.stateDisabled .origin {
+  opacity: 0.55;
+}
+
 .fileNameMuted {
   font: var(--text-xs);
   font-family: var(--font-mono);

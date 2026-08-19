@@ -10,7 +10,10 @@ import { useT } from "../../i18n";
 
 export function EditorView() {
   const t = useT();
-  const { selectedPack, editor, setView, openApplyDialog } = useAppState();
+  const { selectedPack, editor, setView, openApplyDialog, packsState } = useAppState();
+  // Every pack the library knows about, so any event can borrow a sound from
+  // any pack that has one.
+  const library = packsState.status === "success" ? packsState.data : [];
 
   if (!selectedPack) {
     return (
@@ -67,6 +70,8 @@ export function EditorView() {
             onUseDefault={editor.useDefault}
             onDisable={editor.disable}
             onReplace={editor.replaceFile}
+            onUseLibrarySound={editor.useLibrarySound}
+            library={library}
             packId={selectedPack.id}
             remoteBaseUrl={selectedPack.remoteBaseUrl}
           />
