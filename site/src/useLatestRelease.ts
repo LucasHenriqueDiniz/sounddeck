@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
  *   is filtered instead.
  */
 
-const REPO = 'LucasHenriqueDiniz/sounddeck';
+const REPO = 'LucasHenriqueDiniz/chimer';
 export const REPO_URL = `https://github.com/${REPO}`;
 export const RELEASES_URL = `${REPO_URL}/releases/latest`;
 

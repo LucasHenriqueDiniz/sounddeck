@@ -6,7 +6,7 @@ authors = ["Lucas Henrique Diniz Ostroski"]
 edition = "2021"
 default-run = "chimer"
 license = "MIT"
-repository = "https://github.com/LucasHenriqueDiniz/sounddeck"
+repository = "https://github.com/LucasHenriqueDiniz/chimer"
 homepage = "https://sounddeck.lucashdo.com"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

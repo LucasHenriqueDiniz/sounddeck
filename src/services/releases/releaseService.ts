@@ -9,7 +9,7 @@ import { version as currentVersion } from "../../../package.json";
  * dialog shown after an upgrade.
  */
 
-const REPO = "LucasHenriqueDiniz/sounddeck";
+const REPO = "LucasHenriqueDiniz/chimer";
 const RELEASES_URL = `https://api.github.com/repos/${REPO}/releases`;
 const CACHE_KEY = "sounddeck.releaseCheck";
 /** GitHub rate-limits unauthenticated calls; once every 6h is plenty. */

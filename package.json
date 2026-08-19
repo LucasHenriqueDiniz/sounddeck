@@ -8,10 +8,7 @@
     "build": "tsc && vite build",
     "preview": "vite preview",
     "tauri": "tauri",
-    "build:catalog": "node scripts/build-catalog.mjs",
-    "build:landing-packs": "tsx scripts/build-landing-packs.mjs",
-    "build:og": "node scripts/build-og-image.mjs",
-    "build:landing": "node scripts/build-landing.mjs"
+    "build:catalog": "node scripts/build-catalog.mjs"
   },
   "dependencies": {
     "@tauri-apps/api": "^2",

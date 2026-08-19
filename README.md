@@ -28,11 +28,13 @@ Requires Windows 10 version 1809 or later, or Windows 11. No administrator
 privileges needed, no extra runtime: the app uses the WebView2 already
 present on the system.
 
-```bash
-winget install LucasHenriqueDiniz.SoundDeck
-```
+Download the installer from the [releases page](https://github.com/LucasHenriqueDiniz/chimer/releases/latest).
 
-Or download the installer directly from the [releases page](https://github.com/LucasHenriqueDiniz/sounddeck/releases/latest).
+A winget package is [submitted but not yet merged](https://github.com/microsoft/winget-pkgs/pull/420722). Once it lands:
+
+```bash
+winget install LucasHenriqueDiniz.Chimer
+```
 
 ## How it works
 
@@ -77,7 +79,7 @@ src/
 src-tauri/src/
   windows_sound.rs # sound registry read/write
   pack_download.rs # pack download and extraction
-landing-page/      # static site (Cloudflare Workers)
+site/              # the website: React, prerendered per language (Cloudflare)
 winget/            # per-version winget manifests
 scripts/
   build-catalog.mjs # catalog authoring tool (not shipped in the app)
@@ -97,4 +99,8 @@ affiliated with Microsoft. Windows is a trademark of Microsoft.
 
 ## Status
 
-v0.3.0 published. Active development.
+v0.4.0 published. Active development.
+
+The app is called Chimer as of v0.4.0; it shipped as SoundDeck up to v0.3.1.
+The domain, the bundle identifier and the localStorage keys deliberately still
+carry the old name — see AGENTS.md for why.
