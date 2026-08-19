@@ -15,6 +15,13 @@ import { WhatsNewDialog } from "../features/onboarding/WhatsNewDialog";
 import { useUpdateCheck } from "../features/onboarding/useUpdateCheck";
 import styles from "./AppShell.module.css";
 import { useT } from "../i18n";
+/*
+ * Imported rather than referenced as /favicon.png so Vite emits it with a
+ * content hash in the filename. The webview caches by URL and the bucket-style
+ * "same path, new bytes" swap is exactly what left the old logo on screen
+ * after the icon was replaced; a hashed name makes a stale copy impossible.
+ */
+import brandIcon from "../assets/brand-icon.png";
 
 const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
 
@@ -46,7 +53,7 @@ export function AppShell() {
     <div className={styles.shell}>
       <header className={styles.titlebar} data-tauri-drag-region="deep">
         <div className={styles.brand}>
-          <img className={styles.brandMark} src="/favicon.png" alt="" aria-hidden="true" />
+          <img className={styles.brandMark} src={brandIcon} alt="" aria-hidden="true" />
           <span className={styles.brandName}>Chimer</span>
         </div>
         <AppNavigation />
