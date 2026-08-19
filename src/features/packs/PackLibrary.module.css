@@ -38,7 +38,7 @@
   padding: 0 var(--space-2);
   border-radius: 999px;
   border: 1px solid var(--border-default);
-  background: var(--surface-panel);
+  background: var(--surface-input);
   color: var(--text-secondary);
   font: var(--text-xs);
   font-weight: 500;
@@ -75,7 +75,7 @@
   padding: 0 var(--space-3);
   border-radius: var(--radius-md);
   border: 1px solid var(--border-default);
-  background: var(--surface-panel);
+  background: var(--surface-input);
   color: var(--text-muted);
   max-width: 320px;
   flex: 1;

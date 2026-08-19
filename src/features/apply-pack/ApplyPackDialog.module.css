@@ -29,6 +29,61 @@
   color: var(--text-muted);
 }
 
+/*
+ * The dialog used to open on four numbers and a toggle, which says what will
+ * change but nothing about *what you're applying*. Leading with the pack's own
+ * cover makes the confirmation about the thing being chosen.
+ */
+.hero {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-3);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--brand-gradient);
+  /* The gradient is the brand's, so the text on it is fixed light — it must
+     not follow the theme's text colour or it vanishes in light mode. */
+  color: #ffffff;
+}
+
+.hero > :first-child {
+  width: 104px;
+  height: 66px;
+  flex-shrink: 0;
+  box-shadow: var(--shadow-raised);
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.heroName {
+  font: var(--text-lg);
+}
+
+.heroMeta {
+  font: var(--text-xs);
+  opacity: 0.85;
+}
+
+/* Success: the cover again, with the check badged onto its corner, so the
+   confirmation shows which pack is now live rather than a bare tick. */
+.successCover {
+  position: relative;
+  width: 132px;
+  height: 84px;
+  margin-bottom: var(--space-2);
+}
+
+.successCover > :first-child {
+  width: 100%;
+  height: 100%;
+}
+
 .result {
   display: flex;
   flex-direction: column;
@@ -39,8 +94,12 @@
 }
 
 .successIcon {
-  width: 44px;
-  height: 44px;
+  position: absolute;
+  right: -8px;
+  bottom: -8px;
+  border: 2px solid var(--surface-overlay);
+  width: 40px;
+  height: 40px;
   border-radius: 999px;
   background: var(--success-soft);
   color: var(--success);

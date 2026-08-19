@@ -6,6 +6,7 @@ import { Switch } from "../../components/Switch";
 import { CheckIcon } from "../../components/icons/icons";
 import type { SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
+import { PackCoverArt } from "../packs/PackCoverArt";
 import { useApplyPackFlow } from "./useApplyPackFlow";
 import { ApplyProgress } from "./ApplyProgress";
 import styles from "./ApplyPackDialog.module.css";
@@ -89,6 +90,15 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
     >
       {state.phase === "summary" && (
         <div className={styles.summary}>
+          <div className={styles.hero}>
+            <PackCoverArt cover={pack.cover} size="details" />
+            <div className={styles.heroText}>
+              <p className={styles.heroName}>{pack.name}</p>
+              <p className={styles.heroMeta}>
+                {[pack.author, pack.releaseYear].filter(Boolean).join(" · ")}
+              </p>
+            </div>
+          </div>
           <ul className={styles.stats}>
             <li>
               <span className={`${styles.statValue} tabular-nums`}>{summary.totalEvents}</span>
@@ -124,8 +134,11 @@ export function ApplyPackDialog({ pack, open, onClose, onApplied }: ApplyPackDia
 
       {state.phase === "success" && (
         <div className={styles.result}>
-          <div className={styles.successIcon}>
-            <CheckIcon size={22} />
+          <div className={styles.successCover}>
+            <PackCoverArt cover={pack.cover} size="details" />
+            <span className={styles.successIcon}>
+              <CheckIcon size={20} />
+            </span>
           </div>
           <p className={styles.resultTitle}>{t("apply.successTitle", { name: pack.name })}</p>
           <p className={styles.resultDescription}>

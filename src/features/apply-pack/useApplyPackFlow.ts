@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import type { ApplyOutcome, ApplyPhase } from "../../types/applyPack";
 import type { SoundPack } from "../../types/pack";
+import { playPackConfirmation } from "../../services/audio/packConfirmation";
 import { runApplyPack, type ApplyPackHandle } from "../../services/tauri/applyPackService";
 
 export type ApplyFlowPhase = "summary" | "running" | "success" | "recoverable-error" | "unrecoverable-error";
@@ -34,6 +35,9 @@ export function useApplyPackFlow(onSuccess: () => void) {
       promise.then((outcome: ApplyOutcome) => {
         if (outcome.status === "success") {
           setState((prev) => ({ ...prev, phase: "success" }));
+          // Confirm by ear, with a sound from the scheme that was just
+          // written — the fastest proof the change actually took.
+          playPackConfirmation(pack);
           onSuccess();
         } else {
           setState((prev) => ({
