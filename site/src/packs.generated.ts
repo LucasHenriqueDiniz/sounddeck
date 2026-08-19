@@ -56,7 +56,7 @@ export const PACKS: CatalogPack[] = [
     "name": "Windows 98",
     "author": "Microsoft",
     "releaseYear": 1998,
-    "soundCount": 15,
+    "soundCount": 16,
     "previewUrl": "https://pub-a7bb18fa003c4b529e764f1c308a7146.r2.dev/packs/win98/start.wav",
     "family": "system",
     "coverUrl": "https://pub-a7bb18fa003c4b529e764f1c308a7146.r2.dev/packs/win98/cover.jpg",
