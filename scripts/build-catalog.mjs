@@ -85,7 +85,7 @@ const COVER_IMAGE_OVERRIDES = {
 // packs); Vista and the Plus! packs (11 packs) stay on the DESIGN.md default
 // since no logo asset was supplied for those sub-brands.
 const COVER_IMAGE_CREDITS = {
-  "xp-real": { key: "credit.image.msLogoScreen", vars: { system: "Windows XP" } },
+  "xp-real": { key: "credit.image.msWallpaperLogo", vars: { system: "Windows XP" } },
   win10: { key: "credit.image.msBrandGraphic", vars: { system: "Windows 10" } },
   win98: { key: "credit.image.msLogoScreen", vars: { system: "Windows 98" } },
   win8: { key: "credit.image.msBrandScreen", vars: { system: "Windows 8" } },
@@ -129,6 +129,8 @@ const CREDIT_PROSE = {
     "Reprodução do Art Institute of Chicago via Unsplash (domínio público)",
   "credit.image.msLogoScreen": (v) =>
     `Tela de logo oficial do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
+  "credit.image.msWallpaperLogo": (v) =>
+    `Papel de parede e logo oficiais do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
   "credit.image.msBrandGraphic": (v) =>
     `Gráfico de marca oficial do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
   "credit.image.msBrandScreen": (v) =>

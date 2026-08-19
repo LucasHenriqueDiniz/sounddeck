@@ -244,6 +244,7 @@
   "credit.image.unsplashLogo": "Photo de {author} via Unsplash (Unsplash License, usage libre) — logo {system} ajouté par incrustation, usage de la marque non couvert par une licence libre.",
   "credit.image.museumPublicDomain": "Reproduction de l'Art Institute of Chicago via Unsplash (domaine public)",
   "credit.image.msLogoScreen": "Écran de logo officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
+  "credit.image.msWallpaperLogo": "Fond d'écran et logo officiels de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
   "credit.image.msBrandGraphic": "Visuel de marque officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
   "credit.image.msBrandScreen": "Écran de marque officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
   "credit.image.msPackaging": "Visuel officiel de l'emballage de {name} (Microsoft) — usage de la marque non couvert par une licence libre.",

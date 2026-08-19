@@ -244,6 +244,7 @@
   "credit.image.unsplashLogo": "Photo by {author} via Unsplash (Unsplash License, free to use) — {system} logo composited on top, trademark use not covered by a free license.",
   "credit.image.museumPublicDomain": "Art Institute of Chicago reproduction via Unsplash (public domain)",
   "credit.image.msLogoScreen": "Official {system} logo screen (Microsoft) — trademark use not covered by a free license.",
+  "credit.image.msWallpaperLogo": "Official {system} wallpaper and logo (Microsoft) — trademark use not covered by a free license.",
   "credit.image.msBrandGraphic": "Official {system} brand graphic (Microsoft) — trademark use not covered by a free license.",
   "credit.image.msBrandScreen": "Official {system} brand screen (Microsoft) — trademark use not covered by a free license.",
   "credit.image.msPackaging": "Official {name} packaging art (Microsoft) — trademark use not covered by a free license.",
