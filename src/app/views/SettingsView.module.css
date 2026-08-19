@@ -26,6 +26,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  /*
+   * The control on the right sizes to its content — a six-item language
+   * switcher is wide. Without wrapping, it wins the space fight and squeezes
+   * the description into a one-word-per-line column. Wrapping drops the
+   * control onto its own line instead of crushing the text.
+   */
+  flex-wrap: wrap;
   gap: var(--space-4);
   padding: var(--space-3) var(--space-4);
   background: var(--surface-panel);
@@ -37,6 +44,8 @@
   display: flex;
   flex-direction: column;
   gap: 2px;
+  /* Claim the leftover space rather than shrinking to fit. */
+  flex: 1 1 260px;
   min-width: 0;
 }
 
