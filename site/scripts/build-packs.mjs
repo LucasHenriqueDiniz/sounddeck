@@ -48,11 +48,14 @@ const PREVIEW_EVENTS = ['WindowsLogon', 'SystemAsterisk', 'DeviceConnect', 'Noti
  *    MP3-in-WAV (85), which is what the thirteen Windows 7 themes ship. They
  *    do not decode MS-ADPCM (2) or IMA-ADPCM (17).
  *  - Length. A file that decodes but lasts 31ms is silence to a listener.
+ *    The floor is 150ms, not something rounder: vista-glass ships a genuine
+ *    219ms logon blip whose envelope decays naturally rather than being cut
+ *    off, and swapping that for another sound would misrepresent the pack.
  *
  * Only the first 4 KB is fetched, so probing all thirty packs costs ~120 KB.
  */
 const DECODABLE_FORMATS = new Set([1, 3, 85]);
-const MIN_PREVIEW_SECONDS = 0.3;
+const MIN_PREVIEW_SECONDS = 0.15;
 
 async function isPlayable(url) {
   const response = await fetch(url, { headers: { Range: 'bytes=0-4095' } });
