@@ -1,6 +1,6 @@
 [package]
 name = "sounddeck"
-version = "0.3.0"
+version = "0.3.1"
 description = "A sound scheme picker for Windows 10 and 11."
 authors = ["Lucas Henrique Diniz Ostroski"]
 edition = "2021"
