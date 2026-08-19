@@ -50,6 +50,10 @@ export function langPrefix(lang: Lang): string {
 }
 
 export function hrefFor(lang: Lang, path: string): string {
-  const suffix = path === '/' ? '/' : path;
+  // Trailing slash on purpose: the host is configured with
+  // auto-trailing-slash, so "/download" answers 307 to "/download/". Emitting
+  // the canonical form avoids a redirect on every internal link and keeps
+  // <link rel="canonical"> pointing at the URL that is actually served.
+  const suffix = path === '/' ? '/' : `${path.replace(/\/$/, '')}/`;
   return `${langPrefix(lang)}${suffix}` || '/';
 }

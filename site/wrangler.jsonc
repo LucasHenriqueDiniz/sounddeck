@@ -9,6 +9,9 @@
   "assets": {
     "directory": "dist",
     "html_handling": "auto-trailing-slash",
-    "not_found_handling": "single-page-application"
+    // Every page is prerendered, so an unknown path is genuinely missing.
+    // "single-page-application" would answer 200 with the home page and
+    // hand crawlers unlimited duplicate URLs.
+    "not_found_handling": "404-page"
   }
 }

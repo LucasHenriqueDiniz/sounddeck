@@ -1,5 +1,5 @@
 import type { Lang, TranslationKey } from './i18n';
-import { LANGS, langPrefix } from './i18n';
+import { LANGS, hrefFor } from './i18n';
 
 export type RouteId = 'home' | 'download' | 'changelog' | 'privacy' | 'notFound';
 
@@ -30,8 +30,9 @@ export function allPages(): Array<{ lang: Lang; route: RouteDef; url: string }> 
   const pages = [];
   for (const lang of LANGS) {
     for (const route of ROUTES) {
-      const url = route.path === '/' ? `${langPrefix(lang)}/` : `${langPrefix(lang)}${route.path}`;
-      pages.push({ lang, route, url: url || '/' });
+      // hrefFor is the single place the canonical URL shape is decided, so
+      // the sitemap, the canonical tag and every link agree by construction.
+      pages.push({ lang, route, url: hrefFor(lang, route.path) });
     }
   }
   return pages;
