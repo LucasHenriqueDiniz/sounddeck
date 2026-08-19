@@ -102,6 +102,22 @@ Two things here are non-obvious and already solved — don't regress on them:
    (e.g. `%SystemRoot%\Media\...`); always restoring as `REG_SZ` would
    silently corrupt the value. If you touch the restore path, keep this.
 
+3. **A silenced event is a *zero-length* value, and they're everywhere.**
+   About a third of the events on a stock install (22 of 71 on the dev
+   machine) have an empty `.Current` and an empty `.Default` — that's how
+   Windows spells "(None)". `windows-registry`'s `set_value` can't be handed
+   those bytes directly: its debug-only null-termination check reads
+   `value[len - 2]`, which underflows and **aborts the process**. It's
+   compiled out of release builds, so it only ever killed `tauri dev` — but
+   it killed it dead, mid-apply. All raw writes go through `write_raw_value`,
+   which substitutes the canonical empty string (one UTF-16 NUL) for string
+   types. Don't reintroduce a bare `set_value` on the write path.
+
+   The reason this survived five passing registry tests: every one of them
+   picked its target with `some_event_with_sound()`, so none ever wrote an
+   empty value. `some_silent_event()` is the counterpart — use it when you
+   add write-path coverage.
+
 Security boundaries the app promises on the landing page and in the
 README — **don't break any of them**: nothing outside `HKCU`, no system
 file touched, no privilege elevation, and a backup before every write.

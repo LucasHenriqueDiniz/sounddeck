@@ -8,7 +8,7 @@
 // the OS play a different sound immediately, no restart required.
 
 use serde::{Deserialize, Serialize};
-use windows_registry::{Type as RegType, Value, CURRENT_USER};
+use windows_registry::{Key, Type as RegType, Value, CURRENT_USER};
 
 const SCHEMES_APPS_PATH: &str = "AppEvents\\Schemes\\Apps";
 
@@ -108,6 +108,36 @@ pub fn apply_sound(app: &str, event: &str, wav_path: &str) -> windows_registry::
     Ok(snapshot)
 }
 
+/// Writes a raw value back into `.Current`, preserving its registry type.
+///
+/// Windows represents a silenced event as a *zero-length* value, and that is
+/// not an edge case: 22 of the 71 events on a stock Windows 10 install have an
+/// empty `.Current` and an empty `.Default`. Handing those bytes straight to
+/// `set_value` aborts the process in a dev build — the crate's debug-only
+/// null-termination check reads `value[len - 2]` before writing, which
+/// underflows on an empty buffer. Release builds compile that check out, so
+/// this only ever bit `tauri dev`, but it took the whole app down with it.
+///
+/// Writing the canonical empty string (a single UTF-16 NUL) keeps the original
+/// type and means exactly the same thing to Windows — it is byte-for-byte what
+/// `disable_sound` already writes. Only string types are substituted; an empty
+/// REG_BINARY is passed through untouched, since the check doesn't apply to it.
+fn write_raw_value(key: &Key, reg_type: u32, bytes: &[u8]) -> windows_registry::Result<()> {
+    // REG_SZ, REG_EXPAND_SZ, REG_MULTI_SZ.
+    const STRING_TYPES: [u32; 3] = [1, 2, 7];
+    const EMPTY_STRING: [u8; 2] = [0, 0];
+
+    let bytes = if STRING_TYPES.contains(&reg_type) && bytes.len() < EMPTY_STRING.len() {
+        &EMPTY_STRING[..]
+    } else {
+        bytes
+    };
+
+    let mut value = Value::from(bytes);
+    value.set_ty(RegType::from(reg_type));
+    key.set_value("", &value)
+}
+
 /// Restores the event to the stock Windows sound by copying the `.Default`
 /// template into `.Current` — the same thing Control Panel does when you pick
 /// the Windows Default scheme. If the event has no `.Default` (some third-party
@@ -121,7 +151,7 @@ pub fn apply_windows_default(app: &str, event: &str) -> windows_registry::Result
 
     let current_key = CURRENT_USER.create(current_key_path(app, event))?;
     match default_value {
-        Some(value) => current_key.set_value("", &value)?,
+        Some(value) => write_raw_value(&current_key, value.ty().into(), value.as_ref())?,
         None => {
             let _ = current_key.remove_value("");
         }
@@ -148,6 +178,24 @@ mod tests {
             .into_iter()
             .find(|e| e.current_sound.is_some())
             .expect("at least one event has a sound")
+    }
+
+
+    /// The counterpart to `some_event_with_sound`. Every test above picks an
+    /// event that *has* a sound, which is why the empty-value write path went
+    /// unexercised long enough to crash the dev build: Windows stores a
+    /// silenced event as a zero-length value, and roughly a third of the
+    /// events on a stock install are silent out of the box.
+    fn some_silent_event() -> Option<SoundEvent> {
+        list_events()
+            .expect("registry readable")
+            .into_iter()
+            .find(|e| {
+                e.current_sound.is_none()
+                    && snapshot_event(&e.app, &e.event)
+                        .previous_raw
+                        .is_some_and(|raw| raw.bytes.len() < 2)
+            })
     }
 
     // These write to the live HKCU sound scheme, so they're opt-in:
@@ -216,17 +264,57 @@ mod tests {
             "restore should bring the original sound back"
         );
     }
+    #[test]
+    #[ignore = "writes to the live HKCU sound scheme"]
+    fn restoring_a_silent_event_does_not_abort() {
+        let Some(target) = some_silent_event() else {
+            eprintln!("no zero-length event on this machine; nothing to regress against");
+            return;
+        };
+        let original = snapshot_event(&target.app, &target.event);
+
+        let probe = r"C:\Windows\Media\Windows Ding.wav";
+        apply_sound(&target.app, &target.event, probe).expect("apply");
+
+        // Before write_raw_value this aborted the process rather than failing:
+        // the crate's null-termination check underflows on an empty buffer.
+        restore_sound(&original).expect("restore");
+
+        assert_eq!(
+            get_current_sound(&target.app, &target.event),
+            None,
+            "a silenced event must come back silent"
+        );
+        let after = snapshot_event(&target.app, &target.event)
+            .previous_raw
+            .expect("value still present after restore");
+        let before = original.previous_raw.expect("event had a raw value");
+        assert_eq!(after.reg_type, before.reg_type, "registry type changed");
+    }
+
+    #[test]
+    #[ignore = "writes to the live HKCU sound scheme"]
+    fn windows_default_on_a_silent_event_does_not_abort() {
+        let Some(target) = some_silent_event() else {
+            eprintln!("no zero-length event on this machine; nothing to regress against");
+            return;
+        };
+        let original = snapshot_event(&target.app, &target.event);
+
+        // Copies an empty `.Default` into `.Current` — the other way the
+        // zero-length buffer reached the write path.
+        apply_windows_default(&target.app, &target.event).expect("apply default");
+        assert_eq!(get_current_sound(&target.app, &target.event), None);
+
+        restore_sound(&original).expect("restore");
+    }
 }
 
 pub fn restore_sound(snapshot: &EventSnapshot) -> windows_registry::Result<()> {
     let current_key = CURRENT_USER.create(current_key_path(&snapshot.app, &snapshot.event))?;
 
     match &snapshot.previous_raw {
-        Some(raw) => {
-            let mut value = Value::from(raw.bytes.as_slice());
-            value.set_ty(RegType::from(raw.reg_type));
-            current_key.set_value("", &value)?;
-        }
+        Some(raw) => write_raw_value(&current_key, raw.reg_type, &raw.bytes)?,
         None => {
             // No prior sound registered for this event; clearing the value
             // is the closest equivalent to "restore to how we found it".
