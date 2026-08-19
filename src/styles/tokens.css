@@ -1,3 +1,13 @@
+/*
+ * Design tokens — the single place colour, type, spacing and motion are
+ * defined. Components reference these and never hardcode a value, which is
+ * what makes a palette change like this one a one-file edit.
+ *
+ * Source of truth: DESIGN.md. Two deliberate deviations from it, both noted
+ * inline below: the type scale keeps a --text-sm step the doc doesn't list,
+ * and borders stay at 1px rather than 0.5px.
+ */
+
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
@@ -6,13 +16,23 @@
   --font-display: var(--font-ui);
   --font-mono: "Cascadia Code", "Consolas", ui-monospace, "SFMono-Regular", monospace;
 
-  --text-xs: 400 11px/16px var(--font-ui);
-  --text-sm: 400 12.5px/18px var(--font-ui);
-  --text-md: 400 13.5px/20px var(--font-ui);
-  --text-lg: 500 16px/22px var(--font-ui);
-  --text-xl: 600 20px/26px var(--font-ui);
-  --text-2xl: 600 24px/30px var(--font-ui);
+  /*
+   * Only weights 400 and 500 exist in this system — no semibold, no bold.
+   * Hierarchy comes from size and colour instead.
+   *
+   * --text-sm has no counterpart in DESIGN.md's five styles. It's kept as a
+   * bridge for dense metadata (table cells, chips) that would otherwise have
+   * to jump straight from 13px to 16px; removing it would mean re-picking a
+   * size for every such component by hand.
+   */
+  --text-xs: 400 13px/18px var(--font-ui); /* Caption */
+  --text-sm: 400 14px/20px var(--font-ui); /* bridge, see above */
+  --text-md: 400 16px/24px var(--font-ui); /* Body */
+  --text-lg: 500 16px/24px var(--font-ui); /* H3 */
+  --text-xl: 500 20px/28px var(--font-ui); /* H2 */
+  --text-2xl: 500 28px/36px var(--font-ui); /* H1 */
 
+  /* 8px grid; the 4px step is for optical nudges inside a control. */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -24,8 +44,9 @@
   --space-12: 48px;
 
   --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
+  --radius-md: 8px; /* buttons, inputs */
+  --radius-lg: 12px; /* cards */
+  --radius-xl: 20px;
 
   --control-sm: 28px;
   --control-md: 34px;
@@ -38,127 +59,152 @@
   --motion-slow: 260ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
 
-  --surface-canvas: #f4f2ee;
+  /* Brand ------------------------------------------------------------- */
+  --brand-primary: #d4537e;
+  --brand-accent: #f0997b;
+  --brand-gradient: linear-gradient(135deg, #f0997b, #d4537e);
+
+  /* Surfaces ---------------------------------------------------------- */
+  --surface-canvas: #f1efe8;
   --surface-panel: #ffffff;
   --surface-raised: #ffffff;
   --surface-overlay: #ffffff;
-  --surface-selected: #f7ead6;
-  --surface-hover: rgba(28, 22, 12, 0.045);
-  --surface-pressed: rgba(28, 22, 12, 0.08);
+  --surface-selected: #fbe9ef;
+  --surface-hover: rgba(26, 26, 26, 0.045);
+  --surface-pressed: rgba(26, 26, 26, 0.08);
 
-  --text-primary: #1c1a16;
-  --text-secondary: #55524a;
-  --text-muted: #8a867c;
-  --text-on-accent: #fff8ef;
+  --text-primary: #1a1a1a;
+  --text-secondary: #55524c;
+  --text-muted: #6e6a62;
+  --text-on-accent: #ffffff;
 
-  --border-subtle: rgba(24, 18, 8, 0.09);
-  --border-default: rgba(24, 18, 8, 0.16);
-  --border-strong: rgba(24, 18, 8, 0.30);
+  --border-subtle: rgba(26, 26, 26, 0.09);
+  --border-default: rgba(26, 26, 26, 0.16);
+  --border-strong: rgba(26, 26, 26, 0.3);
 
-  --accent: #9a5b18;
-  --accent-hover: #86500f;
-  --accent-active: #71430c;
-  --accent-soft: #f3e3cf;
+  /*
+   * --accent sits a hair darker than --brand-primary on purpose. DESIGN.md
+   * specifies white text on #D4537E, which measures 3.93:1 — under the 4.5:1
+   * WCAG AA needs at 16px. #bf436d reads as the same pink and measures
+   * 4.95:1. The exact brand pink stays as --brand-primary, for the gradient,
+   * the icon, and anything that carries no text on top.
+   */
+  --accent: #bf436d;
+  --accent-hover: #a93b60;
+  --accent-active: #93334f;
+  --accent-soft: #fbe4ec;
 
-  --success: #2f8f5b;
-  --success-soft: #e2f3e9;
-  --warning: #a4780f;
-  --warning-soft: #faedd2;
-  --danger: #c23b32;
-  --danger-soft: #fbe6e3;
+  --success: #4f7d18;
+  --success-soft: #eaf3dd;
+  --warning: #9a6410;
+  --warning-soft: #fdf0d9;
+  --danger: #c93b3a;
+  --danger-soft: #fbe5e4;
   --info: #3b6ea5;
   --info-soft: #e5eef8;
 
-  --focus-ring: #2f7fd6;
+  --focus-ring: #d4537e;
 
-  --shadow-raised: 0 1px 2px rgba(24, 18, 8, 0.09), 0 1px 1px rgba(24, 18, 8, 0.05);
-  --shadow-overlay: 0 16px 40px rgba(24, 18, 8, 0.20), 0 4px 12px rgba(24, 18, 8, 0.12);
+  --shadow-raised: 0 1px 2px rgba(26, 26, 26, 0.09), 0 1px 1px rgba(26, 26, 26, 0.05);
+  --shadow-overlay: 0 16px 40px rgba(26, 26, 26, 0.2), 0 4px 12px rgba(26, 26, 26, 0.12);
 
-  --scrim: rgba(20, 16, 10, 0.32);
+  --scrim: rgba(20, 18, 16, 0.32);
 }
 
+/*
+ * Dark mode keeps the accents vivid rather than desaturating them — the
+ * brand colours are legible on #1A1A1A as-is. Only the semantic colours are
+ * lightened, because their light-mode versions are darkened for contrast on
+ * white and would disappear here.
+ */
 :root[data-theme="dark"] {
   color-scheme: dark;
 
-  --surface-canvas: #16130e;
-  --surface-panel: #1e1a14;
-  --surface-raised: #241f18;
-  --surface-overlay: #2a2419;
-  --surface-selected: #3c2c14;
-  --surface-hover: rgba(255, 250, 240, 0.05);
-  --surface-pressed: rgba(255, 250, 240, 0.09);
+  --surface-canvas: #1a1a1a;
+  --surface-panel: #242424;
+  --surface-raised: #2b2b2b;
+  --surface-overlay: #2b2b2b;
+  --surface-selected: #3a2029;
+  --surface-hover: rgba(241, 239, 232, 0.05);
+  --surface-pressed: rgba(241, 239, 232, 0.09);
 
-  --text-primary: #f3ede2;
-  --text-secondary: #c9c0b0;
-  --text-muted: #8f8676;
-  --text-on-accent: #201406;
+  --text-primary: #f1efe8;
+  --text-secondary: #c2beb4;
+  --text-muted: #a29e94;
+  --text-on-accent: #1a1a1a;
 
-  --border-subtle: rgba(255, 250, 240, 0.08);
-  --border-default: rgba(255, 250, 240, 0.14);
-  --border-strong: rgba(255, 250, 240, 0.26);
+  --border-subtle: rgba(241, 239, 232, 0.08);
+  --border-default: rgba(241, 239, 232, 0.14);
+  --border-strong: rgba(241, 239, 232, 0.26);
 
-  --accent: #d99a4e;
-  --accent-hover: #e3aa64;
-  --accent-active: #c48838;
-  --accent-soft: rgba(217, 154, 78, 0.16);
+  --accent: #e0698f;
+  --accent-hover: #ea7c9e;
+  --accent-active: #d76488;
+  --accent-soft: rgba(212, 83, 126, 0.18);
 
-  --success: #59c98a;
-  --success-soft: rgba(89, 201, 138, 0.14);
-  --warning: #e0ab5c;
-  --warning-soft: rgba(224, 171, 92, 0.14);
-  --danger: #e8685c;
-  --danger-soft: rgba(232, 104, 92, 0.14);
+  --success: #8cc63f;
+  --success-soft: rgba(140, 198, 63, 0.16);
+  --warning: #ef9f27;
+  --warning-soft: rgba(239, 159, 39, 0.16);
+  --danger: #ef6f68;
+  --danger-soft: rgba(226, 75, 74, 0.16);
   --info: #7fb0e0;
   --info-soft: rgba(127, 176, 224, 0.14);
 
-  --focus-ring: #6bb3ff;
+  --focus-ring: #ea7c9e;
 
   --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
   --shadow-overlay: 0 20px 48px rgba(0, 0, 0, 0.5), 0 4px 14px rgba(0, 0, 0, 0.35);
 
-  --scrim: rgba(6, 5, 3, 0.5);
+  --scrim: rgba(8, 8, 8, 0.5);
 }
 
+/*
+ * Same values again for the "follow the system" case. The duplication is
+ * deliberate: a media query can't be re-pointed at a data-attribute, and the
+ * explicit [data-theme] block above has to keep winning when the user has
+ * pinned a theme that disagrees with the OS.
+ */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
 
-    --surface-canvas: #16130e;
-    --surface-panel: #1e1a14;
-    --surface-raised: #241f18;
-    --surface-overlay: #2a2419;
-    --surface-selected: #3c2c14;
-    --surface-hover: rgba(255, 250, 240, 0.05);
-    --surface-pressed: rgba(255, 250, 240, 0.09);
+    --surface-canvas: #1a1a1a;
+    --surface-panel: #242424;
+    --surface-raised: #2b2b2b;
+    --surface-overlay: #2b2b2b;
+    --surface-selected: #3a2029;
+    --surface-hover: rgba(241, 239, 232, 0.05);
+    --surface-pressed: rgba(241, 239, 232, 0.09);
 
-    --text-primary: #f3ede2;
-    --text-secondary: #c9c0b0;
-    --text-muted: #8f8676;
-    --text-on-accent: #201406;
+    --text-primary: #f1efe8;
+    --text-secondary: #c2beb4;
+    --text-muted: #a29e94;
+    --text-on-accent: #1a1a1a;
 
-    --border-subtle: rgba(255, 250, 240, 0.08);
-    --border-default: rgba(255, 250, 240, 0.14);
-    --border-strong: rgba(255, 250, 240, 0.26);
+    --border-subtle: rgba(241, 239, 232, 0.08);
+    --border-default: rgba(241, 239, 232, 0.14);
+    --border-strong: rgba(241, 239, 232, 0.26);
 
-    --accent: #d99a4e;
-    --accent-hover: #e3aa64;
-    --accent-active: #c48838;
-    --accent-soft: rgba(217, 154, 78, 0.16);
+    --accent: #e0698f;
+    --accent-hover: #ea7c9e;
+    --accent-active: #d76488;
+    --accent-soft: rgba(212, 83, 126, 0.18);
 
-    --success: #59c98a;
-    --success-soft: rgba(89, 201, 138, 0.14);
-    --warning: #e0ab5c;
-    --warning-soft: rgba(224, 171, 92, 0.14);
-    --danger: #e8685c;
-    --danger-soft: rgba(232, 104, 92, 0.14);
+    --success: #8cc63f;
+    --success-soft: rgba(140, 198, 63, 0.16);
+    --warning: #ef9f27;
+    --warning-soft: rgba(239, 159, 39, 0.16);
+    --danger: #ef6f68;
+    --danger-soft: rgba(226, 75, 74, 0.16);
     --info: #7fb0e0;
     --info-soft: rgba(127, 176, 224, 0.14);
 
-    --focus-ring: #6bb3ff;
+    --focus-ring: #ea7c9e;
 
     --shadow-raised: 0 1px 2px rgba(0, 0, 0, 0.4), 0 1px 1px rgba(0, 0, 0, 0.3);
     --shadow-overlay: 0 20px 48px rgba(0, 0, 0, 0.5), 0 4px 14px rgba(0, 0, 0, 0.35);
 
-    --scrim: rgba(6, 5, 3, 0.5);
+    --scrim: rgba(8, 8, 8, 0.5);
   }
 }
