@@ -196,6 +196,16 @@ export function MoonIcon(props: IconProps) {
   );
 }
 
+export function DownloadIcon(props: IconProps) {
+  return (
+    <svg {...iconBaseProps(props.size ?? 16, props)}>
+      <path d="M10 3v9" />
+      <path d="M6.2 8.6 10 12.4l3.8-3.8" />
+      <path d="M4 14.5v1.3a1.2 1.2 0 0 0 1.2 1.2h9.6a1.2 1.2 0 0 0 1.2-1.2v-1.3" />
+    </svg>
+  );
+}
+
 export function HeartIcon(props: IconProps) {
   return (
     <svg {...iconBaseProps(props.size ?? 16, props)}>

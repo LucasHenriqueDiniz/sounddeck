@@ -1,8 +1,6 @@
 import { IconButton } from "../components/IconButton";
 import { StatusBanner } from "../components/StatusBanner";
-import { HeartIcon, PlugOffIcon, RefreshIcon } from "../components/icons/icons";
-
-const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
+import { DownloadIcon, HeartIcon, PlugOffIcon, RefreshIcon } from "../components/icons/icons";
 import { ApplyPackDialog } from "../features/apply-pack/ApplyPackDialog";
 import { AppNavigation } from "./AppNavigation";
 import { WindowControls } from "./WindowControls";
@@ -12,11 +10,19 @@ import { EditorView } from "./views/EditorView";
 import { BackupsView } from "./views/BackupsView";
 import { SettingsView } from "./views/SettingsView";
 import { CreateCustomPackView } from "../features/custom-pack/CreateCustomPackView";
+import { WelcomeTour } from "../features/onboarding/WelcomeTour";
+import { WhatsNewDialog } from "../features/onboarding/WhatsNewDialog";
+import { useFirstRun } from "../features/onboarding/useFirstRun";
+import { useUpdateCheck } from "../features/onboarding/useUpdateCheck";
 import styles from "./AppShell.module.css";
 import { useT } from "../i18n";
 
+const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
+
 export function AppShell() {
   const t = useT();
+  const { kind: firstRun, dismiss: dismissFirstRun } = useFirstRun();
+  const update = useUpdateCheck();
   const {
     view,
     nativeCapability,
@@ -51,6 +57,14 @@ export function AppShell() {
               label={t("shell.nativeUnavailable")}
               icon={<PlugOffIcon />}
               variant="ghost"
+            />
+          )}
+          {update && (
+            <IconButton
+              label={t("shell.updateAvailable", { version: update.version })}
+              icon={<DownloadIcon />}
+              variant="accent"
+              href={update.url}
             />
           )}
           <IconButton label={t("shell.support")} icon={<HeartIcon />} variant="ghost" href={SUPPORT_URL} />
@@ -130,6 +144,9 @@ export function AppShell() {
         onClose={closeApplyDialog}
         onApplied={onApplySuccess}
       />
+
+      <WelcomeTour open={firstRun === "tour"} onClose={dismissFirstRun} />
+      <WhatsNewDialog open={firstRun === "whatsNew"} onClose={dismissFirstRun} />
     </div>
   );
 }
