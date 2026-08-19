@@ -26,17 +26,22 @@ export function useCreateCustomPack() {
   }
 
   function useDefault(id: WindowsEventId) {
-    update(id, { state: "default", fileName: undefined, durationMs: undefined });
+    update(id, { state: "default", fileName: undefined, filePath: undefined, durationMs: undefined });
   }
 
   function disable(id: WindowsEventId) {
-    update(id, { state: "disabled", fileName: undefined, durationMs: undefined });
+    update(id, { state: "disabled", fileName: undefined, filePath: undefined, durationMs: undefined });
   }
 
   async function replaceFile(id: WindowsEventId): Promise<PickWavResult> {
     const result = await pickReplacementWav();
     if (result.status === "picked") {
-      update(id, { state: "pack", fileName: result.fileName, durationMs: undefined });
+      update(id, {
+        state: "pack",
+        fileName: result.fileName,
+        filePath: result.path,
+        durationMs: undefined,
+      });
     }
     return result;
   }

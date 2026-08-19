@@ -49,23 +49,27 @@ pub async fn download_asset(
         return Err("Somente arquivos .wav são aceitos.".to_string());
     }
 
+    let mut dest_dir = app.path().app_data_dir().map_err(|e| e.to_string())?;
+    dest_dir.push("packs");
+    dest_dir.push(&pack_id);
+    let mut cached = dest_dir.clone();
+    cached.push(&file_name);
+    // Applying a pack asks for every one of its files; without this an apply
+    // would re-download the whole pack each time, even right after a preview
+    // already fetched it. Assets are content-addressed by pack id + file name
+    // and never mutated in place, so a non-empty local copy is always current.
+    if cached.metadata().map(|m| m.len() > 0).unwrap_or(false) {
+        return Ok(cached.to_string_lossy().to_string());
+    }
+
     let response = reqwest::get(parsed).await.map_err(|e| e.to_string())?;
     if !response.status().is_success() {
         return Err(format!("Falha ao baixar: HTTP {}", response.status()));
     }
     let bytes = response.bytes().await.map_err(|e| e.to_string())?;
 
-    let mut dest_dir = app
-        .path()
-        .app_data_dir()
-        .map_err(|e| e.to_string())?;
-    dest_dir.push("packs");
-    dest_dir.push(&pack_id);
     std::fs::create_dir_all(&dest_dir).map_err(|e| e.to_string())?;
+    std::fs::write(&cached, &bytes).map_err(|e| e.to_string())?;
 
-    let mut dest_file = dest_dir;
-    dest_file.push(&file_name);
-    std::fs::write(&dest_file, &bytes).map_err(|e| e.to_string())?;
-
-    Ok(dest_file.to_string_lossy().to_string())
+    Ok(cached.to_string_lossy().to_string())
 }

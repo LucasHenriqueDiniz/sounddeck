@@ -7,6 +7,7 @@ import { Skeleton } from "../../components/Skeleton";
 import { StatusBanner } from "../../components/StatusBanner";
 import { BackupsIcon } from "../../components/icons/icons";
 import { useAppState } from "../../app/AppState";
+import { resolveBackupLabel } from "../../types/backup";
 import { useBackups } from "./useBackups";
 import { BackupRow } from "./BackupRow";
 import styles from "./BackupList.module.css";
@@ -99,7 +100,7 @@ export function BackupList() {
         onClose={() => setPendingId(null)}
         title={t("backups.confirm.title")}
         description={
-          pending ? t("backups.confirm.desc", { label: t(pending.labelKey, pending.labelVars) }) : undefined
+          pending ? t("backups.confirm.desc", { label: resolveBackupLabel(pending, t) }) : undefined
         }
         footer={
           <>

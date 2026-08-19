@@ -2,7 +2,7 @@ import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
 import { UndoIcon } from "../../components/icons/icons";
 import { formatDateTime } from "../../lib/format";
-import type { BackupEntry } from "../../types/backup";
+import { resolveBackupLabel, type BackupEntry } from "../../types/backup";
 import styles from "./BackupRow.module.css";
 import { useT } from "../../i18n";
 
@@ -18,7 +18,7 @@ export function BackupRow({ backup, busy, restored, onRestore }: BackupRowProps)
   return (
     <div className={styles.row}>
       <div className={styles.info}>
-        <p className={styles.label}>{t(backup.labelKey, backup.labelVars)}</p>
+        <p className={styles.label}>{resolveBackupLabel(backup, t)}</p>
         <p className={styles.meta}>
           {formatDateTime(backup.createdAt)} · {t("backups.eventCount", { count: backup.eventCount })} · {backup.sizeLabel}
         </p>

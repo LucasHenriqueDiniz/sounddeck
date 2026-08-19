@@ -2,10 +2,11 @@ import { invoke } from "@tauri-apps/api/core";
 import { isRunningInTauri } from "./windowsSoundService";
 
 /**
- * Real, callable wrapper around the `download_pack_asset` Tauri command
- * (src-tauri/src/pack_download.rs). NOT WIRED INTO THE APP YET — nothing
- * calls this until a real pack source (services/tauri/remoteCatalogService.ts)
- * is actually connected, which is itself blocked on the R2 bucket existing.
+ * Wrapper around the `download_pack_asset` Tauri command
+ * (src-tauri/src/pack_download.rs), used by the apply flow to pull a catalog
+ * pack's audio down before writing it into the registry. Previews stream
+ * straight from the remote URL instead, so this is the only path that puts
+ * catalog audio on disk.
  *
  * The Rust side enforces the real safety boundary (https-only, allow-listed
  * host, no path traversal, .wav-only) — this wrapper doesn't duplicate that

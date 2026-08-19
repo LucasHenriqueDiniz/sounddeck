@@ -33,21 +33,45 @@ There is no test suite. Verification is manual, by running the app.
 
 ### The Rust ↔ TypeScript boundary
 
-All communication goes through **4 Tauri commands**, declared in
+All communication goes through **6 Tauri commands**, declared in
 [src-tauri/src/lib.rs](src-tauri/src/lib.rs):
 
 | Command | Does |
 |---|---|
 | `scan_events` | reads every sound event from the registry |
-| `apply_test_sound` | writes a `.wav` to an event, returns a snapshot of the previous value |
-| `restore_sound` | writes a snapshot back |
-| `download_pack_asset` | downloads a `.wav` from the remote catalog |
+| `download_pack_asset` | downloads a `.wav` from the remote catalog (skips if already cached) |
+| `apply_sound_pack` | snapshots, backs up, then writes a whole pack in one pass |
+| `list_backups` | lists saved backups |
+| `restore_backup` | writes a backup's snapshots back |
+| `delete_backup` | removes a backup file |
+
+`apply_sound_pack` is the only write path. It snapshots every affected event
+*before* the first write and rolls back everything it already wrote if any
+single event fails — a pack is never half-applied. Per-event write commands
+existed once (`apply_test_sound`/`restore_sound`) and were removed: they
+made it possible to mutate the live scheme outside the backup-then-verify
+flow, which is exactly what this command exists to prevent.
 
 On the TS side, each command has a wrapper under `src/services/tauri/`.
 **Components never call `invoke` directly** — always through those services.
 `nativeCapability.ts` detects whether the app is running inside Tauri;
 outside of it the app falls back to `src/mocks/`, which is what makes
 `npm run dev` work in the browser.
+
+### Where user data lives
+
+Everything the user creates is keyed to the bundle identifier, never to the
+install path, so an upgrade or reinstall keeps it:
+
+- **Backups** — one JSON file per backup under the app data dir
+  (`%APPDATA%\com.sounddeck.app\backups\`), holding the raw registry bytes
+  and type of every event an apply touched.
+- **Downloaded pack audio** — `%APPDATA%\com.sounddeck.app\packs\<id>\`.
+- **Custom packs, theme, language, applied-pack id** — `localStorage`, which
+  WebView2 stores under `%LOCALAPPDATA%\com.sounddeck.app`.
+
+The MSI/NSIS installers only replace program files, so none of the above is
+touched on upgrade. Don't move any of it into the install directory.
 
 ### The registry model (the non-obvious part)
 
@@ -183,6 +207,13 @@ command**. `packService.listPacks()` merges these local packs with the
 remote/mock catalog. Preview falls back to the synthesized tone like any
 pack without a `remoteBaseUrl` (the app has no filesystem permission to
 play an arbitrary local `.wav` — see `tonePreview.ts`).
+
+An assignment keeps **both** `fileName` (for display) and `filePath` (the
+absolute path the native dialog returned). `filePath` is what makes a custom
+pack appliable at all — the file is never copied into the app, so losing the
+path would leave a pack that looks fine in the library and cannot be
+applied. Catalog packs have no `filePath` and resolve their audio by
+downloading at apply time instead.
 
 ## Landing page
 

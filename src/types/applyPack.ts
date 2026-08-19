@@ -44,6 +44,6 @@ export interface ApplyProgressState {
 }
 
 export type ApplyOutcome =
-  | { status: "success" }
+  | { status: "success"; appliedCount: number }
   | { status: "recoverable-error"; message: string; detail?: string }
   | { status: "unrecoverable-error"; message: string; detail?: string };

@@ -49,8 +49,15 @@ export type EventAssignmentState = "pack" | "default" | "disabled";
 export interface PackEventAssignment {
   eventId: WindowsEventId;
   state: EventAssignmentState;
-  /** File name only (never a full path) — set when state is "pack". */
+  /** Base name, for display — set when state is "pack". */
   fileName?: string;
+  /**
+   * Absolute path to the .wav on this machine. Only set for files the user
+   * picked themselves (custom packs, editor replacements); catalog packs
+   * resolve their path by downloading at apply time instead. Applying needs a
+   * real path, so dropping this on save would make a custom pack unappliable.
+   */
+  filePath?: string;
   durationMs?: number;
 }
 

@@ -41,6 +41,10 @@ fn current_key_path(app: &str, event: &str) -> String {
     format!("{}\\{}\\{}\\.Current", SCHEMES_APPS_PATH, app, event)
 }
 
+fn default_key_path(app: &str, event: &str) -> String {
+    format!("{}\\{}\\{}\\.Default", SCHEMES_APPS_PATH, app, event)
+}
+
 pub fn list_events() -> windows_registry::Result<Vec<SoundEvent>> {
     let apps_key = CURRENT_USER.open(SCHEMES_APPS_PATH)?;
     let mut events = Vec::new();
@@ -83,19 +87,53 @@ fn get_current_raw(app: &str, event: &str) -> Option<RawValue> {
         })
 }
 
+/// Captures an event's current state without writing anything. This is what
+/// a backup is made of — taken for every event *before* the first write, so a
+/// failure partway through can still be rolled back completely.
+pub fn snapshot_event(app: &str, event: &str) -> EventSnapshot {
+    EventSnapshot {
+        app: app.to_string(),
+        event: event.to_string(),
+        previous_sound: get_current_sound(app, event),
+        previous_raw: get_current_raw(app, event),
+    }
+}
+
 pub fn apply_sound(app: &str, event: &str, wav_path: &str) -> windows_registry::Result<EventSnapshot> {
-    let previous_sound = get_current_sound(app, event);
-    let previous_raw = get_current_raw(app, event);
+    let snapshot = snapshot_event(app, event);
 
     let current_key = CURRENT_USER.create(current_key_path(app, event))?;
     current_key.set_string("", wav_path)?;
 
-    Ok(EventSnapshot {
-        app: app.to_string(),
-        event: event.to_string(),
-        previous_sound,
-        previous_raw,
-    })
+    Ok(snapshot)
+}
+
+/// Restores the event to the stock Windows sound by copying the `.Default`
+/// template into `.Current` — the same thing Control Panel does when you pick
+/// the Windows Default scheme. If the event has no `.Default` (some third-party
+/// apps register events without one), clearing `.Current` is the honest
+/// equivalent: no sound rather than a wrong one.
+pub fn apply_windows_default(app: &str, event: &str) -> windows_registry::Result<()> {
+    let default_value = CURRENT_USER
+        .open(default_key_path(app, event))
+        .ok()
+        .and_then(|key| key.get_value("").ok());
+
+    let current_key = CURRENT_USER.create(current_key_path(app, event))?;
+    match default_value {
+        Some(value) => current_key.set_value("", &value)?,
+        None => {
+            let _ = current_key.remove_value("");
+        }
+    }
+    Ok(())
+}
+
+/// Silences the event. Windows treats an empty `.Current` as "(None)" — the
+/// event still exists and can be given a sound again later.
+pub fn disable_sound(app: &str, event: &str) -> windows_registry::Result<()> {
+    let current_key = CURRENT_USER.create(current_key_path(app, event))?;
+    current_key.set_string("", "")
 }
 
 pub fn restore_sound(snapshot: &EventSnapshot) -> windows_registry::Result<()> {
