@@ -1,10 +1,13 @@
 import { Button } from "../../components/Button";
 import { StatusBanner } from "../../components/StatusBanner";
 import { Tabs, type TabItem } from "../../components/Tabs";
-import { MoonIcon, RefreshIcon, SettingsIcon, SunIcon } from "../../components/icons/icons";
+import { HeartIcon, MoonIcon, RefreshIcon, SettingsIcon, SunIcon } from "../../components/icons/icons";
 import { useAppState } from "../AppState";
 import { useI18n, useT, LANGUAGES, type LangPreference } from "../../i18n";
 import styles from "./SettingsView.module.css";
+import { version as appVersion } from "../../../package.json";
+
+const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
 
 export function SettingsView() {
   const { theme, setTheme, nativeCapability, recheckNativeCapability, triggerExternalChangeDemo } =
@@ -91,7 +94,7 @@ export function SettingsView() {
 
         <section className={styles.section}>
           <h1 className={styles.sectionTitle}>{t("settings.about")}</h1>
-          <p className={styles.about}>{t("settings.about.summary", { version: "0.1.0" })}</p>
+          <p className={styles.about}>{t("settings.about.summary", { version: appVersion })}</p>
           <ul className={styles.limitations}>
             <li>{t("settings.limit.catalog")}</li>
             <li>{t("settings.limit.events")}</li>
@@ -106,6 +109,24 @@ export function SettingsView() {
             </a>{" "}
             {t("settings.credit.after")}
           </p>
+        </section>
+
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>{t("settings.support")}</h1>
+          <div className={styles.row}>
+            <div className={styles.rowInfo}>
+              <span className={styles.rowTitle}>{t("settings.support.title")}</span>
+              <span className={styles.rowDescription}>{t("settings.support.desc")}</span>
+            </div>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon={<HeartIcon size={14} />}
+              onClick={() => window.open(SUPPORT_URL, "_blank", "noreferrer")}
+            >
+              {t("settings.support.button")}
+            </Button>
+          </div>
         </section>
 
         <details className={styles.devSection}>

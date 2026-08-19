@@ -1,6 +1,8 @@
 import { IconButton } from "../components/IconButton";
 import { StatusBanner } from "../components/StatusBanner";
-import { PlugOffIcon, RefreshIcon } from "../components/icons/icons";
+import { HeartIcon, PlugOffIcon, RefreshIcon } from "../components/icons/icons";
+
+const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
 import { ApplyPackDialog } from "../features/apply-pack/ApplyPackDialog";
 import { AppNavigation } from "./AppNavigation";
 import { WindowControls } from "./WindowControls";
@@ -51,6 +53,7 @@ export function AppShell() {
               variant="ghost"
             />
           )}
+          <IconButton label={t("shell.support")} icon={<HeartIcon />} variant="ghost" href={SUPPORT_URL} />
         </div>
         <WindowControls />
       </header>
