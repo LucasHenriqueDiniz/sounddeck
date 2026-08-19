@@ -15,7 +15,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DIST = join(ROOT, 'dist');
 const SERVER_DIR = join(ROOT, 'dist-ssr');
-const SITE_ORIGIN = 'https://sounddeck.lucashdo.com';
+// Canonical host. sounddeck.lucashdo.com still serves the same pages, so its
+// copies carry a canonical pointing here — that's what tells a crawler the
+// site moved, instead of leaving two hosts competing as duplicates.
+const SITE_ORIGIN = 'https://chimer.lucashdo.com';
 
 const { render, allPages, LANGS, hrefFor } = await import(
   pathToFileURL(join(SERVER_DIR, 'entry-server.js')).href

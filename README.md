@@ -6,7 +6,7 @@ scheme before any change.
 
 Built with Tauri 2, React 19 and TypeScript.
 
-**[sounddeck.lucashdo.com](https://sounddeck.lucashdo.com)** · [Download](https://sounddeck.lucashdo.com/download) · [Changelog](https://sounddeck.lucashdo.com/changelog)
+**[chimer.lucashdo.com](https://chimer.lucashdo.com)** · [Download](https://chimer.lucashdo.com/download) · [Changelog](https://chimer.lucashdo.com/changelog)
 
 ## What it does
 

@@ -2,10 +2,16 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "chimer",
   "compatibility_date": "2026-08-19",
-  // The domain is still sounddeck.lucashdo.com — the rename hasn't happened
-  // there yet. Point this at the new host once it does, and keep a redirect
-  // from the old one so published download links don't break.
-  "routes": [{ "pattern": "sounddeck.lucashdo.com", "custom_domain": true }],
+  // Both domains stay attached on purpose. chimer is the new canonical host;
+  // sounddeck keeps answering because every download link already published —
+  // in release notes, in the winget manifest's PackageUrl — points at it.
+  // Dropping it would break those, so it is kept and every page served from it
+  // carries a canonical pointing at chimer, which is the correct migration
+  // signal rather than a hard cut.
+  "routes": [
+    { "pattern": "chimer.lucashdo.com", "custom_domain": true },
+    { "pattern": "sounddeck.lucashdo.com", "custom_domain": true }
+  ],
   "assets": {
     "directory": "dist",
     "html_handling": "auto-trailing-slash",

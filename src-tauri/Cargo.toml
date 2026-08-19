@@ -7,7 +7,7 @@ edition = "2021"
 default-run = "chimer"
 license = "MIT"
 repository = "https://github.com/LucasHenriqueDiniz/chimer"
-homepage = "https://sounddeck.lucashdo.com"
+homepage = "https://chimer.lucashdo.com"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
