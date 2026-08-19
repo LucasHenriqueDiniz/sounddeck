@@ -3,7 +3,7 @@ import { ArrowUpRight, Download, Github, Menu, X } from 'lucide-react';
 import { LANGS, LANG_NAMES, hrefFor, type Lang, type Translate } from './i18n';
 import { REPO_URL } from './useLatestRelease';
 
-export const ICON_PATH = '/assets/chimer-icon.png';
+export const ICON_PATH = '/img/chimer-icon.png';
 
 interface LayoutProps {
   lang: Lang;

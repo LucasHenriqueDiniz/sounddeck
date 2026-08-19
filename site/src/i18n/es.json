@@ -1,5 +1,6 @@
 {
   "a11y.close": "Cerrar notificación",
+  "a11y.cover": "Portada del paquete de sonidos {name}",
   "a11y.home": "Inicio de Chimer",
   "a11y.lang": "Idioma",
   "a11y.menu": "Alternar navegación",

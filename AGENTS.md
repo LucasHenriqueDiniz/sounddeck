@@ -320,7 +320,21 @@ routing or the entry points, verify the built HTML still contains the copy —
 - **Release data** (download links, changelog) is fetched client-side, because
   it changes without a rebuild. Nothing about a version or filename is
   hardcoded — a stale link 404s silently.
-- `prerender.mjs` also emits `sitemap.xml`, `robots.txt` and a root `404.html`.
+- `prerender.mjs` also emits `sitemap.xml`, `robots.txt` and a root `404.html`,
+  plus the per-page `<title>`, description, canonical, hreflang, Open Graph and
+  Twitter tags, and a `SoftwareApplication` JSON-LD block on each language's
+  home page. **Social tags belong there, not in `index.html`** — hardcoding
+  them shipped the English home page's card on all 25 pages, with an `og:image`
+  relative URL that no crawler resolves.
+- **`public/img/` and `dist/assets/` are separate on purpose.** `assets/` holds
+  only Vite's content-hashed output, so `public/_headers` can mark it
+  `immutable` for a year without ever pinning stale bytes; hand-authored images
+  live under `img/` with stable names and a one-week TTL. Putting an
+  unhashed file back into `assets/` would make it uncacheable-forever by
+  mistake.
+- The hero screenshot ships as AVIF/WebP/PNG through a `<picture>`; the PNG is
+  a fallback modern browsers never fetch. Keep the `width`/`height` on the
+  `<img>` — it is the LCP element and they are what reserve its box.
 
 `wrangler deploy` publishes straight to the live domain — there is no staging
 environment, so build and check `dist/` first.

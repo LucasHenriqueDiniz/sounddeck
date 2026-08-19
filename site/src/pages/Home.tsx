@@ -80,7 +80,23 @@ export function Home({ lang, t, downloadHref, version, onDownload, notice, dismi
         </div>
         <div className="hero-art">
           <div className="screenshot-frame">
-            <img src="/assets/app-screenshot.png" alt={t('a11y.shot')} />
+            {/*
+              The LCP element. As a PNG it was 786 KB, dwarfing the 4 KB of
+              compressed HTML around it; AVIF is 51 KB and WebP 86 KB for the
+              same pixels. width/height are intrinsic, so the frame reserves
+              its space before the bytes land and the hero doesn't shift.
+            */}
+            <picture>
+              <source srcSet="/img/app-screenshot.avif" type="image/avif" />
+              <source srcSet="/img/app-screenshot.webp" type="image/webp" />
+              <img
+                src="/img/app-screenshot.png"
+                alt={t('a11y.shot')}
+                width={1280}
+                height={800}
+                fetchpriority="high"
+              />
+            </picture>
           </div>
           <div className="floating-label">
             <span className="label-icon"><Sparkles size={15} /></span>
@@ -113,7 +129,7 @@ export function Home({ lang, t, downloadHref, version, onDownload, notice, dismi
                 className="pack-cover"
                 style={pack.coverUrl ? undefined : { background: `linear-gradient(135deg, ${pack.gradientFrom}, ${pack.gradientTo})` }}
               >
-                {pack.coverUrl && <img src={pack.coverUrl} alt="" loading="lazy" />}
+                {pack.coverUrl && <img src={pack.coverUrl} alt={t('a11y.cover', { name: pack.name })} loading="lazy" />}
               </div>
               <div className="pack-meta">
                 <span>{pack.author}</span>

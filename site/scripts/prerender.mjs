@@ -19,6 +19,13 @@ const SERVER_DIR = join(ROOT, 'dist-ssr');
 // copies carry a canonical pointing here — that's what tells a crawler the
 // site moved, instead of leaving two hosts competing as duplicates.
 const SITE_ORIGIN = 'https://chimer.lucashdo.com';
+const SITE_NAME = 'Chimer';
+const OG_IMAGE = `${SITE_ORIGIN}/og.png`;
+
+// Open Graph wants a territorialised locale, not the bare language code the
+// rest of the site keys off. The pairing is nominal — the copy is not
+// region-specific — but a bare "pt" is ignored by most crawlers.
+const OG_LOCALES = { en: 'en_US', pt: 'pt_BR', es: 'es_ES', de: 'de_DE', fr: 'fr_FR' };
 
 const { render, allPages, LANGS, hrefFor } = await import(
   pathToFileURL(join(SERVER_DIR, 'entry-server.js')).href
@@ -46,13 +53,63 @@ for (const { lang, route, url } of pages) {
 
   const canonical = `${SITE_ORIGIN}${url}`;
 
+  // og:image must be absolute. A relative "/og.png" is silently dropped by
+  // every crawler that reads it, so the site had no link preview at all.
+  const social = [
+    `<meta property="og:type" content="website" />`,
+    `<meta property="og:site_name" content="${SITE_NAME}" />`,
+    `<meta property="og:url" content="${canonical}" />`,
+    `<meta property="og:title" content="${escape(title)}" />`,
+    `<meta property="og:description" content="${escape(description)}" />`,
+    `<meta property="og:image" content="${OG_IMAGE}" />`,
+    `<meta property="og:image:width" content="1200" />`,
+    `<meta property="og:image:height" content="630" />`,
+    `<meta property="og:locale" content="${OG_LOCALES[lang]}" />`,
+    ...LANGS.filter((code) => code !== lang).map(
+      (code) => `<meta property="og:locale:alternate" content="${OG_LOCALES[code]}" />`,
+    ),
+    `<meta name="twitter:card" content="summary_large_image" />`,
+    `<meta name="twitter:title" content="${escape(title)}" />`,
+    `<meta name="twitter:description" content="${escape(description)}" />`,
+    `<meta name="twitter:image" content="${OG_IMAGE}" />`,
+  ].join('\n    ');
+
+  // One structured-data entity for the app, on the home page of each language.
+  // It deliberately claims nothing it cannot back up: no rating, no review
+  // count, no version. downloadUrl points at the download page rather than at
+  // a release asset, for the same reason nothing else here hardcodes a
+  // version — the filename changes every release.
+  const jsonLd =
+    route.id === 'home'
+      ? `\n    <script type="application/ld+json">${JSON.stringify({
+          '@context': 'https://schema.org',
+          '@type': 'SoftwareApplication',
+          name: SITE_NAME,
+          url: canonical,
+          description,
+          applicationCategory: 'UtilitiesApplication',
+          operatingSystem: 'Windows 10, Windows 11',
+          image: OG_IMAGE,
+          inLanguage: lang,
+          isAccessibleForFree: true,
+          license: 'https://opensource.org/licenses/MIT',
+          downloadUrl: `${SITE_ORIGIN}${hrefFor(lang, '/download')}`,
+          offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+          author: { '@type': 'Person', name: 'Lucas Henrique Diniz Ostroski' },
+          // A "<" inside JSON would end the script element early. No string
+          // here contains one today; escaping means a future translation that
+          // does can't silently break the page.
+        }).replace(/</g, '\\u003c')}</script>`
+      : '';
+
   const page = template
     .replace('<html lang="en">', `<html lang="${lang}">`)
     .replace(/<title>[\s\S]*?<\/title>/, `<title>${escape(title)}</title>`)
     .replace(
       /<meta name="description"[^>]*>/,
       `<meta name="description" content="${escape(description)}" />\n    ` +
-        `<link rel="canonical" href="${canonical}" />\n    ${alternates}`,
+        `<link rel="canonical" href="${canonical}" />\n    ${alternates}` +
+        `\n    ${social}${jsonLd}`,
     )
     .replace('<div id="root"></div>', `<div id="root">${html}</div>`);
 

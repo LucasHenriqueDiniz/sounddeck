@@ -1,0 +1,26 @@
+# Cache and security headers, applied by Cloudflare's static-asset handler.
+#
+# The split between /assets/ and /img/ is what makes the first rule safe:
+# /assets/ holds only Vite's content-hashed output, where the filename changes
+# whenever the bytes do, so "immutable" can never serve something stale. Hand-
+# authored images live in /img/ under stable names, so they get a bounded TTL
+# instead — a screenshot swap reaches returning visitors within a week rather
+# than never.
+#
+# Without these, every asset came back "max-age=0, must-revalidate", costing a
+# revalidation round-trip per file per visit for bytes that cannot change.
+
+/assets/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/img/*
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+/og.png
+  Cache-Control: public, max-age=604800, stale-while-revalidate=86400
+
+# HTML stays revalidated: a deploy has to be visible immediately.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Strict-Transport-Security: max-age=31536000; includeSubDomains
