@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://aka.ms/winget-manifest.installer.1.6.0.schema.json
+
+PackageIdentifier: LucasHenriqueDiniz.SoundDeck
+PackageVersion: 0.3.1
+MinimumOSVersion: 10.0.17763.0
+InstallModes:
+  - interactive
+  - silent
+UpgradeBehavior: install
+ReleaseDate: 2026-08-19
+Installers:
+  - Architecture: x64
+    InstallerType: nullsoft
+    Scope: user
+    InstallerUrl: https://github.com/LucasHenriqueDiniz/sounddeck/releases/download/v0.3.1/SoundDeck_0.3.1_x64-setup.exe
+    InstallerSha256: F0A1CA1CC94470FA66FC49F556E6CE5D27712B37EDACD919BDCB64B344118A21
+  - Architecture: x64
+    InstallerType: wix
+    Scope: machine
+    InstallerUrl: https://github.com/LucasHenriqueDiniz/sounddeck/releases/download/v0.3.1/SoundDeck_0.3.1_x64_en-US.msi
+    InstallerSha256: 50B141E8C75FF8A2AA80E4306487B4BB293F134A61C54D2912552EE479C7C36D
+    ProductCode: '{D0536D99-F781-4F6D-9BA3-AE6EE86F6AAF}'
+ManifestType: installer
+ManifestVersion: 1.6.0
