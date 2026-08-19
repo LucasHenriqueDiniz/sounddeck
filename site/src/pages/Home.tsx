@@ -15,7 +15,7 @@ import {
 } from 'lucide-react';
 import { Layout } from '../Layout';
 import { PACKS, PACK_COUNT } from '../packs.generated';
-import type { Lang, Translate } from '../i18n';
+import type { Lang, Translate, TranslationKey } from '../i18n';
 import { hrefFor } from '../i18n';
 
 /** How many cards show before the grid is expanded. */
@@ -62,6 +62,17 @@ export function Home({ lang, t, downloadHref, version, onDownload, notice, dismi
     { icon: SlidersHorizontal, title: t('f.twoTitle'), text: t('f.twoText') },
     { icon: History, title: t('f.threeTitle'), text: t('f.threeText') },
   ];
+
+  const steps = [
+    { title: t('how.oneTitle'), text: t('how.oneText') },
+    { title: t('how.twoTitle'), text: t('how.twoText') },
+    { title: t('how.threeTitle'), text: t('how.threeText') },
+  ];
+
+  const faqs = ([1, 2, 3, 4, 5] as const).map((n) => ({
+    question: t(`faq.q${n}` as TranslationKey),
+    answer: t(`faq.a${n}` as TranslationKey),
+  }));
 
   return (
     <Layout lang={lang} t={t} downloadHref={downloadHref} onDownload={onDownload} homeAnchors routePath="/">
@@ -185,6 +196,53 @@ export function Home({ lang, t, downloadHref, version, onDownload, notice, dismi
             <div><Check size={18} /><span><strong>{t('s.twoTitle')}</strong>{t('s.twoText')}</span></div>
             <div><Check size={18} /><span><strong>{t('s.threeTitle')}</strong>{t('s.threeText')}</span></div>
           </div>
+        </div>
+      </section>
+
+      {/*
+        The page previously said what Chimer is but never answered the thing
+        people actually search for — how you change a Windows sound at all.
+        These two sections carry that, including the manual Control Panel
+        route, which is worth stating plainly even though it argues against
+        needing the app.
+      */}
+      <section className="how-section container" id="how">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">{t('how.eyebrow')}</p>
+            <h2>{t('how.title')}<br /><em>{t('how.titleEm')}</em></h2>
+          </div>
+          <p className="section-intro">{t('how.intro')}</p>
+        </div>
+        <ol className="how-grid">
+          {steps.map(({ title, text }, index) => (
+            <li className="step-card" key={title}>
+              <div className="feature-number">0{index + 1}</div>
+              <h3>{title}</h3>
+              <p>{text}</p>
+            </li>
+          ))}
+        </ol>
+        <div className="manual-note">
+          <h3>{t('how.manualTitle')}</h3>
+          <p>{t('how.manualText')}</p>
+        </div>
+      </section>
+
+      <section className="faq-section container" id="faq">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">{t('faq.eyebrow')}</p>
+            <h2>{t('faq.title')}<br /><em>{t('faq.titleEm')}</em></h2>
+          </div>
+        </div>
+        <div className="faq-list">
+          {faqs.map(({ question, answer }) => (
+            <div key={question}>
+              <h3>{question}</h3>
+              <p>{answer}</p>
+            </div>
+          ))}
         </div>
       </section>
 
