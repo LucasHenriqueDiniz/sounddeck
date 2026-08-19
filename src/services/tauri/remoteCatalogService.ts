@@ -19,7 +19,12 @@ export function getConfiguredCatalogBaseUrl(): string | null {
 }
 
 export async function fetchRemoteCatalog(baseUrl: string): Promise<SoundPack[]> {
-  const response = await fetch(`${baseUrl}/catalog.json`);
+  // The bucket sends no Cache-Control, so the webview falls back to heuristic
+  // freshness off Last-Modified and can serve a days-old catalog — stale pack
+  // names, descriptions and credits, with no way for the user to force a
+  // refresh. "no-cache" still uses the cached copy, it just revalidates first,
+  // so an unchanged catalog costs a 304 rather than a full download.
+  const response = await fetch(`${baseUrl}/catalog.json`, { cache: "no-cache" });
   if (!response.ok) {
     throw new Error(`Failed to fetch the remote catalog: HTTP ${response.status}`);
   }
