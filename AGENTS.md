@@ -241,9 +241,13 @@ release from the GitHub API at runtime — nothing to do on the site.
 ### winget
 
 Manifests under `winget/<version>/`, identifier `LucasHenriqueDiniz.SoundDeck`.
-For every new release: copy the folder, update the version, URLs,
-`ReleaseDate` and the installers' **SHA256**, validate, and open a PR
-against `microsoft/winget-pkgs`.
+Only the **current** release's folder is kept — winget doesn't need every
+past version tracked, just the one that should install today. For every new
+release: delete the previous version's folder, copy the manifest as a new
+`winget/<version>/`, update the version, URLs, `ReleaseDate` and the
+installers' **SHA256**, validate, and open a PR against
+`microsoft/winget-pkgs` — closing the previous version's PR first if it's
+still open (one active submission at a time, not one per release).
 
 ```bash
 winget validate --manifest winget/<version>

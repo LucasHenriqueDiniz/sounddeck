@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://aka.ms/winget-manifest.defaultLocale.1.6.0.schema.json
 
 PackageIdentifier: LucasHenriqueDiniz.SoundDeck
-PackageVersion: 0.1.0
+PackageVersion: 0.2.1
 PackageLocale: en-US
 Publisher: Lucas Henrique Diniz Ostroski
 PublisherUrl: https://github.com/LucasHenriqueDiniz
@@ -15,8 +15,9 @@ ShortDescription: A sound scheme picker for Windows 10 and 11.
 Description: |-
   SoundDeck replaces the Windows sound scheme editor with a modern app. Browse a
   library of sound packs, preview every event before committing, and apply a whole
-  scheme in one click. Includes recreations of the Windows XP, Vista and 7 schemes
-  plus two originals, and a per-event editor for finer control.
+  scheme in one click. Includes real recreations of the Windows XP, Vista, 7, 8, 98
+  and 10 default schemes, the official Windows 7 bonus themes, Microsoft Plus!
+  packs, two originals, a per-event editor, and local custom pack creation.
 
   The current scheme is backed up before every change, so any apply is reversible.
   SoundDeck runs without administrator privileges, never modifies system files, and
@@ -31,6 +32,6 @@ Tags:
   - theme
   - sound-scheme
   - personalization
-ReleaseNotesUrl: https://github.com/LucasHenriqueDiniz/sounddeck/releases/tag/v0.1.0
+ReleaseNotesUrl: https://github.com/LucasHenriqueDiniz/sounddeck/releases/tag/v0.2.1
 ManifestType: defaultLocale
 ManifestVersion: 1.6.0
