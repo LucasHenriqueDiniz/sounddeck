@@ -97,4 +97,4 @@ affiliated with Microsoft. Windows is a trademark of Microsoft.
 
 ## Status
 
-v0.2.0 published. Active development.
+v0.3.0 published. Active development.
