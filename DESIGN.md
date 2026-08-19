@@ -1,128 +1,127 @@
-# SoundDeck — contrato de design
+# SoundDeck — design contract
 
-## Caráter do produto
+## Product character
 
-Preciso, calmo, confiável, discretamente nostálgico, sem excesso. SoundDeck é um
-utilitário de sistema — não um site institucional nem um dashboard administrativo.
-A nostalgia entra pelas capas, nomes e prévias dos packs; a interface em si é
-neutra, silenciosa e deixa o conteúdo (capas, formas de onda, nomes de eventos)
-carregar a cor e a personalidade.
+Precise, calm, trustworthy, quietly nostalgic, never excessive. SoundDeck is
+a system utility — not a marketing site or an admin dashboard. Nostalgia
+comes through in the pack covers, names and previews; the interface itself
+stays neutral and quiet, letting the content (covers, waveforms, event
+names) carry the color and personality.
 
-## Densidade de interação
+## Interaction density
 
-Densidade compacta/confortável (não espaçosa). Listas de eventos e a biblioteca
-de packs priorizam mostrar mais itens úteis por tela. Diálogos e telas de
-resultado (sucesso/erro) podem respirar mais, pois aparecem raramente.
+Compact/comfortable density (not spacious). The event list and the pack
+library prioritize showing more useful items per screen. Dialogs and result
+screens (success/error) can breathe more, since they appear rarely.
 
-## Tipografia
+## Typography
 
 - **UI:** `"Segoe UI Variable Text", "Segoe UI", -apple-system, "Inter", system-ui, sans-serif`
-  (nativa no Windows 11/10, sem dependência de rede).
-- **Display:** mesma família da UI, apenas com peso maior — sem uma segunda
-  fonte decorativa.
-- **Monoespaçada:** `"Cascadia Code", "Consolas", ui-monospace, monospace` —
-  usada só para nomes de arquivo e identificadores técnicos.
-- **Escala:** `--text-xs` (11px) a `--text-2xl` (24px), 6 degraus. Ver `tokens.css`.
-- **Pesos:** 400 (corpo), 500 (rótulos/ênfase), 600 (títulos de seção).
-- **Números:** duração, contagens e percentuais usam `font-variant-numeric: tabular-nums`.
-- Nunca usar caixa alta para rótulos longos; texto pequeno nunca abaixo de `--text-xs`.
+  (native on Windows 11/10, no network dependency).
+- **Display:** same family as UI, just heavier weight — no second decorative
+  font.
+- **Monospace:** `"Cascadia Code", "Consolas", ui-monospace, monospace` —
+  used only for file names and technical identifiers.
+- **Scale:** `--text-xs` (11px) to `--text-2xl` (24px), 6 steps. See `tokens.css`.
+- **Weights:** 400 (body), 500 (labels/emphasis), 600 (section titles).
+- **Numbers:** duration, counts and percentages use `font-variant-numeric: tabular-nums`.
+- Never use uppercase for long labels; small text never goes below `--text-xs`.
 
-## Cores semânticas
+## Semantic colors
 
-Tokens em `src/styles/tokens.css`, com claro e escuro definidos intencionalmente
-(não é inversão automática). Uso:
+Tokens live in `src/styles/tokens.css`, with light and dark defined
+intentionally (not an automatic inversion). Usage:
 
-| Token | Papel |
+| Token | Role |
 |---|---|
-| `--surface-canvas` | fundo da janela |
-| `--surface-panel` | painéis (biblioteca, editor, listas) |
-| `--surface-raised` | cards, linhas selecionáveis |
-| `--surface-overlay` | diálogos, menus |
-| `--surface-selected` / `--surface-hover` | estados de seleção e hover |
-| `--text-primary/secondary/muted` | hierarquia tipográfica |
-| `--text-on-accent` | texto sobre `--accent` |
-| `--border-subtle/default/strong` | divisórias, contornos |
-| `--accent` / `--accent-hover` / `--accent-active` / `--accent-soft` | única cor de destaque (âmbar/latão) — ações primárias, seleção, progresso |
-| `--success` / `--warning` / `--danger` / `--info` | estados do sistema — sempre acompanhados de ícone/texto, nunca só cor |
-| `--focus-ring` | anel de foco — tom azul, deliberadamente distinto do acento, para não confundir "selecionado" com "focado" |
+| `--surface-canvas` | window background |
+| `--surface-panel` | panels (library, editor, lists) |
+| `--surface-raised` | cards, selectable rows |
+| `--surface-overlay` | dialogs, menus |
+| `--surface-selected` / `--surface-hover` | selection and hover states |
+| `--text-primary/secondary/muted` | typographic hierarchy |
+| `--text-on-accent` | text over `--accent` |
+| `--border-subtle/default/strong` | dividers, outlines |
+| `--accent` / `--accent-hover` / `--accent-active` / `--accent-soft` | the single accent color (amber/brass) — primary actions, selection, progress |
+| `--success` / `--warning` / `--danger` / `--info` | system states — always paired with icon/text, never color alone |
+| `--focus-ring` | focus ring — a blue tone, deliberately distinct from the accent, so "selected" is never confused with "focused" |
 
-## Superfícies e bordas
+## Surfaces and borders
 
-Três níveis: `canvas` (fundo), `panel` (contêiner estrutural, sem sombra),
-`raised` (item individual dentro de um painel — borda de 1px, sem sombra).
-Sombra (`--shadow-raised`, `--shadow-overlay`) é reservada para elementos que
-flutuam sobre o conteúdo: diálogos, menus, tooltips. Nunca usar sombra em cards
-dentro de listas — a hierarquia vem de borda + espaçamento.
+Three levels: `canvas` (background), `panel` (structural container, no
+shadow), `raised` (an individual item inside a panel — 1px border, no
+shadow). Shadow (`--shadow-raised`, `--shadow-overlay`) is reserved for
+elements that float above content: dialogs, menus, tooltips. Never use
+shadow on cards inside lists — hierarchy comes from border + spacing.
 
-Divisórias usam `--border-subtle` dentro de um mesmo grupo e `--border-default`
-entre seções.
+Dividers use `--border-subtle` within a group and `--border-default` between
+sections.
 
-## Geometria
+## Geometry
 
-- Espaçamento: `--space-1` (4px) a `--space-12` (48px), escala de 4/8px.
-- Raios: `--radius-sm` (4px, controles pequenos), `--radius-md` (8px, cards/inputs/botões),
-  `--radius-lg` (12px, diálogos). Nunca mais que três níveis.
-- Alturas de controle: `--control-sm` (28px), `--control-md` (34px), `--control-lg` (40px).
-- Largura máxima de conteúdo de leitura (resumos, diálogos): `--content-max`.
+- Spacing: `--space-1` (4px) to `--space-12` (48px), 4/8px scale.
+- Radii: `--radius-sm` (4px, small controls), `--radius-md` (8px, cards/inputs/buttons),
+  `--radius-lg` (12px, dialogs). Never more than three levels.
+- Control heights: `--control-sm` (28px), `--control-md` (34px), `--control-lg` (40px).
+- Max width for reading content (summaries, dialogs): `--content-max`.
 
-## Elevação
+## Elevation
 
-Dois níveis de sombra apenas: `--shadow-raised` (dropdown leve) e
-`--shadow-overlay` (diálogo modal). Nada além disso.
+Only two shadow levels: `--shadow-raised` (light dropdown) and
+`--shadow-overlay` (modal dialog). Nothing beyond that.
 
-## Movimento
+## Motion
 
-- `--motion-fast` (120ms) para hover/pressed/foco.
-- `--motion-base` (180ms) para abrir/fechar painéis, trocar de aba.
-- `--motion-slow` (260ms) para transições de progresso e confirmação de sucesso.
-- Easing padrão: `--ease-standard`.
-- `prefers-reduced-motion: reduce` remove praticamente toda duração de
-  transição/animação globalmente — implementado em `base.css`.
+- `--motion-fast` (120ms) for hover/pressed/focus.
+- `--motion-base` (180ms) for opening/closing panels, switching tabs.
+- `--motion-slow` (260ms) for progress transitions and success confirmation.
+- Default easing: `--ease-standard`.
+- `prefers-reduced-motion: reduce` removes essentially all
+  transition/animation duration globally — implemented in `base.css`.
 
-## Componentes
+## Components
 
-- **Botões:** primário (`--accent`), secundário (contorno neutro), fantasma
-  (sem contorno), perigoso (`--danger`). Sempre com estado de carregamento
-  (spinner substitui o rótulo do ícone, texto permanece) e desabilitado
-  (opacidade + `cursor: not-allowed`, nunca só opacidade sem `aria-disabled`).
-- **Badges/estado:** sempre ícone + texto, nunca só cor de fundo.
-- **Listas:** linhas com divisória `--border-subtle`, sem card por item.
-- **Cards:** reservados para objetos discretos com capa (packs). Nunca card
-  dentro de card.
-- **Diálogos:** título, corpo com `--content-max`, ações à direita, `Esc`
-  fecha, foco inicial no primeiro controle relevante, foco retorna ao
-  disparador ao fechar.
-- **Banner de status:** persistente/contextual no topo da área de conteúdo,
-  papel `status`/`alert` conforme severidade.
-- **Estados vazios/erro:** título curto, explicação de uma linha, ação
-  seguinte quando existir.
+- **Buttons:** primary (`--accent`), secondary (neutral outline), ghost
+  (no outline), danger (`--danger`). Always with a loading state (spinner
+  replaces the icon slot, text stays) and disabled state (opacity +
+  `cursor: not-allowed`, never opacity alone without `aria-disabled`).
+- **Badges/status:** always icon + text, never background color alone.
+- **Lists:** rows with `--border-subtle` dividers, no card per item.
+- **Cards:** reserved for discrete objects with a cover (packs). Never a
+  card inside a card.
+- **Dialogs:** title, body with `--content-max`, actions right-aligned,
+  `Esc` closes, initial focus on the first relevant control, focus returns
+  to the trigger on close.
+- **Status banner:** persistent/contextual at the top of the content area,
+  `status`/`alert` role depending on severity.
+- **Empty/error states:** short title, one-line explanation, next action
+  when one exists.
 
-## Comportamento da janela
+## Window behavior
 
-- Tamanho mínimo: **1040×680** (definido em `tauri.conf.json`).
-- Layout em painel duplo (lista + detalhe) só acima de ~880px de largura útil;
-  abaixo disso o detalhe substitui a lista com um botão "voltar" (sem virar
-  layout mobile empilhado).
-- Sem rolagem horizontal em nenhuma tela — listas largas usam elipse/truncamento
-  central para caminhos de arquivo.
-- Barra de título customizada (`decorations: false`): a barra superior de
-  52px é a única região arrastável (`data-tauri-drag-region="deep"`, que
-  automaticamente exclui abas, botões e inputs — nenhum controle interativo
-  fica dentro da região de arraste). Botões de minimizar/maximizar/fechar
-  (`app/WindowControls.tsx`) substituem os controles nativos, seguem a
-  convenção visual do Windows 11 (46px de largura, altura total da barra,
-  hover vermelho em fechar) e ficam encostados na borda direita da janela.
-  Duplo clique na região arrastável maximiza/restaura (comportamento nativo
-  do Tauri, sem código adicional).
-- Atalhos: `Esc` fecha diálogos/menus; `Enter`/`Espaço` ativam controles
-  focados; setas navegam listas de eventos e abas.
+- Minimum size: **1040×680** (set in `tauri.conf.json`).
+- Dual-pane layout (list + detail) only above ~880px of usable width; below
+  that, the detail pane replaces the list with a "back" button (never a
+  stacked mobile layout).
+- No horizontal scrolling on any screen — wide lists use ellipsis/middle
+  truncation for file paths.
+- Custom title bar (`decorations: false`): the 52px top bar is the only
+  draggable region (`data-tauri-drag-region="deep"`, which automatically
+  excludes tabs, buttons and inputs — no interactive control sits inside the
+  drag region). Minimize/maximize/close buttons (`app/WindowControls.tsx`)
+  replace the native controls, follow the Windows 11 visual convention
+  (46px wide, full bar height, red hover on close) and sit flush against
+  the window's right edge. Double-clicking the drag region
+  maximizes/restores (native Tauri behavior, no extra code).
+- Shortcuts: `Esc` closes dialogs/menus; `Enter`/`Space` activate focused
+  controls; arrow keys navigate event lists and tabs.
 
-## Acessibilidade
+## Accessibility
 
-- Contraste mínimo AA (4.5:1 para texto normal, 3:1 para texto grande/ícones
-  informativos) nos dois temas.
-- Foco sempre visível (`:focus-visible`, nunca suprimido).
-- Alvo de toque/clique mínimo de 28px em controles densos.
-- Toda ação somente-ícone tem `aria-label` e tooltip.
-- Estado nunca comunicado só por cor (texto/ícone acompanha sempre).
-- Regiões de status assíncrono usam `aria-live="polite"` (ou `assertive` para erro).
+- Minimum AA contrast (4.5:1 for normal text, 3:1 for large text/informative
+  icons) in both themes.
+- Focus always visible (`:focus-visible`, never suppressed).
+- Minimum touch/click target of 28px on dense controls.
+- Every icon-only action has an `aria-label` and tooltip.
+- State is never communicated by color alone (text/icon always accompanies it).
+- Async status regions use `aria-live="polite"` (or `assertive` for errors).

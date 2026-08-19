@@ -1,269 +1,272 @@
 # AGENTS.md
 
-Guia do repositório para agentes de codificação (Claude Code, opencode, e
-afins). Leia antes de mexer em qualquer coisa.
+Repository guide for coding agents (Claude Code, opencode, and the like).
+Read this before touching anything.
 
-## O que é
+## What this is
 
-App desktop para **Windows 10/11** que troca o esquema de sons do sistema.
-O usuário escolhe um pack, ouve a prévia, aplica — e o esquema anterior fica
-salvo para restaurar. Um editor troca evento por evento quando ele quer detalhe.
+A desktop app for **Windows 10/11** that swaps the system sound scheme.
+The user picks a pack, previews it, applies it — and the previous scheme is
+saved so it can be restored. An editor swaps sounds event by event for
+finer control.
 
-Tauri 2 (Rust) + React 19 + TypeScript + Vite. **Só funciona no Windows**: todo
-o backend depende do registro do Windows. Não há caminho de código para Linux
-ou macOS, e não faz sentido criar um.
+Tauri 2 (Rust) + React 19 + TypeScript + Vite. **Windows-only**: the entire
+backend depends on the Windows registry. There is no code path for Linux or
+macOS, and it doesn't make sense to build one.
 
-## Comandos
+## Commands
 
 ```bash
 npm install
-npm run tauri dev          # app completo (Rust + webview) — o normal
-npm run dev                # só o frontend no browser, sem IPC (usa src/mocks)
+npm run tauri dev          # full app (Rust + webview) — the normal path
+npm run dev                # frontend only, in the browser, no IPC (uses src/mocks)
 npm run build               # tsc + vite build
-npm run tauri build         # instaladores em src-tauri/target/release/bundle
-npm run build:landing-packs  # regenera landing-page/packs-data.js
-npm run build:og             # regenera landing-page/og.png
-npm run build:landing        # gera landing-page/dist/ (site multilíngue)
+npm run tauri build         # installers under src-tauri/target/release/bundle
+npm run build:landing-packs  # regenerates landing-page/packs-data.js
+npm run build:og             # regenerates landing-page/og.png
+npm run build:landing        # generates landing-page/dist/ (multilingual site)
 ```
 
-Não existe suíte de testes. Verificação é manual, rodando o app.
+There is no test suite. Verification is manual, by running the app.
 
-## Arquitetura
+## Architecture
 
-### Fronteira Rust ↔ TypeScript
+### The Rust ↔ TypeScript boundary
 
-Toda comunicação passa por **4 comandos Tauri**, declarados em
+All communication goes through **4 Tauri commands**, declared in
 [src-tauri/src/lib.rs](src-tauri/src/lib.rs):
 
-| Comando | Faz |
+| Command | Does |
 |---|---|
-| `scan_events` | lê todos os eventos de som do registro |
-| `apply_test_sound` | escreve um `.wav` num evento, devolve snapshot do valor anterior |
-| `restore_sound` | reescreve um snapshot de volta |
-| `download_pack_asset` | baixa um `.wav` do catálogo remoto |
+| `scan_events` | reads every sound event from the registry |
+| `apply_test_sound` | writes a `.wav` to an event, returns a snapshot of the previous value |
+| `restore_sound` | writes a snapshot back |
+| `download_pack_asset` | downloads a `.wav` from the remote catalog |
 
-Do lado TS, cada comando tem um wrapper em `src/services/tauri/`. **Componentes
-nunca chamam `invoke` direto** — sempre via esses services. `nativeCapability.ts`
-detecta se está rodando dentro do Tauri; fora dele o app cai nos `src/mocks/`,
-que é o que permite `npm run dev` no browser.
+On the TS side, each command has a wrapper under `src/services/tauri/`.
+**Components never call `invoke` directly** — always through those services.
+`nativeCapability.ts` detects whether the app is running inside Tauri;
+outside of it the app falls back to `src/mocks/`, which is what makes
+`npm run dev` work in the browser.
 
-### O modelo de registro (a parte não óbvia)
+### The registry model (the non-obvious part)
 
-[src-tauri/src/windows_sound.rs](src-tauri/src/windows_sound.rs) escreve em
-`HKCU\AppEvents\Schemes\Apps\<app>\<evento>\.Current`.
+[src-tauri/src/windows_sound.rs](src-tauri/src/windows_sound.rs) writes to
+`HKCU\AppEvents\Schemes\Apps\<app>\<event>\.Current`.
 
-Duas coisas que não são intuitivas e que já estão resolvidas — não regrida nelas:
+Two things here are non-obvious and already solved — don't regress on them:
 
-1. **`.Current` é o que toca.** As subchaves nomeadas (`.Default` e esquemas
-   customizados) são só templates que o Painel de Controle copia para
-   `.Current` quando o usuário troca de esquema. Escrever `.Current` direto faz
-   o som mudar na hora, sem reiniciar nada.
+1. **`.Current` is what actually plays.** The named subkeys (`.Default` and
+   custom schemes) are just templates that Control Panel copies into
+   `.Current` when the user switches schemes. Writing `.Current` directly
+   changes the sound immediately, with no restart needed.
 
-2. **O tipo do valor precisa ser preservado.** `RawValue` guarda os bytes crus
-   *e* o `reg_type` original. Muitos valores são `REG_EXPAND_SZ`
-   (ex.: `%SystemRoot%\Media\...`); restaurar sempre como `REG_SZ` corromperia
-   o valor silenciosamente. Se você mexer no restore, mantenha isso.
+2. **The value's type must be preserved.** `RawValue` stores the raw bytes
+   *and* the original `reg_type`. Many values are `REG_EXPAND_SZ`
+   (e.g. `%SystemRoot%\Media\...`); always restoring as `REG_SZ` would
+   silently corrupt the value. If you touch the restore path, keep this.
 
-Limites de segurança que o app promete na landing page e no README — **não
-quebre nenhum**: nada fora de `HKCU`, nenhum arquivo de sistema tocado, nenhuma
-elevação de privilégio, e backup antes de toda escrita.
+Security boundaries the app promises on the landing page and in the
+README — **don't break any of them**: nothing outside `HKCU`, no system
+file touched, no privilege elevation, and a backup before every write.
 
 ### Frontend
 
 ```
 src/
-  app/          AppShell, AppState (estado global), navegação, views/
-  features/     packs/ apply-pack/ sound-events/ backups/ custom-pack/ — um diretório por fluxo
-  components/   UI compartilhada + icons/
+  app/          AppShell, AppState (global state), navigation, views/
+  features/     packs/ apply-pack/ sound-events/ backups/ custom-pack/ — one directory per flow
+  components/   shared UI + icons/
   services/
-    tauri/      wrappers dos comandos (única porta para o Rust)
-    audio/      tonePreview.ts — prévia sintetizada, sem arquivo
-  i18n/         useT() + locales/*.json — 5 idiomas (en/pt/es/de/fr), veja abaixo
+    tauri/      wrappers around the commands (the only door into Rust)
+    audio/      tonePreview.ts — synthesized preview, no file needed
+  i18n/         useT() + locales/*.json — 5 languages (en/pt/es/de/fr), see below
   hooks/ lib/ types/ mocks/ styles/
 ```
 
-CSS Modules por componente (`Foo.module.css`). [DESIGN.md](DESIGN.md) é o
-contrato de design — tipografia, cores semânticas, geometria, movimento. Leia
-antes de criar componente novo; ele existe para o app não virar uma colcha de
-retalhos.
+CSS Modules per component (`Foo.module.css`). [DESIGN.md](DESIGN.md) is the
+design contract — typography, semantic colors, geometry, motion. Read it
+before creating a new component; it exists so the app doesn't turn into a
+patchwork.
 
-### i18n do app
+### App i18n
 
-A interface tem i18n real: `src/i18n/index.tsx` (hook `useT()` + `TranslationKey`)
-e `src/i18n/locales/{en,pt,es,de,fr}.json` — inglês é a fonte da verdade
-(`TranslationKey = keyof typeof en`), as outras traduzem as mesmas chaves.
-"system" segue o idioma do SO/webview; qualquer outro valor fixa um idioma.
-Descrição/crédito de pack (`SoundPack.description`/`sourceCredit`) **não** passa
-por esse sistema — são strings literais definidas no catálogo, não chaves de
-tradução.
+The UI has real i18n: `src/i18n/index.tsx` (the `useT()` hook + `TranslationKey`)
+and `src/i18n/locales/{en,pt,es,de,fr}.json` — English is the source of
+truth (`TranslationKey = keyof typeof en`), the others translate the same
+keys. "system" follows the OS/webview language; any other value pins one
+language. Pack description/credit (`SoundPack.description`/`sourceCredit`)
+**do not** go through this system — they're literal strings defined in the
+catalog, not translation keys.
 
-## Catálogo de packs
+## Pack catalog
 
-Os `.wav` não moram no repo. Ficam no bucket R2 **`sounddeck-packs`**, e o app
-lê a URL base de `VITE_PACKS_BASE_URL` (o `.env` versionado só tem essa URL
-pública — não é segredo; variáveis `VITE_` vão para o bundle do cliente).
+The `.wav` files don't live in the repo. They're in the **`sounddeck-packs`**
+R2 bucket, and the app reads the base URL from `VITE_PACKS_BASE_URL` (the
+committed `.env` only has this public URL — it's not a secret; `VITE_`
+variables ship in the client bundle).
 
-Pipeline de autoria, rodado à mão e **fora do app**:
+Authoring pipeline, run by hand and **outside the app**:
 
 ```
-zips de esquemas clássicos
-  → scripts/build-catalog.mjs    # extrai, normaliza, gera catalog.json
-  → scripts/upload-catalog.mjs   # sobe para o R2 via wrangler
+classic-scheme zips
+  → scripts/build-catalog.mjs    # extracts, normalizes, generates catalog.json
+  → scripts/upload-catalog.mjs   # uploads to R2 via wrangler
 ```
 
-**Nada disso publica sozinho.** Mudar `scripts/cover-images/`, as tabelas
-`COVER_IMAGE_OVERRIDES`/`COVER_PHOTO_CREDITS`, ou qualquer coisa que afete o
-catálogo só tem efeito depois que os dois comandos acima rodam — sempre que
-mexer em algo aqui, rode os dois antes de considerar a mudança concluída.
-`build-catalog.mjs` só funciona com a pasta local dos `.zip` originais
-(`SOURCE_DIR`, hoje em `C:\Users\Lucas Diniz\Downloads\Nova pasta (2)`) — se
-essa pasta não existir no ambiente atual, **não dá pra rodar o pipeline
-completo**, porque ele reprocessa o áudio junto.
+**None of this publishes on its own.** Changing `scripts/cover-images/`, the
+`COVER_IMAGE_OVERRIDES`/`COVER_PHOTO_CREDITS` tables, or anything that
+affects the catalog only takes effect after both commands above run —
+whenever you touch something here, run both before considering the change
+done. `build-catalog.mjs` only works with the local folder of original
+`.zip` archives (`SOURCE_DIR`, currently `C:\Users\Lucas Diniz\Downloads\Nova pasta (2)`)
+— if that folder doesn't exist in the current environment, **the full
+pipeline can't run**, since it reprocesses the audio too.
 
-Estrutura do bucket, para quem precisar mexer direto:
-`catalog.json` na raiz; cada pack em `packs/<id>/`, com os `.wav` e (se tiver)
-`cover.jpg` dentro. `packService`/`remoteCatalogService.ts` resolvem tudo a
-partir dessas duas convenções — nada de nomes especiais por pack.
+Bucket layout, for anyone who needs to touch it directly:
+`catalog.json` at the root; each pack under `packs/<id>/`, with the `.wav`
+files and (if present) a `cover.jpg` inside. `packService`/`remoteCatalogService.ts`
+resolve everything from those two conventions — no per-pack special-casing.
 
-Se só a **capa** de um pack mudar (não o áudio) e a pasta local não estiver
-disponível, dá pra fazer o equivalente sem rodar o pipeline completo: baixar o
-`catalog.json` publicado, setar `cover.imageUrl = "cover.jpg"` e atualizar
-`sourceCredit` só nos packs afetados (mesmo formato que `build-catalog.mjs`
-geraria), subir o(s) `cover.jpg` para `packs/<id>/cover.jpg` e o `catalog.json`
-atualizado via `wrangler r2 object put ... --remote`. Isso é um atalho, não o
-caminho normal — só serve para capa/metadado, nunca para trocar áudio, e só
-porque o resultado final é idêntico ao que o pipeline completo produziria
-(as tabelas de override já ficam atualizadas em `build-catalog.mjs` de todo
-jeito, então rodar o pipeline completo depois não desfaz nada). A mesma lógica
-de isolamento (comparar packs antes/depois, garantir que só o pretendido
-mudou) vale para **adicionar** um pack novo inteiro fora do pipeline — foi
-assim que `win7` e `vista` (ver abaixo) foram publicados.
+If only a pack's **cover** changes (not the audio) and the local folder
+isn't available, there's an equivalent shortcut without running the full
+pipeline: download the published `catalog.json`, set `cover.imageUrl = "cover.jpg"`
+and update `sourceCredit` only for the affected packs (same format
+`build-catalog.mjs` would generate), upload the `cover.jpg`(s) to
+`packs/<id>/cover.jpg` and the updated `catalog.json` via
+`wrangler r2 object put ... --remote`. This is a shortcut, not the normal
+path — it only covers cover/metadata, never swapping audio, and only
+because the end result is identical to what the full pipeline would produce
+(the override tables in `build-catalog.mjs` already get updated either way,
+so running the full pipeline afterward doesn't undo anything). The same
+isolation logic (diff packs before/after, make sure only the intended one
+changed) applies to **adding** a whole new pack outside the pipeline — that's
+how `win7` and `vista` (see below) were published.
 
-O bucket público não envia `Cache-Control` no `catalog.json` nem nos `.wav`/
-`.jpg` — navegadores aplicam cache heurístico baseado em `Last-Modified`.
-Depois de publicar algo novo, um `curl` sempre mostra o dado fresco; uma aba
-de navegador já aberta pode continuar mostrando a versão antiga até o cache
-expirar ou um reload forçado (`cache: 'no-store'`) acontecer. Não é bug — é
-como o bucket já estava configurado.
+The public bucket doesn't send `Cache-Control` on `catalog.json` or the
+`.wav`/`.jpg` files — browsers apply heuristic caching based on
+`Last-Modified`. After publishing something new, a `curl` always shows
+fresh data; an already-open browser tab can keep showing the old version
+until the cache expires or a forced reload (`cache: 'no-store'`) happens.
+Not a bug — that's just how the bucket was already configured.
 
-Sobre licenciamento de áudio: os esquemas clássicos vêm de acervos públicos de
-fãs (`lelegofrog.github.io`). O site é explícito que os arquivos de áudio não
-são redistribuídos pela Microsoft (`packs.note` no site) — isso continua
-verdade, mantenha essa linha. Dois packs fogem dessa fonte: `win7` e `vista`
-(esquemas "puros", sem tema — algo que `lelegofrog` não tinha) vêm de itens do
-archive.org que preservam a pasta `Media` de instalações reais do Windows 7 e
-Vista. Publicados como exceção pontual direto no R2, fora do pipeline normal
-— ver a nota em `scripts/build-catalog.mjs` sobre o risco de um rerun
-completo sobrescrever `catalog.json` e derrubar os dois silenciosamente.
+On audio licensing: the classic schemes come from public fan archives
+(`lelegofrog.github.io`). The site is explicit that audio files are not
+redistributed by Microsoft (`packs.note` on the site) — that remains true,
+keep that line. Two packs deviate from that source: `win7` and `vista`
+(plain, theme-less schemes — something `lelegofrog` didn't have) come from
+archive.org items that preserve the `Media` folder of real Windows 7 and
+Vista installs. Published as a one-off exception straight to R2, outside
+the normal pipeline — see the note in `scripts/build-catalog.mjs` about the
+risk of a full rerun silently overwriting `catalog.json` and dropping both.
 
-Sobre as capas, a regra **default** é: só imagens livres ou originais, nunca
-logo ou wallpaper com marca — é o que `scripts/build-catalog.mjs` faz nos
-packs de Plus! (95 e XP) e nos temas nomeados de Vista (Glass/Pearl/Tinker),
-11 ao todo. Existe uma **exceção deliberada**, por decisão explícita do
-autor, que hoje cobre todo o conjunto Windows 7/8/10/98/XP/Vista (18 packs):
-`xp-real`, `win10`, `win98`, `win8`, `win7-delta` e `vista` usam a logo/tela
-oficial da Microsoft direto; todos os outros `win7-*` — incluindo
-`win7-heritage`, que é foto pessoal do autor — têm a logo do Windows 7
-composta por cima. Está tudo documentado em `COVER_PHOTO_CREDITS` no próprio
-script, sem esconder que é material da Microsoft. Não generalize essa
-exceção para os temas nomeados de Vista, para Plus!, ou para novos packs sem
-confirmar de novo — não há arquivo de logo para essas sub-marcas hoje.
+On covers, the **default** rule is: free-licensed or original images only,
+never a trademarked logo or wallpaper — that's what `scripts/build-catalog.mjs`
+does for the Plus! packs (95 and XP) and the named Vista themes
+(Glass/Pearl/Tinker), 11 in total. There is a **deliberate exception**, by
+the author's explicit decision, that today covers the whole Windows
+7/8/10/98/XP/Vista set (18 packs): `xp-real`, `win10`, `win98`, `win8`,
+`win7-delta` and `vista` use Microsoft's official logo/splash art directly;
+every other `win7-*` — including `win7-heritage`, the author's own personal
+photo — has the Windows 7 logo composited on top. All of this is documented
+in `COVER_PHOTO_CREDITS` in the script itself, without hiding that it's
+Microsoft material. Don't generalize this exception to the named Vista
+themes, to Plus!, or to new packs without confirming again — there's no
+logo asset for those sub-brands today.
 
-## Pack customizado (local-only)
+## Custom pack (local-only)
 
-`src/features/custom-pack/` deixa o usuário criar um pack próprio: nome +
-`.wav` por evento via o mesmo diálogo nativo do Editor. Salvo em
-`localStorage` (`customPackService.ts`) — **nada de upload, nada de comando
-Tauri novo**. `packService.listPacks()` mescla esses packs locais com o
-catálogo remoto/mock. Preview cai no tom sintetizado como qualquer pack sem
-`remoteBaseUrl` (o app não tem permissão de filesystem para tocar `.wav`
-arbitrário — ver `tonePreview.ts`).
+`src/features/custom-pack/` lets the user create their own pack: a name +
+a `.wav` per event via the same native dialog as the Editor. Saved to
+`localStorage` (`customPackService.ts`) — **no upload, no new Tauri
+command**. `packService.listPacks()` merges these local packs with the
+remote/mock catalog. Preview falls back to the synthesized tone like any
+pack without a `remoteBaseUrl` (the app has no filesystem permission to
+play an arbitrary local `.wav` — see `tonePreview.ts`).
 
 ## Landing page
 
-Site estático **multilíngue**, gerado por script. Publicado em
+A **multilingual** static site, generated by a script. Published at
 **https://sounddeck.lucashdo.com** (Cloudflare Workers).
 
 ```
 landing-page/
-  templates/   HTML de origem, com data-i18n e marcadores {{LANG}} {{BASE}} <!--HEAD--> <!--LANGS-->
-  i18n/        en.json pt.json es.json de.json fr.json  — fonte única das strings
+  templates/   source HTML, with data-i18n and {{LANG}} {{BASE}} <!--HEAD--> <!--LANGS--> markers
+  i18n/        en.json pt.json es.json de.json fr.json  — single source of the strings
   static/      site.css site.js og.png favicon.png icon-310.png packs-data.js llms.txt
-  dist/        gerado, fora do git — é o que o wrangler publica
+  dist/        generated, outside git — this is what wrangler publishes
 ```
 
 ```bash
-npm run build:landing      # gera dist/
+npm run build:landing      # generates dist/
 cd landing-page && npx wrangler deploy
 ```
 
-**Nunca edite `dist/` nem os HTML por idioma** — eles são saída. Mexa em
-`templates/` (estrutura) ou `i18n/*.json` (texto).
+**Never edit `dist/` or the per-language HTML** — they're output. Edit
+`templates/` (structure) or `i18n/*.json` (text).
 
-Cada idioma tem URL própria: inglês na raiz, os demais em `/pt/`, `/es/`,
-`/de/`, `/fr/`. Isso não é preferência de estilo — um seletor de idioma por
-JavaScript faz o Google indexar só o idioma padrão, que era o problema antes.
-O texto traduzido precisa estar no HTML servido.
+Each language has its own URL: English at the root, the others under
+`/pt/`, `/es/`, `/de/`, `/fr/`. This isn't a style preference — a
+JavaScript-based language switcher makes Google index only the default
+language, which was the problem before. The translated text needs to be in
+the served HTML.
 
-Para adicionar um idioma: criar `i18n/<código>.json` com as mesmas chaves e
-acrescentar uma entrada em `LANGS` no build. O build avisa em stderr se
-alguma chave estiver faltando.
+To add a language: create `i18n/<code>.json` with the same keys and add an
+entry to `LANGS` in the build. The build warns on stderr if any key is
+missing.
 
-Outras convenções:
+Other conventions:
 
-- Inglês é o padrão e vai para a raiz. É o primeiro item de `LANGS`.
-- O seletor usa **nomes de idioma, nunca bandeiras** — bandeira é país, não
-  idioma (pt = Brasil ou Portugal? en = EUA ou Reino Unido?).
-- `site.js` não traduz nada. As poucas strings que ele usa em runtime
-  (download e changelog, renderizados da API do GitHub) vêm de
-  `window.__I18N`, injetado pelo build.
-- `og.png` é gerado por script: `npm run build:og`.
-- `llms.txt` descreve o site para agentes de IA. Atualize quando o produto mudar.
+- English is the default and goes to the root. It's the first item in `LANGS`.
+- The switcher uses **language names, never flags** — a flag is a country,
+  not a language (pt = Brazil or Portugal? en = US or UK?).
+- `site.js` doesn't translate anything. The few strings it uses at runtime
+  (download and changelog, rendered from the GitHub API) come from
+  `window.__I18N`, injected by the build.
+- `og.png` is generated by a script: `npm run build:og`.
+- `llms.txt` describes the site for AI agents. Update it when the product changes.
 
 ## Release
 
-Push de tag `v*.*.*` dispara [.github/workflows/release.yml](.github/workflows/release.yml):
-GitHub Actions compila no `windows-latest` via `tauri-action` e cria uma release
-**em rascunho** — você precisa publicar à mão no GitHub.
+Pushing a `v*.*.*` tag triggers [.github/workflows/release.yml](.github/workflows/release.yml):
+GitHub Actions builds on `windows-latest` via `tauri-action` and creates a
+**draft** release — you need to publish it by hand on GitHub.
 
-A versão vive em **três lugares** e eles precisam bater:
+The version lives in **three places** and they must match:
 `package.json`, `src-tauri/Cargo.toml`, `src-tauri/tauri.conf.json`.
 
-Depois de publicar, `landing-page/download.html` e `changelog.html` puxam a
-release da API do GitHub em runtime — nada a fazer no site.
+After publishing, `landing-page/download.html` and `changelog.html` pull the
+release from the GitHub API at runtime — nothing to do on the site.
 
 ### winget
 
-Manifestos em `winget/<versão>/`, identificador `LucasHenriqueDiniz.SoundDeck`.
-A cada release nova: copiar a pasta, atualizar versão, URLs, `ReleaseDate` e os
-**SHA256** dos instaladores, validar e abrir PR em `microsoft/winget-pkgs`.
+Manifests under `winget/<version>/`, identifier `LucasHenriqueDiniz.SoundDeck`.
+For every new release: copy the folder, update the version, URLs,
+`ReleaseDate` and the installers' **SHA256**, validate, and open a PR
+against `microsoft/winget-pkgs`.
 
 ```bash
-winget validate --manifest winget/<versão>
+winget validate --manifest winget/<version>
 ```
 
-## Convenções
+## Conventions
 
-- **Commits em inglês**, imperativo, explicando o porquê e não só o quê.
-  A prosa dos docs (`README.md`, `DESIGN.md`, este arquivo) é em português;
-  comentários de código são em inglês. Mantenha essa divisão.
-- Comentários explicam **por que**, não o que. Os comentários em
-  `windows_sound.rs` são o padrão a seguir.
-- Branch padrão: `master`.
+- **Commits in English**, imperative, explaining why and not just what.
+- **Docs prose is in English too** (`README.md`, `DESIGN.md`, this file) —
+  code comments are also English. Keep both English; there's no PT/EN split
+  anymore.
+- Comments explain **why**, not what. The comments in `windows_sound.rs` are
+  the standard to follow.
+- Default branch: `master`.
 
-## Estado atual
+## Current state
 
-v0.1.0 publicada. Em desenvolvimento ativo.
+Active development.
 
-A interface do app **tem i18n real** (5 idiomas — ver "i18n do app" acima),
-diferente de uma fase anterior do projeto em que era hardcoded em inglês.
+The app UI **has real i18n** (5 languages — see "App i18n" above).
 
-O `UpgradeCode` do MSI está **fixado** em `tauri.conf.json`
-(`bundle.windows.wix.upgradeCode`). Não mude esse GUID: ele é o que faz o
-Windows reconhecer uma versão nova como atualização da anterior em vez de
-instalar as duas lado a lado. Ele foi lido do MSI da 0.1.0 já distribuída.
-
-Pendências conhecidas que valem arrumar quando encostar perto:
-
-- `README.md` diz "ainda sem release empacotado", o que ficou desatualizado
-  desde a v0.1.0.
+The MSI's `UpgradeCode` is **pinned** in `tauri.conf.json`
+(`bundle.windows.wix.upgradeCode`). Don't change this GUID: it's what makes
+Windows recognize a new version as an upgrade of the previous one instead of
+installing both side by side. It was read from the already-distributed
+0.1.0 MSI.

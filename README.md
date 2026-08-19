@@ -1,90 +1,100 @@
 # SoundDeck
 
-Gerenciador de esquemas de sons para Windows 10/11. Escolha um pack, ouça a prévia e aplique
-sem mexer no Painel de Controle — com backup automático do esquema atual antes de qualquer alteração.
+Windows 10/11 sound scheme manager. Pick a pack, preview it, apply it —
+no need to touch Control Panel — with an automatic backup of the current
+scheme before any change.
 
-Construído com Tauri 2, React 19 e TypeScript.
+Built with Tauri 2, React 19 and TypeScript.
 
-**[sounddeck.lucashdo.com](https://sounddeck.lucashdo.com)** · [Baixar](https://sounddeck.lucashdo.com/download) · [Notas de versão](https://sounddeck.lucashdo.com/changelog)
+**[sounddeck.lucashdo.com](https://sounddeck.lucashdo.com)** · [Download](https://sounddeck.lucashdo.com/download) · [Changelog](https://sounddeck.lucashdo.com/changelog)
 
-## O que faz
+## What it does
 
-- **Packs de sons** — navegue por um catálogo de esquemas e aplique com um clique.
-- **Prévia antes de aplicar** — ouça cada evento (inicialização, lixeira, erro, notificação) antes de commitar.
-- **Backup e restauração** — o esquema atual é salvo antes de cada aplicação; volte ao original quando quiser.
-- **Por evento** — troque sons individuais em vez do pack inteiro.
-- **100% local** — os arquivos ficam na sua máquina; não há conta, telemetria ou upload.
+- **Sound packs** — browse a catalog of sound schemes and apply one with a click.
+- **Preview before applying** — listen to each event (startup, recycle bin, error, notification) before committing.
+- **Backup and restore** — the current scheme is saved before every apply; go back to it whenever you want.
+- **Per-event editing** — swap individual sounds instead of the whole pack.
+- **Custom packs** — build your own pack locally (name it, pick a `.wav` per event); nothing is uploaded.
+- **100% local** — files live on your machine; no account, no telemetry, no upload.
 
-Cinco packs vêm inclusos: recriações dos esquemas do Windows XP (2001), Vista (2006) e 7 (2009),
-mais dois originais — Minimal, quase silencioso, e Calm, com sinos suaves.
+Real recreations of the Windows XP (2001), Vista (2006), 7 (2009), 8 (2012),
+98 (1998) and 10 (2015) default schemes ship in the catalog, alongside the
+official Windows 7 bonus themes, Microsoft Plus! packs, and two originals —
+Minimal, near-silent, and Calm, with soft chimes.
 
-## Instalação
+## Installation
 
-Requer Windows 10 versão 1809 ou mais recente, ou Windows 11. Não precisa de privilégios de
-administrador e não há runtime extra: o app usa o WebView2 já presente no sistema.
+Requires Windows 10 version 1809 or later, or Windows 11. No administrator
+privileges needed, no extra runtime: the app uses the WebView2 already
+present on the system.
 
 ```bash
 winget install LucasHenriqueDiniz.SoundDeck
 ```
 
-Ou baixe o instalador direto da [página de releases](https://github.com/LucasHenriqueDiniz/sounddeck/releases/latest).
+Or download the installer directly from the [releases page](https://github.com/LucasHenriqueDiniz/sounddeck/releases/latest).
 
-## Como funciona
+## How it works
 
-O aplicativo escreve direto nas chaves de esquema de som do registro do Windows
-(`src-tauri/src/windows_sound.rs`), em `HKCU\AppEvents\Schemes\Apps`, e mantém os `.wav`
-em uma pasta gerenciada por pack. O backup (`src/features/backups`) serializa o esquema
-vigente antes de qualquer escrita, então aplicar um pack é sempre reversível.
+The app writes directly to the Windows registry's sound-scheme keys
+(`src-tauri/src/windows_sound.rs`), under `HKCU\AppEvents\Schemes\Apps`, and
+keeps the `.wav` files in a per-pack managed folder. The backup
+(`src/features/backups`) serializes the current scheme before any write, so
+applying a pack is always reversible.
 
-Nenhum arquivo de sistema é modificado, nenhuma DLL é substituída e nada é escrito fora
-da colmeia do usuário no registro — o mesmo lugar que o painel oficial usa.
+No system file is modified, no DLL is replaced, and nothing is written
+outside the user's own registry hive — the same place the official Control
+Panel uses.
 
-## Desenvolvimento
+## Development
 
 ```bash
 npm install
 npm run tauri dev
 ```
 
-Build de produção:
+Production build:
 
 ```bash
 npm run tauri build
 ```
 
-Veja [AGENTS.md](AGENTS.md) para a arquitetura em detalhe e [DESIGN.md](DESIGN.md) para o
-contrato de design. (`CLAUDE.md` existe só como um import de uma linha, para
-o Claude Code também ler o mesmo arquivo.)
+See [AGENTS.md](AGENTS.md) for the detailed architecture and [DESIGN.md](DESIGN.md)
+for the design contract. (`CLAUDE.md` exists only as a one-line import, so
+Claude Code reads the same file too.)
 
-## Estrutura
+## Structure
 
 ```txt
 src/
   features/
-    packs/         # catálogo e instalação de packs
-    apply-pack/    # fluxo de aplicação no sistema
-    sound-events/  # eventos individuais do Windows
-    backups/       # backup e restauração do esquema
-  services/tauri/  # ponte com o backend Rust
+    packs/         # pack catalog and installation
+    apply-pack/    # apply-to-system flow
+    sound-events/  # individual Windows events
+    backups/       # scheme backup and restore
+    custom-pack/   # local-only custom pack creation
+  services/tauri/  # bridge to the Rust backend
 src-tauri/src/
-  windows_sound.rs # leitura/escrita do registro de som
-  pack_download.rs # download e extração de packs
-landing-page/      # site estático (Cloudflare Workers)
-winget/            # manifestos do winget por versão
+  windows_sound.rs # sound registry read/write
+  pack_download.rs # pack download and extraction
+landing-page/      # static site (Cloudflare Workers)
+winget/            # per-version winget manifests
 scripts/
-  build-catalog.mjs # ferramenta de autoria do catálogo (não vai no app)
+  build-catalog.mjs # catalog authoring tool (not shipped in the app)
 ```
 
-## Créditos
+## Credits
 
-Os arquivos de som dos esquemas clássicos vêm de acervos públicos de fãs, como
-[lelegofrog.github.io/wav.html](https://lelegofrog.github.io/wav.html).
-SoundDeck não é afiliado à Microsoft. Windows é marca da Microsoft.
+Classic scheme audio files come from public fan archives, such as
+[lelegofrog.github.io/wav.html](https://lelegofrog.github.io/wav.html), plus
+a couple of items on [archive.org](https://archive.org) preserving real
+Windows installs (see [AGENTS.md](AGENTS.md) for details). SoundDeck is not
+affiliated with Microsoft. Windows is a trademark of Microsoft.
 
-## Licença
+## License
 
 [MIT](LICENSE).
 
 ## Status
 
-v0.1.0 publicada. Em desenvolvimento ativo.
+v0.2.0 published. Active development.
