@@ -7,6 +7,14 @@
     <meta name="description" content="Chimer brings back the character of Windows sounds. Pick a pack, hear the preview, and make it yours in one click. Free and open source for Windows 10 and 11." />
     <link rel="icon" type="image/png" href="/img/chimer-icon.png" />
     <!--
+      The body font, preloaded: it is needed for the first paint of the
+      headline and would otherwise not be discovered until the stylesheet
+      has been parsed. Only the latin subset — latin-ext is fetched on
+      demand by unicode-range and preloading it would waste 18 KB on
+      every visit.
+    -->
+    <link rel="preload" href="/fonts/dm-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <!--
       Social and canonical tags are injected per page by scripts/prerender.mjs,
       not written here. Hardcoding them meant all 25 prerendered pages shipped
       the English home page's card, and og:image pointed at a relative "/og.png"
