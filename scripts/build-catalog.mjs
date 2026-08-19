@@ -23,12 +23,16 @@ import { fileURLToPath } from "node:url";
 
 const SOURCE_DIR = process.argv[2] ?? "C:\\Users\\Lucas Diniz\\Downloads\\Nova pasta (2)";
 const OUTPUT_DIR = process.argv[3] ?? join(tmpdir(), "sounddeck-catalog");
-const SOURCE_CREDIT = "Arquivos de som via https://lelegofrog.github.io/wav.html";
+const FAN_ARCHIVE_URL = "https://lelegofrog.github.io/wav.html";
+// Credits are stored as translation keys + variables, like descriptions —
+// see the note above DESCRIPTION_TEMPLATES. The joined Portuguese prose is
+// still emitted as `sourceCredit` for older app versions.
+const AUDIO_CREDIT = { key: "credit.audio.fanArchive", vars: { url: FAN_ARCHIVE_URL } };
 
 // ---------------------------------------------------------------------------
 // Cover images — optional, per pack id. Default is a freely-licensed or
 // original photo (see PHOTO_CREDITS / DESIGN.md), but 17 packs are a
-// documented trademark exception — see the comment above COVER_PHOTO_CREDITS.
+// documented trademark exception — see the comment above COVER_IMAGE_CREDITS.
 // Falls back to the generated gradient+glyph when a pack has no entry here.
 // ---------------------------------------------------------------------------
 const SCRIPT_DIR = fileURLToPath(new URL(".", import.meta.url));
@@ -80,36 +84,70 @@ const COVER_IMAGE_OVERRIDES = {
 // license that does not apply. This is the full Windows 7/8/10/98/XP set (17
 // packs); Vista and the Plus! packs (11 packs) stay on the DESIGN.md default
 // since no logo asset was supplied for those sub-brands.
-const COVER_PHOTO_CREDITS = {
-  "xp-real": "Tela de logo oficial do Windows XP (Microsoft) — uso da marca não coberto por licença livre.",
-  win10: "Gráfico de marca oficial do Windows 10 (Microsoft) — uso da marca não coberto por licença livre.",
-  win98: "Tela de logo oficial do Windows 98 (Microsoft) — uso da marca não coberto por licença livre.",
-  win8: "Tela de marca oficial do Windows 8 (Microsoft) — uso da marca não coberto por licença livre.",
-  "win7-afternoon": "Foto de Rui Marinho via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-calligraphy": "Foto de Yifeng Lu via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-characters": "Render 3D de origem não identificada, via Reddit — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-cityscape": "Foto de Julien Maculan via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-delta": "Arte oficial da embalagem do Windows 7 Delta Extras Pack (Microsoft) — uso da marca não coberto por licença livre.",
-  "win7-festival": "Foto de origem não identificada, via TechTudo/Globo — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-garden": "Foto de Annie Spratt via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-heritage": "Foto pessoal do autor do projeto (ponte de dezessete arcos, Palácio de Verão) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-landscape": "Foto de Mohammed Shonar via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-quirky": "Foto de Karla Vidal via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-raga": "Foto de Gowtham AGM via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-savanna": "Foto de Justin Lane via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "win7-sonata": "Foto de Johannes Plenio via Unsplash (Unsplash License, uso livre) — logo do Windows 7 adicionada por composição, uso da marca não coberto por licença livre.",
-  "plus95-jungle": "Foto de Geio Tischler via Unsplash (Unsplash License, uso livre)",
-  "plus95-musica": "Foto de Gabriel Lerner via Unsplash (Unsplash License, uso livre)",
-  "plus95-robotz": "Foto de Emilipothèse via Unsplash (Unsplash License, uso livre)",
-  "plus95-utopia": "Foto de Jivan Garcha via Unsplash (Unsplash License, uso livre)",
-  "vista-glass": "Foto de A. C. via Unsplash (Unsplash License, uso livre)",
-  "vista-pearl": "Foto de Rick Rothenberg via Unsplash (Unsplash License, uso livre)",
-  "vista-tinker": "Foto de Tim Mossholder via Unsplash (Unsplash License, uso livre)",
-  "plusxp-aquarium": "Foto de J Cruikshank via Unsplash (Unsplash License, uso livre)",
-  "plusxp-davinci": "Reprodução do Art Institute of Chicago via Unsplash (domínio público)",
-  "plusxp-nature": "Foto de Geranimo via Unsplash (Unsplash License, uso livre)",
-  "plusxp-space": "Foto de Aron Visuals via Unsplash (Unsplash License, uso livre)",
+const COVER_IMAGE_CREDITS = {
+  "xp-real": { key: "credit.image.msLogoScreen", vars: { system: "Windows XP" } },
+  win10: { key: "credit.image.msBrandGraphic", vars: { system: "Windows 10" } },
+  win98: { key: "credit.image.msLogoScreen", vars: { system: "Windows 98" } },
+  win8: { key: "credit.image.msBrandScreen", vars: { system: "Windows 8" } },
+  "win7-delta": { key: "credit.image.msPackaging", vars: { name: "Windows 7 Delta Extras Pack" } },
+  "win7-characters": { key: "credit.image.renderUnidentifiedLogo", vars: { via: "Reddit", system: "Windows 7" } },
+  "win7-festival": { key: "credit.image.photoUnidentifiedLogo", vars: { via: "TechTudo/Globo", system: "Windows 7" } },
+  "win7-heritage": { key: "credit.image.authorPhotoLogo", vars: { system: "Windows 7" } },
+  "plusxp-davinci": { key: "credit.image.museumPublicDomain", vars: {} },
+  "win7-afternoon": { key: "credit.image.unsplashLogo", vars: { author: "Rui Marinho", system: "Windows 7" } },
+  "win7-calligraphy": { key: "credit.image.unsplashLogo", vars: { author: "Yifeng Lu", system: "Windows 7" } },
+  "win7-cityscape": { key: "credit.image.unsplashLogo", vars: { author: "Julien Maculan", system: "Windows 7" } },
+  "win7-garden": { key: "credit.image.unsplashLogo", vars: { author: "Annie Spratt", system: "Windows 7" } },
+  "win7-landscape": { key: "credit.image.unsplashLogo", vars: { author: "Mohammed Shonar", system: "Windows 7" } },
+  "win7-quirky": { key: "credit.image.unsplashLogo", vars: { author: "Karla Vidal", system: "Windows 7" } },
+  "win7-raga": { key: "credit.image.unsplashLogo", vars: { author: "Gowtham AGM", system: "Windows 7" } },
+  "win7-savanna": { key: "credit.image.unsplashLogo", vars: { author: "Justin Lane", system: "Windows 7" } },
+  "win7-sonata": { key: "credit.image.unsplashLogo", vars: { author: "Johannes Plenio", system: "Windows 7" } },
+  "plus95-jungle": { key: "credit.image.unsplash", vars: { author: "Geio Tischler" } },
+  "plus95-musica": { key: "credit.image.unsplash", vars: { author: "Gabriel Lerner" } },
+  "plus95-robotz": { key: "credit.image.unsplash", vars: { author: "Emilipothèse" } },
+  "plus95-utopia": { key: "credit.image.unsplash", vars: { author: "Jivan Garcha" } },
+  "vista-glass": { key: "credit.image.unsplash", vars: { author: "A. C." } },
+  "vista-pearl": { key: "credit.image.unsplash", vars: { author: "Rick Rothenberg" } },
+  "vista-tinker": { key: "credit.image.unsplash", vars: { author: "Tim Mossholder" } },
+  "plusxp-aquarium": { key: "credit.image.unsplash", vars: { author: "J Cruikshank" } },
+  "plusxp-nature": { key: "credit.image.unsplash", vars: { author: "Geranimo" } },
+  "plusxp-space": { key: "credit.image.unsplash", vars: { author: "Aron Visuals" } },
 };
+
+// Portuguese rendering of the credit keys above, mirroring
+// src/i18n/locales/pt.json. Only used to fill the legacy `sourceCredit`
+// string; the app itself renders from the keys.
+const CREDIT_PROSE = {
+  "credit.audio.fanArchive": (v) => `Arquivos de som via ${v.url}`,
+  "credit.audio.realInstall": (v) =>
+    `Arquivos de som reais extraídos de uma instalação do ${v.system}, via archive.org (item "${v.item}")`,
+  "credit.image.unsplash": (v) => `Foto de ${v.author} via Unsplash (Unsplash License, uso livre)`,
+  "credit.image.unsplashLogo": (v) =>
+    `Foto de ${v.author} via Unsplash (Unsplash License, uso livre) — logo do ${v.system} adicionada por composição, uso da marca não coberto por licença livre.`,
+  "credit.image.museumPublicDomain": () =>
+    "Reprodução do Art Institute of Chicago via Unsplash (domínio público)",
+  "credit.image.msLogoScreen": (v) =>
+    `Tela de logo oficial do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
+  "credit.image.msBrandGraphic": (v) =>
+    `Gráfico de marca oficial do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
+  "credit.image.msBrandScreen": (v) =>
+    `Tela de marca oficial do ${v.system} (Microsoft) — uso da marca não coberto por licença livre.`,
+  "credit.image.msPackaging": (v) =>
+    `Arte oficial da embalagem do ${v.name} (Microsoft) — uso da marca não coberto por licença livre.`,
+  "credit.image.renderUnidentifiedLogo": (v) =>
+    `Render 3D de origem não identificada, via ${v.via} — logo do ${v.system} adicionada por composição, uso da marca não coberto por licença livre.`,
+  "credit.image.photoUnidentifiedLogo": (v) =>
+    `Foto de origem não identificada, via ${v.via} — logo do ${v.system} adicionada por composição, uso da marca não coberto por licença livre.`,
+  "credit.image.authorPhotoLogo": (v) =>
+    `Foto pessoal do autor do projeto (ponte de dezessete arcos, Palácio de Verão) — logo do ${v.system} adicionada por composição, uso da marca não coberto por licença livre.`,
+};
+
+function creditProse(ref) {
+  const render = CREDIT_PROSE[ref.key];
+  if (!render) throw new Error(`Unknown credit key: ${ref.key}`);
+  return render(ref.vars ?? {});
+}
 
 // ---------------------------------------------------------------------------
 // Filename -> WindowsEventId mapping
@@ -374,15 +412,20 @@ function buildPack(id, name, releaseYear, described, hue, files, stagingRoot) {
 
   const cover = coverFor(name, hue);
   const overrideFile = COVER_IMAGE_OVERRIDES[id];
-  let sourceCredit = SOURCE_CREDIT;
+  const audioCredit = AUDIO_CREDIT;
+  let imageCredit = null;
   if (overrideFile) {
     const srcPath = join(COVER_IMAGES_DIR, overrideFile);
     if (existsSync(srcPath)) {
       copyFileSync(srcPath, join(packDir, "cover.jpg"));
       cover.imageUrl = "cover.jpg";
-      if (COVER_PHOTO_CREDITS[id]) sourceCredit = `${SOURCE_CREDIT} · ${COVER_PHOTO_CREDITS[id]}`;
+      imageCredit = COVER_IMAGE_CREDITS[id] ?? null;
     }
   }
+  const sourceCredit = [audioCredit, imageCredit]
+    .filter(Boolean)
+    .map(creditProse)
+    .join(" · ");
 
   return {
     id,
@@ -393,6 +436,9 @@ function buildPack(id, name, releaseYear, described, hue, files, stagingRoot) {
     ...described,
     cover,
     sourceCredit,
+    audioCreditKey: audioCredit.key,
+    audioCreditVars: audioCredit.vars,
+    ...(imageCredit ? { imageCreditKey: imageCredit.key, imageCreditVars: imageCredit.vars } : {}),
     files: catalogFiles,
   };
 }

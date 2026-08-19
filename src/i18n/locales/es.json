@@ -237,5 +237,17 @@
   "whatsNew.subtitle": "Esto es lo que cambió desde la versión que tenías.",
   "packDesc.systemDefault": "Esquema de sonidos original de {system}.",
   "packDesc.bundledTheme": "Esquema oficial \"{theme}\", uno de los temas de sonido incluidos en {system}.",
-  "packDesc.plusTheme": "Tema \"{theme}\" de Microsoft Plus! para {system}."
+  "packDesc.plusTheme": "Tema \"{theme}\" de Microsoft Plus! para {system}.",
+  "credit.audio.fanArchive": "Archivos de sonido vía {url}",
+  "credit.audio.realInstall": "Archivos de sonido reales extraídos de una instalación de {system}, vía archive.org (elemento \"{item}\")",
+  "credit.image.unsplash": "Foto de {author} vía Unsplash (Unsplash License, uso libre)",
+  "credit.image.unsplashLogo": "Foto de {author} vía Unsplash (Unsplash License, uso libre) — logotipo de {system} añadido por composición, uso de la marca no cubierto por una licencia libre.",
+  "credit.image.museumPublicDomain": "Reproducción del Art Institute of Chicago vía Unsplash (dominio público)",
+  "credit.image.msLogoScreen": "Pantalla de logotipo oficial de {system} (Microsoft) — uso de la marca no cubierto por una licencia libre.",
+  "credit.image.msBrandGraphic": "Gráfico de marca oficial de {system} (Microsoft) — uso de la marca no cubierto por una licencia libre.",
+  "credit.image.msBrandScreen": "Pantalla de marca oficial de {system} (Microsoft) — uso de la marca no cubierto por una licencia libre.",
+  "credit.image.msPackaging": "Arte oficial del empaque de {name} (Microsoft) — uso de la marca no cubierto por una licencia libre.",
+  "credit.image.renderUnidentifiedLogo": "Render 3D de origen no identificado, vía {via} — logotipo de {system} añadido por composición, uso de la marca no cubierto por una licencia libre.",
+  "credit.image.photoUnidentifiedLogo": "Foto de origen no identificado, vía {via} — logotipo de {system} añadido por composición, uso de la marca no cubierto por una licencia libre.",
+  "credit.image.authorPhotoLogo": "Foto personal del autor del proyecto (Puente de los Diecisiete Arcos, Palacio de Verano) — logotipo de {system} añadido por composición, uso de la marca no cubierto por una licencia libre."
 }

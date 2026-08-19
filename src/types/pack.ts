@@ -39,8 +39,17 @@ export interface SoundPack {
   descriptionVars?: Record<string, string>;
   cover: PackCoverArt;
   assignments: PackEventAssignment[];
-  /** Attribution for where the source audio came from, shown in pack details. */
+  /**
+   * Literal fallback credit. Prefer `resolvePackCredit` — catalog packs carry
+   * the keyed pair below.
+   */
   sourceCredit?: string;
+  /** Where the audio came from. */
+  audioCreditKey?: string;
+  audioCreditVars?: Record<string, string>;
+  /** Where the cover image came from, including any trademark note. */
+  imageCreditKey?: string;
+  imageCreditVars?: Record<string, string>;
   /**
    * Set only for packs loaded from the real remote catalog — lets preview
    * controls stream the actual file instead of a synthesized stand-in tone.
@@ -71,4 +80,28 @@ export function resolvePackDescription(
   // fallback below detects.
   const translated = t(pack.descriptionKey as TranslationKey, pack.descriptionVars);
   return translated === pack.descriptionKey ? pack.description : translated;
+}
+
+/**
+ * Joins the audio and cover-image attributions the way the catalog used to
+ * store them pre-joined. Falls back to the literal `sourceCredit` when a pack
+ * predates the keyed fields — a credit is a legal-ish statement, so showing
+ * the stale prose beats showing nothing.
+ */
+export function resolvePackCredit(
+  pack: SoundPack,
+  t: (key: TranslationKey, vars?: Record<string, string | number>) => string,
+): string | undefined {
+  const translate = (key?: string, vars?: Record<string, string>) => {
+    if (!key) return undefined;
+    const text = t(key as TranslationKey, vars);
+    return text === key ? undefined : text;
+  };
+
+  const parts = [
+    translate(pack.audioCreditKey, pack.audioCreditVars),
+    translate(pack.imageCreditKey, pack.imageCreditVars),
+  ].filter(Boolean);
+
+  return parts.length > 0 ? parts.join(" · ") : pack.sourceCredit;
 }

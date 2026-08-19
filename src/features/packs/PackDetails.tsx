@@ -3,7 +3,7 @@ import { Badge } from "../../components/Badge";
 import { Button } from "../../components/Button";
 import { Dialog } from "../../components/Dialog";
 import { CheckIcon, EditorIcon, TrashIcon } from "../../components/icons/icons";
-import { resolvePackDescription, type SoundPack } from "../../types/pack";
+import { resolvePackCredit, resolvePackDescription, type SoundPack } from "../../types/pack";
 import { buildApplySummary } from "../../services/tauri/applyPackService";
 import { deleteCustomPack } from "../../services/tauri/customPackService";
 import { derivePackTags, resolveTagLabel, ORIGIN_TAG_KEY } from "../../lib/packTags";
@@ -34,6 +34,7 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents, onDeleted 
   const t = useT();
   const summary = buildApplySummary(pack);
   const originLabel = t(ORIGIN_TAG_KEY[pack.origin]);
+  const credit = resolvePackCredit(pack, t);
   const authorIsOrigin = pack.author === ORIGIN_CANONICAL_AUTHOR[pack.origin];
   const [confirmingDelete, setConfirmingDelete] = useState(false);
 
@@ -63,7 +64,7 @@ export function PackDetails({ pack, isApplied, onApply, onEditEvents, onDeleted 
           {pack.releaseYear ? ` · ${pack.releaseYear}` : ""}
         </p>
         <p className={styles.description}>{resolvePackDescription(pack, t)}</p>
-        {pack.sourceCredit && <p className={styles.credit}>{pack.sourceCredit}</p>}
+        {credit && <p className={styles.credit}>{credit}</p>}
         <div className={styles.tags}>
           {derivePackTags(pack).map((tag) => (
             <span key={tag} className={styles.tag}>

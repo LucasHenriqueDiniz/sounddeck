@@ -133,17 +133,27 @@ truth (`TranslationKey = keyof typeof en`), the others translate the same
 keys. "system" follows the OS/webview language; any other value pins one
 language.
 
-**Pack descriptions are translated too.** The catalog stores a
-`descriptionKey` + `descriptionVars` per pack (`packDesc.systemDefault`,
-`packDesc.bundledTheme`, `packDesc.plusTheme`) rather than prose, so the same
-catalog reads correctly in every UI language. Render them with
-`resolvePackDescription(pack, t)`, never `pack.description` directly — that
-field is only the fallback for packs with no key (custom packs, or a catalog
-published before this change). `build-catalog.mjs` emits both.
+**Pack descriptions and credits are translated too.** The catalog stores
+translation keys + variables rather than prose, so the same catalog reads
+correctly in every UI language:
 
-`sourceCredit` is **still literal Portuguese** and still untranslated — 30
-bespoke strings mixing attribution, photographer names and trademark notes,
-which don't reduce to a few templates the way descriptions did.
+| Field | Keys |
+|---|---|
+| `descriptionKey`/`descriptionVars` | `packDesc.systemDefault`, `packDesc.bundledTheme`, `packDesc.plusTheme` |
+| `audioCreditKey`/`audioCreditVars` | `credit.audio.*` (2) |
+| `imageCreditKey`/`imageCreditVars` | `credit.image.*` (10) |
+
+Render with `resolvePackDescription(pack, t)` and `resolvePackCredit(pack, t)`,
+never `pack.description`/`pack.sourceCredit` directly — those are only the
+fallback for packs with no key (custom packs, or a catalog published before
+this change). `build-catalog.mjs` emits both the keys and the Portuguese
+prose.
+
+Credits carry attribution and trademark notices, so the key set is
+deliberately fine-grained: an official Microsoft logo screen, a brand
+graphic and packaging art each have their own key rather than sharing a
+vague "official artwork" one. Adding a cover means picking the key that
+actually describes the asset — don't reach for the closest existing one.
 
 ## Pack catalog
 

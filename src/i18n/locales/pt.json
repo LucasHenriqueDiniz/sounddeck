@@ -237,5 +237,17 @@
   "whatsNew.subtitle": "O que mudou desde a versão que você tinha.",
   "packDesc.systemDefault": "Esquema de sons original do {system}.",
   "packDesc.bundledTheme": "Esquema oficial \"{theme}\", um dos temas de som incluídos no {system}.",
-  "packDesc.plusTheme": "Tema \"{theme}\" do Microsoft Plus! para {system}."
+  "packDesc.plusTheme": "Tema \"{theme}\" do Microsoft Plus! para {system}.",
+  "credit.audio.fanArchive": "Arquivos de som via {url}",
+  "credit.audio.realInstall": "Arquivos de som reais extraídos de uma instalação do {system}, via archive.org (item \"{item}\")",
+  "credit.image.unsplash": "Foto de {author} via Unsplash (Unsplash License, uso livre)",
+  "credit.image.unsplashLogo": "Foto de {author} via Unsplash (Unsplash License, uso livre) — logo do {system} adicionada por composição, uso da marca não coberto por licença livre.",
+  "credit.image.museumPublicDomain": "Reprodução do Art Institute of Chicago via Unsplash (domínio público)",
+  "credit.image.msLogoScreen": "Tela de logo oficial do {system} (Microsoft) — uso da marca não coberto por licença livre.",
+  "credit.image.msBrandGraphic": "Gráfico de marca oficial do {system} (Microsoft) — uso da marca não coberto por licença livre.",
+  "credit.image.msBrandScreen": "Tela de marca oficial do {system} (Microsoft) — uso da marca não coberto por licença livre.",
+  "credit.image.msPackaging": "Arte oficial da embalagem do {name} (Microsoft) — uso da marca não coberto por licença livre.",
+  "credit.image.renderUnidentifiedLogo": "Render 3D de origem não identificada, via {via} — logo do {system} adicionada por composição, uso da marca não coberto por licença livre.",
+  "credit.image.photoUnidentifiedLogo": "Foto de origem não identificada, via {via} — logo do {system} adicionada por composição, uso da marca não coberto por licença livre.",
+  "credit.image.authorPhotoLogo": "Foto pessoal do autor do projeto (ponte de dezessete arcos, Palácio de Verão) — logo do {system} adicionada por composição, uso da marca não coberto por licença livre."
 }

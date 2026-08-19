@@ -237,5 +237,17 @@
   "whatsNew.subtitle": "Das hat sich seit Ihrer vorherigen Version geändert.",
   "packDesc.systemDefault": "Das originale Sound-Schema von {system}.",
   "packDesc.bundledTheme": "Das offizielle Schema \"{theme}\", eines der in {system} enthaltenen Sound-Themes.",
-  "packDesc.plusTheme": "Das Thema \"{theme}\" aus Microsoft Plus! für {system}."
+  "packDesc.plusTheme": "Das Thema \"{theme}\" aus Microsoft Plus! für {system}.",
+  "credit.audio.fanArchive": "Sounddateien über {url}",
+  "credit.audio.realInstall": "Echte Sounddateien aus einer {system}-Installation, über archive.org (Objekt \"{item}\")",
+  "credit.image.unsplash": "Foto von {author} über Unsplash (Unsplash License, freie Nutzung)",
+  "credit.image.unsplashLogo": "Foto von {author} über Unsplash (Unsplash License, freie Nutzung) — {system}-Logo einmontiert, Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.museumPublicDomain": "Reproduktion des Art Institute of Chicago über Unsplash (gemeinfrei)",
+  "credit.image.msLogoScreen": "Offizieller {system}-Logobildschirm (Microsoft) — Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.msBrandGraphic": "Offizielle {system}-Markengrafik (Microsoft) — Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.msBrandScreen": "Offizieller {system}-Markenbildschirm (Microsoft) — Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.msPackaging": "Offizielle Verpackungsgrafik von {name} (Microsoft) — Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.renderUnidentifiedLogo": "3D-Render unbekannter Herkunft, über {via} — {system}-Logo einmontiert, Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.photoUnidentifiedLogo": "Foto unbekannter Herkunft, über {via} — {system}-Logo einmontiert, Markennutzung nicht durch eine freie Lizenz gedeckt.",
+  "credit.image.authorPhotoLogo": "Privatfoto des Projektautors (Siebzehn-Bogen-Brücke, Sommerpalast) — {system}-Logo einmontiert, Markennutzung nicht durch eine freie Lizenz gedeckt."
 }

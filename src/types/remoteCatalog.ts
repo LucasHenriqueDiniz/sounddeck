@@ -27,6 +27,10 @@ export interface RemoteCatalogPack {
   cover: PackCoverArt;
   /** Attribution for where the source audio came from, shown in pack details. */
   sourceCredit?: string;
+  audioCreditKey?: string;
+  audioCreditVars?: Record<string, string>;
+  imageCreditKey?: string;
+  imageCreditVars?: Record<string, string>;
   files: RemoteCatalogFile[];
 }
 

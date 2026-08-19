@@ -53,6 +53,10 @@ export async function fetchRemoteCatalog(baseUrl: string): Promise<SoundPack[]> 
         : pack.cover,
       assignments,
       sourceCredit: pack.sourceCredit,
+      audioCreditKey: pack.audioCreditKey,
+      audioCreditVars: pack.audioCreditVars,
+      imageCreditKey: pack.imageCreditKey,
+      imageCreditVars: pack.imageCreditVars,
       remoteBaseUrl: baseUrl,
     } satisfies SoundPack;
   });

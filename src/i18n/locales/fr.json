@@ -237,5 +237,17 @@
   "whatsNew.subtitle": "Voici ce qui a changé depuis votre version précédente.",
   "packDesc.systemDefault": "Le jeu de sons original de {system}.",
   "packDesc.bundledTheme": "Le jeu officiel « {theme} », l'un des thèmes sonores inclus dans {system}.",
-  "packDesc.plusTheme": "Le thème « {theme} » de Microsoft Plus! pour {system}."
+  "packDesc.plusTheme": "Le thème « {theme} » de Microsoft Plus! pour {system}.",
+  "credit.audio.fanArchive": "Fichiers audio via {url}",
+  "credit.audio.realInstall": "Fichiers audio réels extraits d'une installation de {system}, via archive.org (élément « {item} »)",
+  "credit.image.unsplash": "Photo de {author} via Unsplash (Unsplash License, usage libre)",
+  "credit.image.unsplashLogo": "Photo de {author} via Unsplash (Unsplash License, usage libre) — logo {system} ajouté par incrustation, usage de la marque non couvert par une licence libre.",
+  "credit.image.museumPublicDomain": "Reproduction de l'Art Institute of Chicago via Unsplash (domaine public)",
+  "credit.image.msLogoScreen": "Écran de logo officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
+  "credit.image.msBrandGraphic": "Visuel de marque officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
+  "credit.image.msBrandScreen": "Écran de marque officiel de {system} (Microsoft) — usage de la marque non couvert par une licence libre.",
+  "credit.image.msPackaging": "Visuel officiel de l'emballage de {name} (Microsoft) — usage de la marque non couvert par une licence libre.",
+  "credit.image.renderUnidentifiedLogo": "Rendu 3D d'origine non identifiée, via {via} — logo {system} ajouté par incrustation, usage de la marque non couvert par une licence libre.",
+  "credit.image.photoUnidentifiedLogo": "Photo d'origine non identifiée, via {via} — logo {system} ajouté par incrustation, usage de la marque non couvert par une licence libre.",
+  "credit.image.authorPhotoLogo": "Photo personnelle de l'auteur du projet (pont aux dix-sept arches, Palais d'Été) — logo {system} ajouté par incrustation, usage de la marque non couvert par une licence libre."
 }
