@@ -17,10 +17,10 @@ Built with Tauri 2, React 19 and TypeScript.
 - **Custom packs** — build your own pack locally (name it, pick a `.wav` per event); nothing is uploaded.
 - **100% local** — files live on your machine; no account, no telemetry, no upload.
 
-Real recreations of the Windows XP (2001), Vista (2006), 7 (2009), 8 (2012),
-98 (1998) and 10 (2015) default schemes ship in the catalog, alongside the
-official Windows 7 bonus themes, Microsoft Plus! packs, and two originals —
-Minimal, near-silent, and Calm, with soft chimes.
+Thirty packs are available from the catalog: the Windows 98, XP, Vista, 7, 8
+and 10 default schemes, the thirteen Windows 7 bonus themes, the Vista
+Glass/Pearl/Tinker themes, and the Microsoft Plus! packs for Windows 95 and XP
+— all real audio from the original schemes.
 
 ## Installation
 

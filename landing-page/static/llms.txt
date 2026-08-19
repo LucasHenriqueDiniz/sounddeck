@@ -10,16 +10,40 @@ administrator privileges, never modifies Windows system files, and writes only
 to the current user's registry hive (HKCU\AppEvents\Schemes\Apps) — the same
 location the official Control Panel applet uses. Every apply is reversible.
 
-Five packs ship with the app: recreations of the Windows XP (2001), Vista (2006)
-and 7 (2009) schemes, plus two originals — Minimal (near-silent) and Calm
-(soft chimes). A per-event editor swaps individual sounds for the roughly thirty
-Windows sound events.
+## Packs
+
+Thirty packs are available from the app's public catalog, all of them real
+audio from the original schemes:
+
+- Windows default schemes: 98, XP, Vista, 7, 8 and 10
+- The thirteen Windows 7 bonus themes: Afternoon, Calligraphy, Characters,
+  Cityscape, Delta, Festival, Garden, Heritage, Landscape, Quirky, Raga,
+  Savanna and Sonata
+- The Windows Vista themes: Glass, Pearl and Tinker
+- Microsoft Plus! for Windows 95: Jungle, Musica, Robotz and Utopia
+- Microsoft Plus! for Windows XP: Aquarium, daVinci, Nature and Space
+
+Users can also build their own pack from their own .wav files. Custom packs are
+stored locally and never uploaded.
+
+## Features
+
+- Preview any sound before applying it
+- Apply a whole pack in one click, or edit individual events with the per-event
+  editor
+- Automatic backup before every change, restorable at any time from the app
+- Available in English, Portuguese, Spanish, German and French, following the
+  system language by default
+- Light and dark themes
 
 The project is not affiliated with Microsoft. Windows is a Microsoft trademark.
+The classic scheme audio comes from public fan archives and from archive.org
+items preserving original Windows installations; it is not redistributed by
+Microsoft.
 
 ## Pages
 
-- [Home](https://sounddeck.lucashdo.com/): what the app does, the five packs, safety model
+- [Home](https://sounddeck.lucashdo.com/): what the app does, the pack catalog, safety model
 - [Download](https://sounddeck.lucashdo.com/download): installers, requirements, install steps
 - [Changelog](https://sounddeck.lucashdo.com/changelog): every published release
 - [Privacy](https://sounddeck.lucashdo.com/privacy): no account, no telemetry, no data leaves the machine
@@ -28,6 +52,10 @@ The project is not affiliated with Microsoft. Windows is a Microsoft trademark.
 
 - winget: `winget install LucasHenriqueDiniz.SoundDeck`
 - Direct download: https://github.com/LucasHenriqueDiniz/sounddeck/releases/latest
+
+Requires Windows 10 version 1809 or later, or Windows 11. No administrator
+privileges and no extra runtime needed — the app uses the WebView2 already
+present on the system.
 
 ## Source
 
