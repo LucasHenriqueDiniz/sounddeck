@@ -12,7 +12,6 @@ import { SettingsView } from "./views/SettingsView";
 import { CreateCustomPackView } from "../features/custom-pack/CreateCustomPackView";
 import { WelcomeTour } from "../features/onboarding/WelcomeTour";
 import { WhatsNewDialog } from "../features/onboarding/WhatsNewDialog";
-import { useFirstRun } from "../features/onboarding/useFirstRun";
 import { useUpdateCheck } from "../features/onboarding/useUpdateCheck";
 import styles from "./AppShell.module.css";
 import { useT } from "../i18n";
@@ -21,9 +20,10 @@ const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
 
 export function AppShell() {
   const t = useT();
-  const { kind: firstRun, dismiss: dismissFirstRun } = useFirstRun();
   const update = useUpdateCheck();
   const {
+    onboarding,
+    dismissOnboarding,
     view,
     nativeCapability,
     externallyChanged,
@@ -145,8 +145,8 @@ export function AppShell() {
         onApplied={onApplySuccess}
       />
 
-      <WelcomeTour open={firstRun === "tour"} onClose={dismissFirstRun} />
-      <WhatsNewDialog open={firstRun === "whatsNew"} onClose={dismissFirstRun} />
+      <WelcomeTour open={onboarding === "tour"} onClose={dismissOnboarding} />
+      <WhatsNewDialog open={onboarding === "whatsNew"} onClose={dismissOnboarding} />
     </div>
   );
 }

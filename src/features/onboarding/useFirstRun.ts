@@ -48,5 +48,12 @@ const LAUNCH_DECISION: FirstRunKind = decide();
 export function useFirstRun() {
   const [kind, setKind] = useState<FirstRunKind>(LAUNCH_DECISION);
 
-  return { kind, dismiss: () => setKind(null) };
+  return {
+    kind,
+    dismiss: () => setKind(null),
+    // The launch decision is one-shot by design, so without this the tour is
+    // unreachable the moment the marker is written — which is exactly how it
+    // went unnoticed. Settings uses this to open it again on request.
+    showTour: () => setKind("tour"),
+  };
 }

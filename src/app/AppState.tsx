@@ -10,6 +10,7 @@ import {
 import type { AsyncState, NativeCapabilityStatus } from "../types/async";
 import type { SoundPack } from "../types/pack";
 import { checkNativeCapability } from "../services/tauri/nativeCapability";
+import { useFirstRun, type FirstRunKind } from "../features/onboarding/useFirstRun";
 import {
   getAppliedPackId,
   isExternallyChanged,
@@ -49,6 +50,10 @@ interface AppStateValue {
   acknowledgeExternalChange: () => void;
   triggerExternalChangeDemo: () => void;
 
+  onboarding: FirstRunKind;
+  dismissOnboarding: () => void;
+  showTour: () => void;
+
   selectedPackId: string | null;
   selectPack: (id: string | null) => void;
   goToEditor: (id: string) => void;
@@ -74,6 +79,7 @@ interface AppStateValue {
 const AppStateContext = createContext<AppStateValue | null>(null);
 
 export function AppStateProvider({ children }: { children: ReactNode }) {
+  const { kind: onboarding, dismiss: dismissOnboarding, showTour } = useFirstRun();
   const [view, setView] = useState<ViewId>("library");
   const { theme, setTheme } = useTheme();
 
@@ -180,6 +186,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       refreshAppliedState,
       acknowledgeExternalChange,
       triggerExternalChangeDemo,
+      onboarding,
+      dismissOnboarding,
+      showTour,
       selectedPackId,
       selectPack,
       goToEditor,
@@ -206,6 +215,9 @@ export function AppStateProvider({ children }: { children: ReactNode }) {
       refreshAppliedState,
       acknowledgeExternalChange,
       triggerExternalChangeDemo,
+      onboarding,
+      dismissOnboarding,
+      showTour,
       selectedPackId,
       selectPack,
       goToEditor,

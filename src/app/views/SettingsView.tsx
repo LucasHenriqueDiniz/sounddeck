@@ -10,8 +10,14 @@ import { version as appVersion } from "../../../package.json";
 const SUPPORT_URL = "https://lucashdo.com/donate?project=SoundDeck";
 
 export function SettingsView() {
-  const { theme, setTheme, nativeCapability, recheckNativeCapability, triggerExternalChangeDemo } =
-    useAppState();
+  const {
+    theme,
+    setTheme,
+    nativeCapability,
+    recheckNativeCapability,
+    triggerExternalChangeDemo,
+    showTour,
+  } = useAppState();
   const t = useT();
   const { preference, setPreference } = useI18n();
 
@@ -89,6 +95,19 @@ export function SettingsView() {
                 }
               />
             )}
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h1 className={styles.sectionTitle}>{t("settings.help")}</h1>
+          <div className={styles.row}>
+            <div className={styles.rowInfo}>
+              <span className={styles.rowTitle}>{t("settings.tour.title")}</span>
+              <span className={styles.rowDescription}>{t("settings.tour.desc")}</span>
+            </div>
+            <Button variant="secondary" size="sm" onClick={showTour}>
+              {t("settings.tour.button")}
+            </Button>
           </div>
         </section>
 
