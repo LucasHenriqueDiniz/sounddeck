@@ -76,6 +76,12 @@ writeFileSync(
   'utf8',
 );
 
+// Cloudflare can override this file at the edge: the zone's AI Crawl Control
+// has a "Managed robots.txt" toggle that prepends its own content-signal
+// preamble and AI-crawler Disallow rules ahead of whatever the origin serves.
+// It is off for this zone on purpose — an open-source app gains from being
+// citable by AI assistants — but if this file ever stops matching what the
+// site actually serves, that toggle is the first place to look.
 writeFileSync(
   join(DIST, 'robots.txt'),
   `User-agent: *\nAllow: /\n\nSitemap: ${SITE_ORIGIN}/sitemap.xml\n`,
