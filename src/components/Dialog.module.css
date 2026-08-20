@@ -6,6 +6,12 @@
   background: var(--surface-overlay);
   color: var(--text-primary);
   width: 90vw;
+  /*
+   * The UA stylesheet gives <dialog> overflow: auto, so the element itself
+   * scrolled alongside .body — a 14px scrollbar wrapped around a 12px one.
+   * .content clips at 82vh and .body is the only thing that should scroll.
+   */
+  overflow: hidden;
 }
 
 .md {
@@ -24,6 +30,7 @@
   display: flex;
   flex-direction: column;
   max-height: 82vh;
+  overflow: hidden;
 }
 
 .header {
@@ -41,8 +48,16 @@
   color: var(--text-secondary);
 }
 
+/*
+ * min-height: 0 is what makes the scrolling work. This is a flex column item,
+ * and the default min-height: auto refuses to shrink below the content's
+ * height — so the body grew to its full size, .content blew past its 82vh,
+ * and the <dialog> itself started scrolling as well. Two scrollbars, one
+ * inside the other. Only tall dialogs ever hit it.
+ */
 .body {
   padding: var(--space-5) var(--space-6);
+  min-height: 0;
   overflow-y: auto;
 }
 

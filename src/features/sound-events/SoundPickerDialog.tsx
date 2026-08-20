@@ -18,6 +18,26 @@ import { resolvePackFileUrl } from "../../services/tauri/remoteCatalogService";
 import { useT, type TranslationKey } from "../../i18n";
 import styles from "./SoundPickerDialog.module.css";
 
+/**
+ * A pack can point several events at the same file, so listing everything
+ * would repeat it. Keyed on the name because that is what identifies a file
+ * within a pack.
+ */
+function dedupeByFileName(assignments: PackEventAssignment[]): PackEventAssignment[] {
+  const seen = new Set<string>();
+  return assignments.filter((a) => {
+    const name = a.fileName as string;
+    if (seen.has(name)) return false;
+    seen.add(name);
+    return true;
+  });
+}
+
+/** The extension is noise: every one of these is a .wav. */
+function displayName(fileName: string): string {
+  return fileName.replace(/\.wav$/i, "");
+}
+
 export interface LibrarySound {
   packId: string;
   packName: string;
@@ -70,16 +90,23 @@ export function SoundPickerDialog({
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [query, setQuery] = useState("");
+  const [showAll, setShowAll] = useState(false);
 
   const key = eventKey(meta.id);
 
-  /** One group per pack that has a sound for this event. */
+  /**
+   * One group per pack. By default a pack contributes only the sound it maps
+   * to *this* event, which is almost always what you want — the XP click for
+   * the XP click. "Show every sound" widens it to the pack's whole set, for
+   * when the right sound is filed under a different event.
+   */
   const groups = useMemo(() => {
     const found: { packId: string; packName: string; sounds: LibrarySound[] }[] = [];
     for (const pack of library) {
-      const matches = pack.assignments.filter(
-        (a) => eventKey(a.eventId) === key && a.state === "pack" && a.fileName,
-      );
+      const usable = pack.assignments.filter((a) => a.state === "pack" && a.fileName);
+      const matches = showAll
+        ? dedupeByFileName(usable)
+        : usable.filter((a) => eventKey(a.eventId) === key);
       if (matches.length === 0) continue;
       found.push({
         packId: pack.id,
@@ -102,7 +129,7 @@ export function SoundPickerDialog({
       if (b.packId === currentPackId) return 1;
       return a.packName.localeCompare(b.packName);
     });
-  }, [library, key, currentPackId]);
+  }, [library, key, currentPackId, showAll]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
@@ -209,14 +236,26 @@ export function SoundPickerDialog({
           </p>
         )}
 
-        <p className={styles.sectionLabel} aria-live="polite">
-          {query.trim()
-            ? t("picker.showing", { shown, total })
-            : t("picker.fromLibrary", { count: total })}
-        </p>
+        <div className={styles.listHeader}>
+          <p className={styles.sectionLabel} aria-live="polite">
+            {query.trim()
+              ? t("picker.showing", { shown, total })
+              : t("picker.fromLibrary", { count: total })}
+          </p>
+          <button
+            type="button"
+            className={styles.showAllToggle}
+            onClick={() => setShowAll((value) => !value)}
+            aria-pressed={showAll}
+          >
+            {showAll ? t("picker.showMatching") : t("picker.showEverything")}
+          </button>
+        </div>
 
         {total === 0 ? (
-          <p className={styles.empty}>{t("picker.noneInLibrary")}</p>
+          <p className={styles.empty}>
+            {t("picker.noneInLibrary")} {!showAll && t("picker.tryEverything")}
+          </p>
         ) : filtered.length === 0 ? (
           <p className={styles.empty}>{t("picker.noMatches", { query: query.trim() })}</p>
         ) : (
@@ -241,7 +280,7 @@ export function SoundPickerDialog({
                           audioUrl={sound.audioUrl}
                         />
                         <span className={styles.itemFile} title={sound.fileName}>
-                          {sound.fileName}
+                          {displayName(sound.fileName)}
                         </span>
                         <span className={`${styles.itemDuration} tabular-nums`}>
                           {formatDuration(sound.durationMs)}
