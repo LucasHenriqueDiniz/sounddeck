@@ -1,11 +1,62 @@
+/*
+ * There is deliberately no max-height or overflow anywhere in here. Dialog's
+ * own body already scrolls; adding a second scroller around the list meant the
+ * wheel was swallowed by the inner box and the dialog jumped once it bottomed
+ * out. The body is the only scroller, and the toolbar sticks to its top.
+ */
 .body {
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
 }
 
-.customButton {
-  align-self: flex-start;
+.toolbar {
+  position: sticky;
+  top: calc(var(--space-4) * -1);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  /* Covers the rows scrolling underneath it. */
+  padding: var(--space-3) 0;
+  margin-top: calc(var(--space-3) * -1);
+  background: var(--surface-overlay);
+}
+
+.search {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--space-3);
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.searchInput {
+  width: 100%;
+  height: var(--control-md);
+  padding: 0 var(--space-3) 0 calc(var(--space-3) * 2 + 14px);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--surface-input);
+  color: var(--text-primary);
+  font: var(--text-sm);
+}
+
+.searchInput::placeholder {
+  color: var(--text-muted);
+}
+
+.searchInput:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 1px;
+  border-color: transparent;
 }
 
 .currentCustom {
@@ -24,7 +75,7 @@
 }
 
 .sectionLabel {
-  margin: var(--space-2) 0 0;
+  margin: 0;
   font: var(--text-xs);
   color: var(--text-muted);
 }
@@ -39,13 +90,35 @@
   text-align: center;
 }
 
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-1);
+  padding-bottom: var(--space-1);
+  border-bottom: 1px solid var(--border-subtle);
+  font: var(--text-xs);
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.groupTag {
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  color: var(--accent);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 .list {
-  /*
-   * The catalog can offer thirty sounds for a common event, so the list
-   * scrolls inside the dialog rather than growing it past the viewport.
-   */
-  max-height: 340px;
-  overflow-y: auto;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -73,25 +146,12 @@
   background: var(--surface-selected);
 }
 
-.itemInfo {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  min-width: 0;
-  flex: 1;
-}
-
 .itemFile {
+  flex: 1;
+  min-width: 0;
   font: var(--text-sm);
+  font-family: var(--font-mono);
   color: var(--text-primary);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.itemSource {
-  font: var(--text-xs);
-  color: var(--text-muted);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { AudioPreviewButton } from "../../components/AudioPreviewButton";
 import { IconButton } from "../../components/IconButton";
-import { AlertCircleIcon, DisableIcon, ReplaceIcon, UndoIcon } from "../../components/icons/icons";
+import { AlertCircleIcon, ChevronDownIcon, DisableIcon, UndoIcon } from "../../components/icons/icons";
 import { formatDuration } from "../../lib/format";
 import type { SoundPack } from "../../types/pack";
 import type { EventFriendlyMeta, PackEventAssignment } from "../../types/soundEvent";
@@ -97,14 +97,31 @@ export function SoundEventRow({
 
       <div className={styles.state}>
         <EventStateBadge state={assignment.state} />
-        {assignment.fileName ? (
-          <span className={styles.fileName} title={assignment.fileName}>
-            {assignment.fileName}
+        {/*
+          The sound is the control, not a label next to one. It was a passive
+          span with the picker hidden behind an icon button that looked exactly
+          like the three beside it — there was nothing on screen saying a sound
+          could be chosen here.
+        */}
+        <button
+          type="button"
+          className={styles.soundSelect}
+          onClick={canPick ? () => setPickerOpen(true) : handleReplaceDirect}
+          disabled={busy}
+          aria-label={t("event.chooseSoundFor", { event: name })}
+        >
+          <span className={styles.soundValue}>
+            {assignment.fileName ? (
+              <span className={styles.fileName} title={assignment.fileName}>
+                {assignment.fileName}
+              </span>
+            ) : (
+              <span className={styles.fileNameMuted}>{t("event.pickSound")}</span>
+            )}
+            {origin && <span className={styles.origin}>{origin}</span>}
           </span>
-        ) : (
-          <span className={styles.fileNameMuted}>{t("event.noFile")}</span>
-        )}
-        {origin && <span className={styles.origin}>{origin}</span>}
+          <ChevronDownIcon size={14} className={styles.soundChevron} />
+        </button>
         <span className={`${styles.duration} tabular-nums`}>{formatDuration(assignment.durationMs)}</span>
       </div>
 
@@ -115,13 +132,6 @@ export function SoundEventRow({
           size="sm"
           disabled={assignment.state === "disabled"}
           audioUrl={audioUrl}
-        />
-        <IconButton
-          label={canPick ? t("event.chooseSound") : t("event.replaceFile")}
-          icon={<ReplaceIcon />}
-          size="sm"
-          onClick={canPick ? () => setPickerOpen(true) : handleReplaceDirect}
-          disabled={busy}
         />
         <IconButton
           label={t("event.useDefault")}
